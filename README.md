@@ -1,4 +1,4 @@
-# Bryton Rider 860 core application
+# OpenBikeComputer core application
 
 ## Dependency
 - libwayland-client

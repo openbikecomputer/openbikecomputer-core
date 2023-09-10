@@ -1,4 +1,4 @@
-BIN = bryton860-core
+BIN = openbikecomputer-core
 DESTDIR ?= /usr/bin
 
 SRC = src/main.c \

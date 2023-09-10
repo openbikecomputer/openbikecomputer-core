@@ -52,7 +52,7 @@ int main(int argc, char **argv)
 	uint32_t time_till_next;
 	int sleep;
 
-	printf("Bryton Rider 860 main application\n");
+	printf("OpenBikeComputer main application\n");
 
 	printf("Init LVGL\n");
 	lv_init();
