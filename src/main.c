@@ -92,7 +92,7 @@ int main(int argc, char **argv)
 
 	/* Create a display */
 	printf("Create display\n");
-	lv_disp_t * disp = lv_wayland_create_window(SCREEN_HOR_SIZE, SCREEN_VER_SIZE, "lvgl wayland demo", NULL /*close_cb*/);
+	lv_disp_t * disp = lv_wayland_create_window(SCREEN_HOR_SIZE, SCREEN_VER_SIZE, "openbikecomputer", NULL /*close_cb*/);
 
 	printf("Set fullscreen mode\n");
 	lv_wayland_window_set_fullscreen(disp, true);
