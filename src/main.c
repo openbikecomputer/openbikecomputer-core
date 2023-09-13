@@ -25,9 +25,11 @@
 #include <limits.h>
 #include <errno.h>
 #include <poll.h>
+#include <pthread.h>
 
 #define SCREEN_HOR_SIZE (800)
 #define SCREEN_VER_SIZE (480)
+#define LVGL_REFRESH_TICK_RATE 30 /*milliseconds*/
 
 static void event_handler(lv_event_t * e)
 {
@@ -64,11 +66,22 @@ static void lv_example_btn_1(void)
     lv_obj_center(label);
 }
 
+static void * tick_thread_handler(void *data)
+{
+	while(1)
+	{
+		lv_tick_inc(LVGL_REFRESH_TICK_RATE);
+		usleep(LVGL_REFRESH_TICK_RATE * 1000);
+	}
+}
+
 int main(int argc, char **argv)
 {
+	int ret;
 	struct pollfd pfd;
 	uint32_t time_till_next;
 	int sleep;
+	pthread_t tick_thread;
 
 	printf("OpenBikeComputer main application\n");
 
@@ -90,6 +103,13 @@ int main(int argc, char **argv)
 	printf("Manage LVGL timer event\n");
 	pfd.fd = lv_wayland_get_fd();
 	pfd.events = POLLIN;
+
+	ret = pthread_create(&tick_thread, NULL, &tick_thread_handler, NULL);
+	if(ret != 0)
+	{
+		printf("Create thread failed, return: %d\n", ret);
+		exit(-1);
+	}
 
 	while (1) {
 		/* Handle any Wayland/LVGL timers/events */

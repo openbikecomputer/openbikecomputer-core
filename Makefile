@@ -14,9 +14,9 @@ INCLUDE = -Isrc \
 CC ?= gcc
 CCLD ?= gcc
 
-CFLAGS += $(INCLUDE)
+CFLAGS += $(INCLUDE) -D_REENTRANT
 LDFLAGS +=
-LIBS += -L$(SYSROOT)/usr/lib/ -llvgl -llv_drivers -lwayland-client -lxkbcommon -lwayland-cursor
+LIBS += -L$(SYSROOT)/usr/lib/ -llvgl -llv_drivers -lwayland-client -lxkbcommon -lwayland-cursor -lpthread
 
 OBJS = $(patsubst %.c, %.o, $(SRC))
 
