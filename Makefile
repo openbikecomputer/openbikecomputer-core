@@ -2,7 +2,6 @@ BIN = openbikecomputer-core
 DESTDIR ?= /usr/bin
 
 SRC = src/main.c \
-      $(SYSROOT)/usr/include/lvgl/lv_drivers/wayland/protocols/wayland-xdg-shell-client-protocol.c
 
 INCLUDE = -Isrc \
           -I$(SYSROOT)/usr/include \
@@ -16,7 +15,7 @@ CCLD ?= gcc
 
 CFLAGS += $(INCLUDE) -D_REENTRANT
 LDFLAGS +=
-LIBS += -L$(SYSROOT)/usr/lib/ -llvgl -llv_drivers -lwayland-client -lxkbcommon -lwayland-cursor -lpthread
+LIBS += -L$(SYSROOT)/usr/lib/ -llvgl -llv_drivers -llv-wayland-protocol -lwayland-client -lxkbcommon -lwayland-cursor -lpthread
 
 OBJS = $(patsubst %.c, %.o, $(SRC))
 
