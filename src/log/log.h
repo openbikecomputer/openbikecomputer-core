@@ -21,6 +21,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include <stddef.h>
 
 #define LOG_LEVEL_ERROR 3
 #define LOG_LEVEL_WARN 2
@@ -29,7 +30,7 @@
 
 /* Define default log level */
 #ifndef LOG_LEVEL
-#define LOG_LEVEL LOG_LEVEL_ERROR
+#define LOG_LEVEL LOG_LEVEL_INFO
 #endif
 
 int log_set_color( bool value);
@@ -70,7 +71,7 @@ void _write_log(const char * filename, const char * function, int line, const ch
 //#########################################
 
 
-#define log(level, ...) do { if(level >= LOG_LEVEL) { _write_log(__FILE__, __FUNCTION__, __LINE__, __VA_ARGS__); } } while(0)
+#define log(level, ...) do { if(level >= LOG_LEVEL) { _write_log(__FILE__, __func__, __LINE__, __VA_ARGS__); } } while(0)
 
 /* Write simple log */
 #define log_error(...) log(LOG_LEVEL_ERROR, __VA_ARGS__)
@@ -89,7 +90,7 @@ void _write_log(const char * filename, const char * function, int line, const ch
  */
 
 //Just DIE...
-#define fail_if(return_value, ...){                                        \
+#define fail(return_value, ...){                                        \
 	log_error(__VA_ARGS__);                                                   \
 	return return_value;                                                      \
 }
