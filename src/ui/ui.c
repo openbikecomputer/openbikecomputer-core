@@ -26,15 +26,21 @@
 #include <lvgl.h>
 #include <wayland.h>
 
+#include "log.h"
 #include "system.h"
 
 static void * tick_thread_handler(void *data)
 {
+	/* The tick thread tell the LVGL lib the time elapsed */
 	while(1)
 	{
 		lv_tick_inc(LVGL_REFRESH_TICK_RATE);
 		usleep(LVGL_REFRESH_TICK_RATE * 1000);
 	}
+
+	/* If we are here something wrong happen, kill the application */
+	log_error("LVGL tick thread exit, kill the application\n");
+	exit(-1);
 
 	return NULL;
 }
@@ -71,7 +77,7 @@ static void * draw_thread_handler(void *data)
 	}
 
 	/* If we are here something wrong happen, kill the application */
-	printf("LVGL draw thread exit, kill the application\n");
+	log_error("LVGL draw thread exit, kill the application\n");
 	exit(-1);
 
 	return NULL;
