@@ -18,22 +18,92 @@
 
 #include <stdio.h>
 #include <unistd.h>
+#include <getopt.h>
+#include <stdlib.h>
+#include <string.h>
 #include "version.h"
 #include "ui.h"
 #include "log.h"
 #include "bike_config.h"
 #include "rider_config.h"
 #include "system_config.h"
+#include "data_manager.h"
+#include "utils.h"
 
-int main(int argc, char **argv)
+static void _print_help(void)
 {
-	int ret = 0;
+	printf("Usage:\n");
+	printf("openbikecomputer-core <option>\n");
+	printf("\n");
+	printf("Options:\n");
+	printf("  -h, --help: print this\n");
+	printf("  -v, --version: print the version\n");
+	printf("  -s, --simulation <file>: launch simulation mode\n");
+}
 
-	printf("OpenBikeComputer core V%d.%d.%d\n",\
+static void _print_version(void)
+{
+	printf("%d.%d.%d\n",\
 		OPEN_BIKE_COMPUTER_VERSION_MAJOR,
 		OPEN_BIKE_COMPUTER_VERSION_MINOR,
 		OPEN_BIKE_COMPUTER_VERSION_FIX
 	);
+}
+
+#define SIM_STRING_SIZE 64
+int main(int argc, char **argv)
+{
+	int ret = 0;
+	int c = 0;
+	bool simulation_mode = false;
+	char simulation_file[SIM_STRING_SIZE];
+
+	/* Disable getopt error output */
+	opterr = 0;
+	while (1)
+	{
+		static struct option long_options[] =
+		{
+			{"help",       no_argument,       0, 'h'},
+			{"version",    no_argument,       0, 'v'},
+			{"simulation", required_argument, 0, 's'},
+			{0, 0, 0, 0}
+		};
+
+		/* Parse application arguments to get the options */
+		c = getopt_long(argc, argv, "hvs:", long_options, NULL);
+
+		/* Detect the end of the options. */
+		if(c == -1)
+			break;
+
+		switch(c)
+		{
+			case 'h':
+				/* Show help and exit */
+				_print_help();
+				exit(0);
+				break;
+
+			case 'v':
+				/* Show version and exit */
+				_print_version();
+				exit(0);
+				break;
+
+			case 's':
+				simulation_mode = true;
+				safe_strncpy(simulation_file, optarg, sizeof(simulation_file));
+				break;
+
+			case '?':
+			default:
+				/* Option error */
+				_print_help();
+				exit(-1);
+				break;
+		}
+	}
 
 	ret = system_config_init();
 	fail_if_negative(ret, -1, "Error: system_config_init failed, return: %d\n", ret);
