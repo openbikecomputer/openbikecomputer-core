@@ -6,6 +6,12 @@ CONFDIR ?= etc/openbikecomputer
 SRC = src/main.c \
       src/log/log.c \
       src/ui/ui.c \
+      src/ui/screen/screen_manager.c \
+      src/ui/screen/main_screen.c \
+      src/ui/screen/bike_conf_screen.c \
+      src/ui/screen/rider_conf_screen.c \
+      src/ui/screen/system_conf_screen.c \
+      src/ui/screen/data_screen.c \
       src/config/bike_config.c \
       src/config/rider_config.c \
       src/config/system_config.c \
@@ -14,6 +20,7 @@ SRC = src/main.c \
 INCLUDE = -Isrc \
           -Isrc/log \
           -Isrc/ui \
+          -Isrc/ui/screen \
           -Isrc/config \
           -I$(SYSROOT)/usr/include \
           -I$(SYSROOT)/usr/include/lvgl \

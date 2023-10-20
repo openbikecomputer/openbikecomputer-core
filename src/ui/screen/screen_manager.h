@@ -15,18 +15,20 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#ifndef _SYSTEM_HEADER_
-#define _SYSTEM_HEADER_
 
-/* LVGL configuration */
-#define SCREEN_HOR_SIZE (800)
-#define SCREEN_VER_SIZE (1024)
-#define SCREEN_ROTATION LV_DISP_ROT_NONE /* Other possible value LV_DISP_ROT_90 , LV_DISP_ROT_180 , or LV_DISP_ROT_270 */
-#define LVGL_REFRESH_TICK_RATE 30 /*milliseconds*/
+#ifndef _SCREEN_MANAGER_HEADER_
+#define _SCREEN_MANAGER_HEADER_
 
-/* System configuration file */
-#define SYSTEM_CONF_FILE_PATH "/etc/openbikecomputer/system.conf"
-#define RIDER_CONF_FILE_PATH "/etc/openbikecomputer/rider.conf"
-#define BIKE_CONF_FILE_PATH "/etc/openbikecomputer/bike.conf"
+typedef enum {
+	E_MAIN_SCREEN = 0,
+	E_RIDER_CONF_SCREEN,
+	E_BIKE_CONF_SCREEN,
+	E_SYSTEM_CONF_SCREEN,
+	E_DATA_SCREEN,
+	E_SCREEN_ID_MAX /*must be last*/
+} E_screen_id;
 
-#endif //_SYSTEM_HEADER_
+int screen_manager_init(void);
+int screen_manager_change_screen(E_screen_id next);
+
+#endif //_SCREEN_MANAGER_HEADER_

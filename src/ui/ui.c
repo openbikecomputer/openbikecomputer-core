@@ -28,6 +28,16 @@
 
 #include "log.h"
 #include "system.h"
+#include "screen_manager.h"
+
+static struct {
+	bool is_initialized;
+	pthread_t tick_thread;
+	pthread_t draw_thread;
+	lv_disp_t *display;
+} ui = {
+	.is_initialized = false,
+};
 
 static void * tick_thread_handler(void *data)
 {
@@ -83,74 +93,35 @@ static void * draw_thread_handler(void *data)
 	return NULL;
 }
 
-static int create_initial_ui(void)
-{
-	lv_obj_t * tv = lv_tileview_create(lv_scr_act());
-
-	/*Tile1: Configuration menu*/
-	lv_obj_t * tile1 = lv_tileview_add_tile(tv, 0, 0, LV_DIR_BOTTOM);
-	lv_obj_t * label = lv_label_create(tile1);
-	lv_label_set_text(label, "Scroll down");
-	lv_obj_center(label);
-
-
-	/*Tile2: Main screen (speed/hour/power/other) */
-	lv_obj_t * tile2 = lv_tileview_add_tile(tv, 0, 1, LV_DIR_TOP | LV_DIR_RIGHT);
-
-	lv_obj_t * btn = lv_btn_create(tile2);
-
-	label = lv_label_create(btn);
-	lv_label_set_text(label, "Scroll up or right");
-
-	lv_obj_set_size(btn, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
-	lv_obj_center(btn);
-
-	/*Tile3: Navigation (MAP) */
-	lv_obj_t * tile3 = lv_tileview_add_tile(tv, 1, 1, LV_DIR_LEFT);
-	lv_obj_t * list = lv_list_create(tile3);
-	lv_obj_set_size(list, LV_PCT(100), LV_PCT(100));
-
-	lv_list_add_btn(list, NULL, "One");
-
-	return 0;
-}
-
 int ui_init(void)
 {
 	int ret;
-	pthread_t tick_thread, draw_thread;
+
+	fail_if_true(ui.is_initialized, -1, "Error: ui is already initialized\n");
 
 	/* Init lvgl lib and wayland driver */
 	lv_init();
 	lv_wayland_init();
 
 	/* Create a display */
-	lv_disp_t * disp = lv_wayland_create_window(SCREEN_HOR_SIZE, SCREEN_VER_SIZE, "openbikecomputer", NULL /*close_cb*/);
-	lv_disp_set_rotation(disp, LV_DISP_ROT_270);
-	lv_wayland_window_set_fullscreen(disp, true);
+	ui.display = lv_wayland_create_window(SCREEN_HOR_SIZE, SCREEN_VER_SIZE, "openbikecomputer", NULL /*close_cb*/);
+	fail_if_null(ui.display, -1, "Error: lv_wayland_create_window return NULL\n");
+	lv_disp_set_rotation(ui.display, SCREEN_ROTATION);
+	lv_wayland_window_set_fullscreen(ui.display, true);
 
 	/* Create a thread to tell lvgl the elapsed time */
-	ret = pthread_create(&tick_thread, NULL, &tick_thread_handler, NULL);
-	if(ret != 0)
-	{
-		printf("Create tick thread failed, return: %d\n", ret);
-		return -1;
-	}
+	ret = pthread_create(&ui.tick_thread, NULL, &tick_thread_handler, NULL);
+	fail_if_negative(ret, -1, "Error: Create lvgl tick thread failed, return: %d\n", ret);
 
 	/* Create a thread to handle lvgl drawing */
-	ret = pthread_create(&draw_thread, NULL, &draw_thread_handler, NULL);
-	if(ret != 0)
-	{
-		printf("Create draw thread failed, return: %d\n", ret);
-		return -2;
-	}
+	ret = pthread_create(&ui.draw_thread, NULL, &draw_thread_handler, NULL);
+	fail_if_negative(ret, -2, "Error: Create lvgl draw thread failed, return: %d\n", ret);
 
-	ret = create_initial_ui();
-	if(ret < 0)
-	{
-		printf("Create initial ui failed, return: %d\n", ret);
-		return -3;
-	}
+	ret = screen_manager_init();
+	fail_if_negative(ret, -3, "Error: screen_manager_init failed, return: %d\n", ret);
+
+	/* Mark the ui module as initialized */
+	ui.is_initialized = true;
 
 	return 0;
 }

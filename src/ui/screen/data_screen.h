@@ -15,18 +15,11 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#ifndef _SYSTEM_HEADER_
-#define _SYSTEM_HEADER_
 
-/* LVGL configuration */
-#define SCREEN_HOR_SIZE (800)
-#define SCREEN_VER_SIZE (1024)
-#define SCREEN_ROTATION LV_DISP_ROT_NONE /* Other possible value LV_DISP_ROT_90 , LV_DISP_ROT_180 , or LV_DISP_ROT_270 */
-#define LVGL_REFRESH_TICK_RATE 30 /*milliseconds*/
+#ifndef _DATA_SCREEN_HEADER_
+#define _DATA_SCREEN_HEADER_
 
-/* System configuration file */
-#define SYSTEM_CONF_FILE_PATH "/etc/openbikecomputer/system.conf"
-#define RIDER_CONF_FILE_PATH "/etc/openbikecomputer/rider.conf"
-#define BIKE_CONF_FILE_PATH "/etc/openbikecomputer/bike.conf"
+int data_screen_enter(void);
+int data_screen_exit(void);
 
-#endif //_SYSTEM_HEADER_
+#endif //__SCREEN_HEADER_
