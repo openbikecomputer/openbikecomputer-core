@@ -22,6 +22,7 @@ INCLUDE = -Isrc \
           -Isrc/ui \
           -Isrc/ui/screen \
           -Isrc/config \
+          -Isrc/utils \
           -I$(SYSROOT)/usr/include \
           -I$(SYSROOT)/usr/include/lvgl \
           -I$(SYSROOT)/usr/include/lvgl/lv_drivers \
