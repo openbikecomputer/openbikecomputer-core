@@ -18,6 +18,17 @@
 #ifndef _UI_HEADER_
 #define _UI_HEADER_
 
+typedef enum {
+	E_MAIN_SCREEN = 0,
+	E_RIDER_CONF_SCREEN,
+	E_BIKE_CONF_SCREEN,
+	E_SYSTEM_CONF_SCREEN,
+	E_DATA_SCREEN,
+	E_SCREEN_ID_MAX /*must be last*/
+} E_screen_id;
+
+
 int ui_init(void);
+int ui_change_screen(E_screen_id next);
 
 #endif //_UI_HEADER_

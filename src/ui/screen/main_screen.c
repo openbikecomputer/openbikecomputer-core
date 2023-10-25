@@ -24,14 +24,14 @@
 #include "log.h"
 #include "system.h"
 #include "main_screen.h"
-#include "screen_manager.h"
+#include "ui.h"
 
 static void rider_button_event_handler(lv_event_t *event)
 { 
 	lv_event_code_t code = lv_event_get_code(event); 
 
     if(code == LV_EVENT_CLICKED) {
-		screen_manager_change_screen(E_RIDER_CONF_SCREEN);
+		ui_change_screen(E_RIDER_CONF_SCREEN);
     }
 }
 static void bike_button_event_handler(lv_event_t *event)
@@ -39,7 +39,7 @@ static void bike_button_event_handler(lv_event_t *event)
 	lv_event_code_t code = lv_event_get_code(event); 
 
     if(code == LV_EVENT_CLICKED) {
-		screen_manager_change_screen(E_BIKE_CONF_SCREEN);
+		ui_change_screen(E_BIKE_CONF_SCREEN);
     }
 }
 static void system_button_event_handler(lv_event_t *event)
@@ -47,7 +47,7 @@ static void system_button_event_handler(lv_event_t *event)
 	lv_event_code_t code = lv_event_get_code(event); 
 
     if(code == LV_EVENT_CLICKED) {
-		screen_manager_change_screen(E_SYSTEM_CONF_SCREEN);
+		ui_change_screen(E_SYSTEM_CONF_SCREEN);
     }
 }
 static void data_button_event_handler(lv_event_t *event)
@@ -55,7 +55,7 @@ static void data_button_event_handler(lv_event_t *event)
 	lv_event_code_t code = lv_event_get_code(event); 
 
     if(code == LV_EVENT_CLICKED) {
-		screen_manager_change_screen(E_DATA_SCREEN);
+		ui_change_screen(E_DATA_SCREEN);
     }
 }
 

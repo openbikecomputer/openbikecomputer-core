@@ -6,7 +6,6 @@ CONFDIR ?= etc/openbikecomputer
 SRC = src/main.c \
       src/log/log.c \
       src/ui/ui.c \
-      src/ui/screen/screen_manager.c \
       src/ui/screen/main_screen.c \
       src/ui/screen/bike_conf_screen.c \
       src/ui/screen/rider_conf_screen.c \

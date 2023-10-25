@@ -24,14 +24,14 @@
 #include "log.h"
 #include "system.h"
 #include "system_conf_screen.h"
-#include "screen_manager.h"
+#include "ui.h"
 
 static void back_button_event_handler(lv_event_t *event)
 { 
 	lv_event_code_t code = lv_event_get_code(event); 
 
     if(code == LV_EVENT_CLICKED) {
-		screen_manager_change_screen(E_MAIN_SCREEN);
+		ui_change_screen(E_MAIN_SCREEN);
     }
 }
 
