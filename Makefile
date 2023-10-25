@@ -15,7 +15,8 @@ SRC = src/main.c \
       src/config/bike_config.c \
       src/config/rider_config.c \
       src/config/system_config.c \
-      src/config/libconfig_helper.c
+      src/config/libconfig_helper.c \
+      src/utils/fifo.c
 
 INCLUDE = -Isrc \
           -Isrc/log \
