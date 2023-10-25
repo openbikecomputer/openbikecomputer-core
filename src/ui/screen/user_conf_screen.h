@@ -15,21 +15,11 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#ifndef _UI_HEADER_
-#define _UI_HEADER_
 
-typedef enum {
-	E_MAIN_SCREEN = 0,
-	E_RIDER_CONF_SCREEN,
-	E_BIKE_CONF_SCREEN,
-	E_SYSTEM_CONF_SCREEN,
-	E_USER_CONF_SCREEN,
-	E_DATA_SCREEN,
-	E_SCREEN_ID_MAX /*must be last*/
-} E_screen_id;
+#ifndef _USER_CONF_SCREEN_HEADER_
+#define _USER_CONF_SCREEN_HEADER_
 
+int user_conf_screen_enter(void);
+int user_conf_screen_exit(void);
 
-int ui_init(void);
-int ui_change_screen(E_screen_id next);
-
-#endif //_UI_HEADER_
+#endif //_USER_CONF_SCREEN_HEADER_

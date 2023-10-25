@@ -26,9 +26,17 @@
 #include "main_screen.h"
 #include "ui.h"
 
+static void user_button_event_handler(lv_event_t *event)
+{
+	lv_event_code_t code = lv_event_get_code(event);
+
+    if(code == LV_EVENT_CLICKED) {
+		ui_change_screen(E_USER_CONF_SCREEN);
+    }
+}
 static void rider_button_event_handler(lv_event_t *event)
-{ 
-	lv_event_code_t code = lv_event_get_code(event); 
+{
+	lv_event_code_t code = lv_event_get_code(event);
 
     if(code == LV_EVENT_CLICKED) {
 		ui_change_screen(E_RIDER_CONF_SCREEN);
@@ -36,7 +44,7 @@ static void rider_button_event_handler(lv_event_t *event)
 }
 static void bike_button_event_handler(lv_event_t *event)
 {
-	lv_event_code_t code = lv_event_get_code(event); 
+	lv_event_code_t code = lv_event_get_code(event);
 
     if(code == LV_EVENT_CLICKED) {
 		ui_change_screen(E_BIKE_CONF_SCREEN);
@@ -44,7 +52,7 @@ static void bike_button_event_handler(lv_event_t *event)
 }
 static void system_button_event_handler(lv_event_t *event)
 {
-	lv_event_code_t code = lv_event_get_code(event); 
+	lv_event_code_t code = lv_event_get_code(event);
 
     if(code == LV_EVENT_CLICKED) {
 		ui_change_screen(E_SYSTEM_CONF_SCREEN);
@@ -52,7 +60,7 @@ static void system_button_event_handler(lv_event_t *event)
 }
 static void data_button_event_handler(lv_event_t *event)
 {
-	lv_event_code_t code = lv_event_get_code(event); 
+	lv_event_code_t code = lv_event_get_code(event);
 
     if(code == LV_EVENT_CLICKED) {
 		ui_change_screen(E_DATA_SCREEN);
@@ -64,6 +72,7 @@ int main_screen_enter(void)
 	lv_obj_t * label_bike_conf;
 	lv_obj_t * label_rider_conf;
 	lv_obj_t * label_system_conf;
+	lv_obj_t * label_user_conf;
 	lv_obj_t * label_data_screen;
 
 	/* Create a style to increase the font size */
@@ -80,7 +89,7 @@ int main_screen_enter(void)
 
 	label_data_screen = lv_label_create(btn1);
 	lv_label_set_text(label_data_screen, "Real time data");
-    lv_obj_center(label_data_screen);
+	lv_obj_center(label_data_screen);
 
 	/* Create rider button */
 	lv_obj_t * btn2 = lv_btn_create(lv_scr_act());
@@ -91,7 +100,7 @@ int main_screen_enter(void)
 
 	label_rider_conf = lv_label_create(btn2);
 	lv_label_set_text(label_rider_conf, "Rider configuration");
-    lv_obj_center(label_rider_conf);
+	lv_obj_center(label_rider_conf);
 
 	/* Create bike button */
 	lv_obj_t * btn3 = lv_btn_create(lv_scr_act());
@@ -102,7 +111,7 @@ int main_screen_enter(void)
 
 	label_bike_conf = lv_label_create(btn3);
 	lv_label_set_text(label_bike_conf, "Bike configuration");
-    lv_obj_center(label_bike_conf);
+	lv_obj_center(label_bike_conf);
 
 	/* Create system button */
 	lv_obj_t * btn4 = lv_btn_create(lv_scr_act());
@@ -113,7 +122,18 @@ int main_screen_enter(void)
 
 	label_system_conf = lv_label_create(btn4);
 	lv_label_set_text(label_system_conf, "System configuration");
-    lv_obj_center(label_system_conf);
+	lv_obj_center(label_system_conf);
+
+	/* Create user button */
+	lv_obj_t * btn5 = lv_btn_create(lv_scr_act());
+	lv_obj_add_event_cb(btn5, user_button_event_handler, LV_EVENT_ALL, NULL);
+	lv_obj_set_size(btn5, 600, 200);
+	lv_obj_align(btn5, LV_ALIGN_TOP_MID, 0, 1050); //+250*4+50
+	lv_obj_add_style(btn5, &style_btn, 0);
+
+	label_user_conf = lv_label_create(btn5);
+	lv_label_set_text(label_user_conf, "User configuration");
+	lv_obj_center(label_user_conf);
 
 	return 0;
 }

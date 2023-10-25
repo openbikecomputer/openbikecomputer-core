@@ -32,6 +32,7 @@
 #include "rider_conf_screen.h"
 #include "system_conf_screen.h"
 #include "data_screen.h"
+#include "user_conf_screen.h"
 
 #include "fifo.h"
 #include "log.h"
@@ -47,6 +48,7 @@ static struct {
 	[E_RIDER_CONF_SCREEN]  = {.enter = &rider_conf_screen_enter, .exit = &rider_conf_screen_exit},
 	[E_BIKE_CONF_SCREEN]   = {.enter = &bike_conf_screen_enter, .exit = &bike_conf_screen_exit},
 	[E_SYSTEM_CONF_SCREEN] = {.enter = &system_screen_enter, .exit = &system_screen_exit},
+	[E_USER_CONF_SCREEN]   = {.enter = &user_conf_screen_enter, .exit = &user_conf_screen_exit},
 	[E_DATA_SCREEN]        = {.enter = &data_screen_enter, .exit = &data_screen_exit},
 };
 
