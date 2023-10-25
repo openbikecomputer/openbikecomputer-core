@@ -15,6 +15,7 @@ SRC = src/main.c \
       src/config/bike_config.c \
       src/config/rider_config.c \
       src/config/system_config.c \
+      src/config/user_config.c \
       src/config/libconfig_helper.c \
       src/data/data_manager.c \
       src/utils/simulator.c \

@@ -16,14 +16,21 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef _SYSTEM_CONFIG_
-#define _SYSTEM_CONFIG_
+#ifndef _USER_HEADER_
+#define _USER_HEADER_
 
-int system_config_init(void);
-int system_config_get_device_name(char *name, int size);
-int system_config_get_enable_gps(void);
-int system_config_get_enable_ant(void);
-int system_config_get_enable_bluetooth(void);
-int system_config_get_enable_wifi(void);
+int user_config_init(void);
 
-#endif //_SYSTEM_CONFIG_
+int user_config_get_brightness(void);
+int user_config_get_gps_on(void);
+int user_config_get_ant_on(void);
+int user_config_get_bluetooth_on(void);
+int user_config_get_wifi_on(void);
+
+int user_config_set_brightness(int value);
+int user_config_set_gps_on(int value);
+int user_config_set_ant_on(int value);
+int user_config_set_bluetooth_on(int value);
+int user_config_set_wifi_on(int value);
+
+#endif //_USER_HEADER_

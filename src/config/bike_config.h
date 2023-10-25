@@ -16,6 +16,9 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#ifndef _BIKE_HEADER_
+#define _BIKE_HEADER_
+
 typedef enum {
 	E_ATB = 0,
 	E_MTB,
@@ -32,3 +35,5 @@ int bike_config_get_name(char *buff, int size);
 int bike_config_get_weight(void);
 E_bike_type bike_config_get_type(void);
 int bike_config_get_wheel_size(void);
+
+#endif //_BIKE_HEADER_

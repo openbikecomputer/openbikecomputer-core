@@ -28,5 +28,6 @@
 #define SYSTEM_CONF_FILE_PATH "/etc/openbikecomputer/system.conf"
 #define RIDER_CONF_FILE_PATH "/etc/openbikecomputer/rider.conf"
 #define BIKE_CONF_FILE_PATH "/etc/openbikecomputer/bike.conf"
+#define USER_CONF_FILE_PATH "/etc/openbikecomputer/user.conf"
 
 #endif //_SYSTEM_HEADER_
