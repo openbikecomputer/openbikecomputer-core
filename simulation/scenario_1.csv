@@ -1,0 +1,3 @@
+# each line represent a series of parameter value separate by ';'
+#latitude;longitude;speed;altitude;temperature;heart rate;power;cadence
+40.85785103546679;-74.09127485791015;235;415;203;125;78;82

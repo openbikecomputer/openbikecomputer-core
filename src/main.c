@@ -27,7 +27,9 @@
 #include "bike_config.h"
 #include "rider_config.h"
 #include "system_config.h"
+#include "data_manager.h"
 #include "utils.h"
+#include "simulator.h"
 
 static void _print_help(void)
 {
@@ -113,8 +115,17 @@ int main(int argc, char **argv)
 	ret = rider_config_init();
 	fail_if_negative(ret, -3, "Error: rider_config_init failed, return: %d\n", ret);
 
+	ret = data_manager_init();
+	fail_if_negative(ret, -4, "Error: data_manager_init failed, return: %d\n", ret);
+
 	ret = ui_init();
-	fail_if_negative(ret, -4, "Error: ui initialization failed, return: %d\n", ret);
+	fail_if_negative(ret, -5, "Error: ui initialization failed, return: %d\n", ret);
+
+	if(simulation_mode)
+	{
+		ret = simulator_init(simulation_file);
+		fail_if_negative(ret, -6, "Error: simulator initialization failed, return: %d\n", ret);
+	}
 
 	/* Don't exit the application */
 	while (1) {
