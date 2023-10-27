@@ -19,10 +19,10 @@
 #ifndef _LIBCONFIG_HELPER_HEADER_
 #define _LIBCONFIG_HELPER_HEADER_
 
-int libconfig_helper_get_int(char *file, char *conf, int *value);
-int libconfig_helper_get_string(char *file, char *conf, char *buff, int size);
+int libconfig_helper_get_int(const char *file, const char *conf, int *value);
+int libconfig_helper_get_string(const char *file, const char *conf, char *buff, int size);
 
-int libconfig_helper_set_int(char *file, char *conf, int value);
-int libconfig_helper_set_string(char *file, char *conf, char *value);
+int libconfig_helper_set_int(const char *file, const char *conf, const int value);
+int libconfig_helper_set_string(const char *file, const char *conf, const char *value);
 
 #endif /*_LIBCONFIG_HELPER_HEADER_*/

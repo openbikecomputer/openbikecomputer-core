@@ -90,7 +90,7 @@ int user_config_get_wifi_on(void)
 	return user_conf.wifi_on;
 }
 
-int user_config_set_brightness(int value)
+int user_config_set_brightness(const int value)
 {
 	fail_if_false(user_conf.is_initialized, -1, "Error: user_conf is not initialized\n");
 
@@ -104,7 +104,7 @@ int user_config_set_brightness(int value)
 	return 0;
 }
 
-int user_config_set_gps_on(int value)
+int user_config_set_gps_on(const int value)
 {
 	fail_if_false(user_conf.is_initialized, -1, "Error: user_conf is not initialized\n");
 
@@ -118,7 +118,7 @@ int user_config_set_gps_on(int value)
 	return 0;
 }
 
-int user_config_set_ant_on(int value)
+int user_config_set_ant_on(const int value)
 {
 	fail_if_false(user_conf.is_initialized, -1, "Error: user_conf is not initialized\n");
 
@@ -132,7 +132,7 @@ int user_config_set_ant_on(int value)
 	return 0;
 }
 
-int user_config_set_bluetooth_on(int value)
+int user_config_set_bluetooth_on(const int value)
 {
 	fail_if_false(user_conf.is_initialized, -1, "Error: user_conf is not initialized\n");
 
@@ -146,7 +146,7 @@ int user_config_set_bluetooth_on(int value)
 	return 0;
 }
 
-int user_config_set_wifi_on(int value)
+int user_config_set_wifi_on(const int value)
 {
 	fail_if_false(user_conf.is_initialized, -1, "Error: user_conf is not initialized\n");
 

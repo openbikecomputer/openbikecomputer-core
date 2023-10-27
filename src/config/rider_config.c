@@ -109,3 +109,75 @@ int rider_config_get_height(void)
 
 	return rider_conf.height;
 }
+
+int rider_config_set_name(const char *name)
+{
+	fail_if_false(rider_conf.is_initialized, -1, "Error: rider_conf is not initialized\n");
+	fail_if_null(name, -2, "Error: name is null\n");
+
+	int ret = 0;
+
+	ret = libconfig_helper_set_string(RIDER_CONF_FILE_PATH, "name", name);
+	fail_if_negative(ret, -3, "Error: libconfig_helper_set_string failed, return: %d\n", ret);
+
+	strncpy(rider_conf.name, name, sizeof(rider_conf.name)-1);
+
+	return 0;
+}
+
+int rider_config_set_first_name(const char *first_name)
+{
+	fail_if_false(rider_conf.is_initialized, -1, "Error: rider_conf is not initialized\n");
+	fail_if_null(first_name, -2, "Error: first_name is null\n");
+
+	int ret = 0;
+
+	ret = libconfig_helper_set_string(RIDER_CONF_FILE_PATH, "first_name", first_name);
+	fail_if_negative(ret, -3, "Error: libconfig_helper_set_string failed, return: %d\n", ret);
+
+	strncpy(rider_conf.first_name, first_name, sizeof(rider_conf.first_name)-1);
+
+	return 0;
+}
+
+int rider_config_set_age(const int age)
+{
+	fail_if_false(rider_conf.is_initialized, -1, "Error: rider_conf is not initialized\n");
+
+	int ret = 0;
+
+	ret = libconfig_helper_set_int(RIDER_CONF_FILE_PATH, "age", age);
+	fail_if_negative(ret, -3, "Error: libconfig_helper_set_string failed, return: %d\n", ret);
+
+	rider_conf.age = age;
+
+	return 0;
+}
+
+int rider_config_set_weight(const int weight)
+{
+	fail_if_false(rider_conf.is_initialized, -1, "Error: rider_conf is not initialized\n");
+
+	int ret = 0;
+
+	ret = libconfig_helper_set_int(RIDER_CONF_FILE_PATH, "weight", weight);
+	fail_if_negative(ret, -3, "Error: libconfig_helper_set_string failed, return: %d\n", ret);
+
+	rider_conf.weight = weight;
+
+	return 0;
+}
+
+int rider_config_set_height(const int height)
+{
+	fail_if_false(rider_conf.is_initialized, -1, "Error: rider_conf is not initialized\n");
+
+	int ret = 0;
+
+	ret = libconfig_helper_set_int(RIDER_CONF_FILE_PATH, "height", height);
+	fail_if_negative(ret, -3, "Error: libconfig_helper_set_string failed, return: %d\n", ret);
+
+	rider_conf.height = height;
+
+	return 0;
+}

@@ -27,10 +27,10 @@ int user_config_get_ant_on(void);
 int user_config_get_bluetooth_on(void);
 int user_config_get_wifi_on(void);
 
-int user_config_set_brightness(int value);
-int user_config_set_gps_on(int value);
-int user_config_set_ant_on(int value);
-int user_config_set_bluetooth_on(int value);
-int user_config_set_wifi_on(int value);
+int user_config_set_brightness(const int value);
+int user_config_set_gps_on(const int value);
+int user_config_set_ant_on(const int value);
+int user_config_set_bluetooth_on(const int value);
+int user_config_set_wifi_on(const int value);
 
 #endif //_USER_HEADER_

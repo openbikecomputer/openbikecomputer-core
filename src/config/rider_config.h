@@ -20,10 +20,18 @@
 #define _RIDER_CONFIG_
 
 int rider_config_init(void);
+
 int rider_config_get_name(char *buff, int size);
 int rider_config_get_first_name(char *buff, int size);
 int rider_config_get_age(void);
 int rider_config_get_weight(void);
 int rider_config_get_height(void);
+
+int rider_config_set_name(const char *name);
+int rider_config_set_first_name(const char *first_name);
+int rider_config_set_age(const int age);
+int rider_config_set_weight(const int weight);
+int rider_config_set_height(const int height);
+
 
 #endif //_RIDER_CONFIG_

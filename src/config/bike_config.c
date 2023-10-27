@@ -129,3 +129,90 @@ int bike_config_get_wheel_size(void)
 
 	return bike_conf.wheel_size;
 }
+
+int bike_config_set_brand(const char *brand)
+{
+	fail_if_false(bike_conf.is_initialized, -1, "Error: bike_conf is not initialized\n");
+	fail_if_null(brand, -2, "Error: brand is null\n");
+
+	int ret = 0;
+
+	ret = libconfig_helper_set_string(BIKE_CONF_FILE_PATH, "brand", brand);
+	fail_if_negative(ret, -3, "Error: libconfig_helper_set_string failed, return: %d\n", ret);
+
+	strncpy(bike_conf.brand, brand, sizeof(bike_conf.brand)-1);
+
+	return 0;
+}
+
+int bike_config_set_model(const char *model)
+{
+	fail_if_false(bike_conf.is_initialized, -1, "Error: bike_conf is not initialized\n");
+	fail_if_null(model, -2, "Error: model is null\n");
+
+	int ret = 0;
+
+	ret = libconfig_helper_set_string(BIKE_CONF_FILE_PATH, "model", model);
+	fail_if_negative(ret, -3, "Error: libconfig_helper_set_string failed, return: %d\n", ret);
+
+	strncpy(bike_conf.model, model, sizeof(bike_conf.model)-1);
+
+	return 0;
+}
+
+int bike_config_set_name(const char *name)
+{
+	fail_if_false(bike_conf.is_initialized, -1, "Error: bike_conf is not initialized\n");
+	fail_if_null(name, -2, "Error: name is null\n");
+
+	int ret = 0;
+
+	ret = libconfig_helper_set_string(BIKE_CONF_FILE_PATH, "name", name);
+	fail_if_negative(ret, -3, "Error: libconfig_helper_set_string failed, return: %d\n", ret);
+
+	strncpy(bike_conf.name, name, sizeof(bike_conf.name)-1);
+
+	return 0;
+}
+
+int bike_config_set_weight(const int weight)
+{
+	fail_if_false(bike_conf.is_initialized, -1, "Error: bike_conf is not initialized\n");
+
+	int ret = 0;
+
+	ret = libconfig_helper_set_int(BIKE_CONF_FILE_PATH, "weight", weight);
+	fail_if_negative(ret, -2, "Error: libconfig_helper_set_int failed, return %d\n", ret);
+
+	bike_conf.weight = weight;
+
+	return 0;
+}
+
+int bike_config_set_type(const E_bike_type type)
+{
+	fail_if_false(bike_conf.is_initialized, -1, "Error: bike_conf is not initialized\n");
+
+	int ret = 0;
+
+	ret = libconfig_helper_set_int(BIKE_CONF_FILE_PATH, "type", type);
+	fail_if_negative(ret, -2, "Error: libconfig_helper_set_int failed, return %d\n", ret);
+
+	bike_conf.type = type;
+
+	return 0;
+}
+
+int bike_config_set_wheel_size(const int wheel_size)
+{
+	fail_if_false(bike_conf.is_initialized, -1, "Error: bike_conf is not initialized\n");
+
+	int ret = 0;
+
+	ret = libconfig_helper_set_int(BIKE_CONF_FILE_PATH, "wheel_size", wheel_size);
+	fail_if_negative(ret, -2, "Error: libconfig_helper_set_int failed, return %d\n", ret);
+
+	bike_conf.wheel_size = wheel_size;
+
+	return 0;
+}

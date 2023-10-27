@@ -24,7 +24,7 @@
 #include "log.h"
 #include "libconfig_helper.h"
 
-int libconfig_helper_get_int(char *file, char *conf, int *value)
+int libconfig_helper_get_int(const char *file, const char *conf, int *value)
 {
 	fail_if_null(file, -1, "Error: file is null\n");
 	fail_if_null(conf, -2, "Error: conf is null\n");
@@ -54,7 +54,7 @@ int libconfig_helper_get_int(char *file, char *conf, int *value)
 	return 0;
 }
 
-int libconfig_helper_get_string(char *file, char *conf, char *buff, int size)
+int libconfig_helper_get_string(const char *file, const char *conf, char *buff, int size)
 {
 	fail_if_null(file, -1, "Error: file is null\n");
 	fail_if_null(conf, -2, "Error: conf is null\n");
@@ -90,7 +90,7 @@ int libconfig_helper_get_string(char *file, char *conf, char *buff, int size)
 	return 0;
 }
 
-int libconfig_helper_set_int(char *file, char *conf, int value)
+int libconfig_helper_set_int(const char *file, const char *conf, const int value)
 {
 	fail_if_null(file, -1, "Error: file is null\n");
 	fail_if_null(conf, -2, "Error: conf is null\n");
@@ -132,7 +132,7 @@ int libconfig_helper_set_int(char *file, char *conf, int value)
 	return 0;
 }
 
-int libconfig_helper_set_string(char *file, char *conf, char *value)
+int libconfig_helper_set_string(const char *file, const char *conf, const char *value)
 {
 	fail_if_null(file, -1, "Error: file is null\n");
 	fail_if_null(conf, -2, "Error: conf is null\n");

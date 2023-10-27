@@ -36,4 +36,11 @@ int bike_config_get_weight(void);
 E_bike_type bike_config_get_type(void);
 int bike_config_get_wheel_size(void);
 
+int bike_config_set_brand(const char *buff);
+int bike_config_set_model(const char *buff);
+int bike_config_set_name(const char *buff);
+int bike_config_set_weight(const int weight);
+int bike_config_set_type(const E_bike_type type);
+int bike_config_set_wheel_size(const int wheel_size);
+
 #endif //_BIKE_HEADER_
