@@ -27,7 +27,7 @@ int ui_helper_create_button(int size_x, int size_y, lv_align_t align, int pos_x,
 
 	int ret = 0;
 
-	lv_style_t default_style;
+	static lv_style_t default_style;
 	ret = ui_style_get_default_style(&default_style);
 	fail_if_negative(ret, -3, "Error: ui_style_get_default_style failed, return %d\n");
 
