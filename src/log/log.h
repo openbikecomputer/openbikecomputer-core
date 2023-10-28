@@ -30,7 +30,7 @@
 
 /* Define default log level */
 #ifndef LOG_LEVEL
-#define LOG_LEVEL LOG_LEVEL_INFO
+#define LOG_LEVEL LOG_LEVEL_WARN
 #endif
 
 int log_set_color( bool value);
