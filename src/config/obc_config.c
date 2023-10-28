@@ -16,9 +16,28 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef _CONFIG_HEADER_
-#define _CONFIG_HEADER_
+#include "log.h"
+#include "bike_config.h"
+#include "rider_config.h"
+#include "system_config.h"
+#include "user_config.h"
+#include "obc_config.h"
 
-int config_init(void);
+int obc_config_init(void)
+{
+	int ret = 0;
 
-#endif //_CONFIG_HEADER_
+	ret = system_config_init();
+	fail_if_negative(ret, -1, "Error: system_config_init failed, return: %d\n", ret);
+
+	ret = bike_config_init();
+	fail_if_negative(ret, -2, "Error: bike_config_init failed, return: %d\n", ret);
+
+	ret = rider_config_init();
+	fail_if_negative(ret, -3, "Error: rider_config_init failed, return: %d\n", ret);
+
+	ret = user_config_init();
+	fail_if_negative(ret, -4, "Error: user_config_init failed, return: %d\n", ret);
+
+	return 0;
+}

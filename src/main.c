@@ -27,7 +27,7 @@
 #include "data.h"
 #include "utils.h"
 #include "simulator.h"
-#include "config.h"
+#include "obc_config.h"
 
 static void _print_help(void)
 {
@@ -105,8 +105,8 @@ int main(int argc, char **argv)
 	}
 
 	/* Init all configuration system, bike, rider and user */
-	ret = config_init();
-	fail_if_negative(ret, -1, "Error: config_init failed, return: %d\n", ret);
+	ret = obc_config_init();
+	fail_if_negative(ret, -1, "Error: obc_config_init failed, return: %d\n", ret);
 
 	/* Init the data manager and recorder subsystem */
 	ret = data_init();
