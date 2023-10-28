@@ -19,7 +19,9 @@ SRC = src/main.c \
       src/config/system_config.c \
       src/config/user_config.c \
       src/config/libconfig_helper.c \
+      src/data/data.c \
       src/data/data_manager.c \
+      src/data/data_recorder.c \
       src/utils/simulator.c \
       src/utils/fifo.c
 

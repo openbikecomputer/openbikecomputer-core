@@ -24,7 +24,7 @@
 #include "version.h"
 #include "ui.h"
 #include "log.h"
-#include "data_manager.h"
+#include "data.h"
 #include "utils.h"
 #include "simulator.h"
 #include "config.h"
@@ -107,8 +107,9 @@ int main(int argc, char **argv)
 	ret = config_init();
 	fail_if_negative(ret, -1, "Error: config_init failed, return: %d\n", ret);
 
-	ret = data_manager_init();
-	fail_if_negative(ret, -2, "Error: data_manager_init failed, return: %d\n", ret);
+	/* Init the data manager and recorder subsystem */
+	ret = data_init();
+	fail_if_negative(ret, -2, "Error: data_init failed, return: %d\n", ret);
 
 	ret = ui_init();
 	fail_if_negative(ret, -3, "Error: ui initialization failed, return: %d\n", ret);
