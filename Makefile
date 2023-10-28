@@ -13,6 +13,8 @@ SRC = src/main.c \
       src/ui/screen/system_conf_screen.c \
       src/ui/screen/user_conf_screen.c \
       src/ui/screen/data_screen.c \
+      src/ui/ui_style.c \
+      src/ui/ui_helper.c \
       src/config/config.c \
       src/config/bike_config.c \
       src/config/rider_config.c \

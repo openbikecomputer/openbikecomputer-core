@@ -37,6 +37,7 @@
 #include "fifo.h"
 #include "log.h"
 #include "system.h"
+#include "ui_style.h"
 #include "ui.h"
 
 #define SCREEN_FIFO_DEPTH 8
@@ -259,21 +260,25 @@ int ui_init(void)
 	lv_disp_set_rotation(ui.display, SCREEN_ROTATION);
 	lv_wayland_window_set_fullscreen(ui.display, true);
 
+	/* Init ui style */
+	ret = ui_style_init();
+	fail_if_negative(ret, -4, "Error: ui_style_init failed, return: %d\n", ret);
+
 	/* Create a thread to tell lvgl the elapsed time */
 	ret = pthread_create(&ui.tick_thread, NULL, &tick_thread_handler, NULL);
-	fail_if_negative(ret, -4, "Error: Create lvgl tick thread failed, return: %d\n", ret);
+	fail_if_negative(ret, -5, "Error: Create lvgl tick thread failed, return: %d\n", ret);
 
 	/* Create a thread to handle lvgl drawing */
 	ret = pthread_create(&ui.draw_thread, NULL, &draw_thread_handler, NULL);
-	fail_if_negative(ret, -5, "Error: Create lvgl draw thread failed, return: %d\n", ret);
+	fail_if_negative(ret, -6, "Error: Create lvgl draw thread failed, return: %d\n", ret);
 
 	/* Create a thread to handle lvgl drawing */
 	ret = pthread_create(&ui.screen_thread, NULL, &screen_thread_handler, NULL);
-	fail_if_negative(ret, -6, "Error: Create screen manager thread failed, return: %d\n", ret);
+	fail_if_negative(ret, -7, "Error: Create screen manager thread failed, return: %d\n", ret);
 
 	/* Display the main screen */
 	ret = _push_next_screen_in_fifo(E_MAIN_SCREEN);
-	fail_if_negative(ret, -7, "Error: _push_next_screen_in_fifo failed, return %d\n", ret);
+	fail_if_negative(ret, -8, "Error: _push_next_screen_in_fifo failed, return %d\n", ret);
 
 	/* Mark the ui module as initialized */
 	ui.is_initialized = true;
