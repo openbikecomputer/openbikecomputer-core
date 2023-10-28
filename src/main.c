@@ -104,6 +104,7 @@ int main(int argc, char **argv)
 		}
 	}
 
+	/* Init all configuration system, bike, rider and user */
 	ret = config_init();
 	fail_if_negative(ret, -1, "Error: config_init failed, return: %d\n", ret);
 
@@ -111,9 +112,11 @@ int main(int argc, char **argv)
 	ret = data_init();
 	fail_if_negative(ret, -2, "Error: data_init failed, return: %d\n", ret);
 
+	/* Init the ui and display the main screen */
 	ret = ui_init();
 	fail_if_negative(ret, -3, "Error: ui initialization failed, return: %d\n", ret);
 
+	/* If simulation mode is set, play the simulation file */
 	if(simulation_mode)
 	{
 		ret = simulator_init(simulation_file);
