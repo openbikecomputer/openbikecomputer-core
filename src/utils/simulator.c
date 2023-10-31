@@ -86,7 +86,7 @@ static void * simu_thread_handler(void *data)
 		}
 
 		/* push value to the data manager */
-		printf("Value read:%f;%f;%d;%d;%d;%d;%d;%d", latitude, longitude, speed, altitude,temperature, heart_rate, power, cadence);
+		printf("Value read:%f;%f;%d;%d;%d;%d;%d;%d\n", latitude, longitude, speed, altitude,temperature, heart_rate, power, cadence);
 	}
 
 	/* Close the file */
