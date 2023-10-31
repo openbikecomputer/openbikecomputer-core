@@ -13,6 +13,15 @@ SRC = src/main.c \
       src/ui/screen/system_conf_screen.c \
       src/ui/screen/user_conf_screen.c \
       src/ui/screen/data_screen.c \
+      src/ui/screen/navigation_screen.c \
+      src/ui/screen/profile_screen.c \
+      src/ui/screen/result_screen.c \
+      src/ui/screen/route_screen.c \
+      src/ui/screen/settings_ant_screen.c \
+      src/ui/screen/settings_bluetooth_screen.c \
+      src/ui/screen/settings_gps_screen.c \
+      src/ui/screen/settings_screen.c \
+      src/ui/screen/settings_wifi_screen.c \
       src/ui/ui_style.c \
       src/ui/ui_helper.c \
       src/config/obc_config.c \

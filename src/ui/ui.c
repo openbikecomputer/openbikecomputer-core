@@ -33,6 +33,15 @@
 #include "system_conf_screen.h"
 #include "data_screen.h"
 #include "user_conf_screen.h"
+#include "navigation_screen.h"
+#include "profile_screen.h"
+#include "result_screen.h"
+#include "route_screen.h"
+#include "settings_ant_screen.h"
+#include "settings_bluetooth_screen.h"
+#include "settings_gps_screen.h"
+#include "settings_screen.h"
+#include "settings_wifi_screen.h"
 
 #include "fifo.h"
 #include "log.h"
@@ -51,6 +60,15 @@ static struct {
 	[E_SYSTEM_CONF_SCREEN] = {.enter = &system_screen_enter, .exit = &system_screen_exit},
 	[E_USER_CONF_SCREEN]   = {.enter = &user_conf_screen_enter, .exit = &user_conf_screen_exit},
 	[E_DATA_SCREEN]        = {.enter = &data_screen_enter, .exit = &data_screen_exit},
+	[E_NAVIGATION_SCREEN]         = {.enter = &navigation_screen_enter, .exit = &navigation_screen_exit},
+	[E_RESULT_SCREEN]             = {.enter = &result_screen_enter, .exit = &result_screen_exit},
+	[E_ROUTE_SCREEN]              = {.enter = &route_screen_enter, .exit = &route_screen_exit},
+	[E_PROFILE_SCREEN]            = {.enter = &profile_screen_enter, .exit = &profile_screen_exit},
+	[E_SETTINGS_SCREEN]           = {.enter = &settings_screen_enter, .exit = &settings_screen_exit},
+	[E_SETTINGS_GPS_SCREEN]       = {.enter = &settings_gps_screen_enter, .exit = &settings_gps_screen_exit},
+	[E_SETTINGS_ANT_SCREEN]       = {.enter = &settings_ant_screen_enter, .exit = &settings_ant_screen_exit},
+	[E_SETTINGS_BLUETOOTH_SCREEN] = {.enter = &settings_bluetooth_screen_enter, .exit = &settings_bluetooth_screen_exit},
+	[E_SETTINGS_WIFI_SCREEN]      = {.enter = &settings_wifi_screen_enter, .exit = &settings_wifi_screen_exit},
 };
 
 static struct {

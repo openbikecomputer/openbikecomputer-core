@@ -1,5 +1,5 @@
 /*
-	OpenBikeComputer core application
+    OpenBikeComputer core application
     Copyright (C) 2023  LAMBS Pierre-Antoine
 
     This program is free software: you can redistribute it and/or modify
@@ -16,10 +16,13 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef _DATA_SCREEN_HEADER_
-#define _DATA_SCREEN_HEADER_
+#include "settings_bluetooth_screen.h"
 
-int data_screen_enter(void);
-int data_screen_exit(void);
-
-#endif //_DATA_SCREEN_HEADER_
+int settings_bluetooth_screen_enter(void)
+{
+	return 0;
+}
+int settings_bluetooth_screen_exit(void)
+{
+	return 0;
+}
