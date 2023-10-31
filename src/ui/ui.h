@@ -29,7 +29,10 @@ typedef enum {
 } E_screen_id;
 
 
-int ui_init(void);
+int ui_init(int resolution_hor, int resolution_ver, int screen_rotation);
 int ui_change_screen(E_screen_id next);
+int ui_go_to_previous_screen(void);
+int ui_get_resolution_hor(void);
+int ui_get_resolution_ver(void);
 
 #endif //_UI_HEADER_

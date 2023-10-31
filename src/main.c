@@ -28,6 +28,7 @@
 #include "utils.h"
 #include "simulator.h"
 #include "obc_config.h"
+#include "system.h"
 
 static void _print_help(void)
 {
@@ -38,6 +39,9 @@ static void _print_help(void)
 	printf("  -h, --help: print this\n");
 	printf("  -v, --version: print the version\n");
 	printf("  -s, --simulation <file>: launch simulation mode\n");
+	printf("  -w, --screen_w <resolution X>: Set screen horizontal resolution\n");
+	printf("  -h, --screen_h <resolution Y>: Set screen vertical resolution\n");
+	printf("  -r, --rotation <angle>: rotation angle of the screen, possible value 0, 90, 180 or 270\n");
 }
 
 static void _print_version(void)
@@ -56,6 +60,9 @@ int main(int argc, char **argv)
 	int c = 0;
 	bool simulation_mode = false;
 	char simulation_file[SIM_STRING_SIZE];
+	int resolution_hor = SCREEN_HOR_SIZE;
+	int resolution_ver = SCREEN_VER_SIZE;
+	int screen_rotation = SCREEN_ROTATION;
 
 	/* Disable getopt error output */
 	opterr = 0;
@@ -66,11 +73,14 @@ int main(int argc, char **argv)
 			{"help",       no_argument,       0, 'h'},
 			{"version",    no_argument,       0, 'v'},
 			{"simulation", required_argument, 0, 's'},
+			{"screen_w",   required_argument, 0, 'a'},
+			{"screen_h",   required_argument, 0, 'b'},
+			{"rotation",   required_argument, 0, 'c'},
 			{0, 0, 0, 0}
 		};
 
 		/* Parse application arguments to get the options */
-		c = getopt_long(argc, argv, "hvs:", long_options, NULL);
+		c = getopt_long(argc, argv, "hvs:a:b:c:", long_options, NULL);
 
 		/* Detect the end of the options. */
 		if(c == -1)
@@ -95,6 +105,16 @@ int main(int argc, char **argv)
 				safe_strncpy(simulation_file, optarg, sizeof(simulation_file));
 				break;
 
+			case 'a':
+				resolution_hor = atoi(optarg);
+				break;
+			case 'b':
+				resolution_ver = atoi(optarg);
+				break;
+			case 'c':
+				screen_rotation = atoi(optarg);
+				break;
+
 			case '?':
 			default:
 				/* Option error */
@@ -113,7 +133,7 @@ int main(int argc, char **argv)
 	fail_if_negative(ret, -2, "Error: data_init failed, return: %d\n", ret);
 
 	/* Init the ui and display the main screen */
-	ret = ui_init();
+	ret = ui_init(resolution_hor, resolution_ver, screen_rotation);
 	fail_if_negative(ret, -3, "Error: ui initialization failed, return: %d\n", ret);
 
 	/* If simulation mode is set, play the simulation file */

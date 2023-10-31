@@ -55,6 +55,11 @@ static struct {
 
 static struct {
 	bool is_initialized;
+	/* display settings */
+	int resolution_hor;
+	int resolution_ver;
+	lv_disp_rot_t rotation;
+
 	/* lvgl display */
 	lv_disp_t *display;
 
@@ -241,7 +246,35 @@ int ui_change_screen(E_screen_id next)
 	return 0;
 }
 
-int ui_init(void)
+int ui_go_to_previous_screen(void)
+{
+	int ret = 0;
+
+	fail_if_false(ui.is_initialized, -1, "Error: ui is not initialized\n");
+
+	/* Display the next screen */
+	// TODO unsafe, need mutex
+	ret = _push_next_screen_in_fifo(ui.previous_screen);
+	fail_if_negative(ret, -3, "Error: _push_next_screen_in_fifo failed, return %d\n", ret);
+
+	return 0;
+}
+
+int ui_get_resolution_hor(void)
+{
+	fail_if_false(ui.is_initialized, -1, "Error: ui is not initialized\n");
+	
+	return ui.resolution_hor;
+}
+
+int ui_get_resolution_ver(void)
+{
+	fail_if_false(ui.is_initialized, -1, "Error: ui is not initialized\n");
+	
+	return ui.resolution_ver;
+}
+
+int ui_init(int resolution_hor, int resolution_ver, int screen_rotation)
 {
 	int ret;
 
@@ -254,11 +287,38 @@ int ui_init(void)
 	ret = fifo_create(&ui.screen_fifo, sizeof(int), SCREEN_FIFO_DEPTH);
 	fail_if_negative(ret, -2, "Error: fifo_create fail, return: %d\n", ret);
 
+	printf("Init display %dx%d, rotation: %d\n", resolution_hor, resolution_ver, screen_rotation);
+
 	/* Create a display */
-	ui.display = lv_wayland_create_window(SCREEN_HOR_SIZE, SCREEN_VER_SIZE, "openbikecomputer", NULL /*close_cb*/);
+	ui.resolution_hor = resolution_hor;
+	ui.resolution_ver = resolution_ver;
+	ui.display = lv_wayland_create_window(ui.resolution_hor, ui.resolution_ver, "openbikecomputer", NULL /*close_cb*/);
 	fail_if_null(ui.display, -3, "Error: lv_wayland_create_window return NULL\n");
-	lv_disp_set_rotation(ui.display, SCREEN_ROTATION);
+
+	/* Set window in fullscreen mode */
 	lv_wayland_window_set_fullscreen(ui.display, true);
+
+	ui.rotation = LV_DISP_ROT_NONE;
+	switch(screen_rotation)
+	{
+		case 0:
+			ui.rotation = LV_DISP_ROT_NONE;
+			break;
+		case 90:
+			ui.rotation = LV_DISP_ROT_90;
+			break;
+		case 180:
+			ui.rotation = LV_DISP_ROT_180;
+			break;
+		case 270:
+			ui.rotation = LV_DISP_ROT_270;
+			break;
+		default:
+			log_error("Invalid screen rotation %d, value 0, 90, 180 or 270\n", screen_rotation);
+			exit(-1);
+			break;
+	};
+	lv_disp_set_rotation(ui.display, ui.rotation);
 
 	/* Init ui style */
 	ret = ui_style_init();
