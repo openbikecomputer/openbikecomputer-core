@@ -70,8 +70,10 @@ install:
 	install -D $(BIN) $(ROOTDIR)/$(BINDIR)/$(BIN)
 	install -d $(ROOTDIR)/$(CONFDIR)
 	install config/*.conf $(ROOTDIR)/$(CONFDIR)/
-	install -d $(ROOTDIR)/$(SHAREDIR)
-	install simulation/*.csv $(ROOTDIR)/$(SHAREDIR)/
+	install -d $(ROOTDIR)/$(SHAREDIR)/simulation
+	install simulation/*.csv $(ROOTDIR)/$(SHAREDIR)/simulation
+	install -d $(ROOTDIR)/$(SHAREDIR)/images
+	install images/* $(ROOTDIR)/$(SHAREDIR)/images
 
 clean:
 	rm -f $(OBJS) $(BIN)
