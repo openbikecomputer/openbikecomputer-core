@@ -22,14 +22,15 @@
 #include <lvgl.h>
 #include "ui.h"
 
-#define TOP_BAR_SIZE ((ui_get_resolution_ver() / 10))
+#define STATUS_BAR_SIZE ((ui_get_resolution_ver() / 10))
+#define STATUS_BAR_TIMER_DELAY (1000) //ms
 
 /* Back button shared by all screen */
 #define BACK_BUTTON_SIZE_X ((ui_get_resolution_hor() / 4))
 #define BACK_BUTTON_SIZE_Y ((ui_get_resolution_ver() / 10))
 #define BACK_BUTTON_ALIGN (LV_ALIGN_TOP_LEFT)
 #define BACK_BUTTON_POS_X 0
-#define BACK_BUTTON_POS_Y (TOP_BAR_SIZE)
+#define BACK_BUTTON_POS_Y (STATUS_BAR_SIZE)
 #define BACK_BUTTON_TEXT "< Back"
 
 typedef struct {
@@ -38,9 +39,18 @@ typedef struct {
 	lv_style_t style;
 } T_lv_btn;
 
+typedef struct {
+	lv_obj_t *bar;
+	lv_obj_t *label;
+	lv_style_t style;
+	lv_timer_t *timer;
+} T_lv_statusbar;
+
 typedef void (*btn_handler)(lv_event_t *event);
 
 void lvgl_helper_back_button_event_handler(lv_event_t *event);
 int lvgl_helper_create_button(T_lv_btn *obj, int size_x, int size_y, lv_align_t align, int pos_x, int pos_y, char *text, btn_handler handler);
+int lvgl_helper_create_status_bar(void);
+int lvgl_helper_destroy_status_bar(void);
 
 #endif //_LVGL_HELPER_HEADER_

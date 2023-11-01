@@ -61,6 +61,10 @@ static struct {
 
 int main_screen_enter(void)
 {
+	int ret = 0;
+	ret = lvgl_helper_create_status_bar();
+	fail_if_negative(ret, -1, "Error: create status bar failed, return: %d\n", ret);
+
 	/* Load global style */
 	ui_style_get_default_style(&main_screen.style);
 
@@ -90,5 +94,6 @@ int main_screen_enter(void)
 
 int main_screen_exit(void)
 {
+	lvgl_helper_destroy_status_bar();
 	return 0;
 }
