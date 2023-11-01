@@ -23,7 +23,6 @@
 
 #include "log.h"
 #include "system.h"
-#include "ui_style.h"
 #include "lvgl_helper.h"
 #include "main_screen.h"
 #include "ui.h"
@@ -59,20 +58,16 @@ static struct {
 	.button_array[5] = {.name = "Settings",   .image = "D:/usr/share/openbikecomputer/images/settings.png", .next_screen = E_SETTINGS_SCREEN},
 };
 
-int main_screen_enter(void)
+int main_screen_enter(lv_obj_t *screen)
 {
-	int ret = 0;
-	ret = lvgl_helper_create_status_bar();
-	fail_if_negative(ret, -1, "Error: create status bar failed, return: %d\n", ret);
-
-	/* Load global style */
-	ui_style_get_default_style(&main_screen.style);
-
-	main_screen.cont = lv_obj_create(lv_scr_act());
-    lv_obj_set_size(main_screen.cont, lv_pct(100), lv_pct(90));
+	main_screen.cont = lv_obj_create(screen);
+    lv_obj_set_size(main_screen.cont, lv_pct(100), lv_pct(100));
     lv_obj_align(main_screen.cont, LV_ALIGN_BOTTOM_MID, 0, 0);
     lv_obj_set_flex_flow(main_screen.cont, LV_FLEX_FLOW_ROW_WRAP);
-	lv_obj_add_style(main_screen.cont, &main_screen.style, 0);
+
+	//lv_obj_set_style_border_width(main_screen.cont, 0, 0);
+	//lv_obj_set_style_outline_width(main_screen.cont, 0, 0);
+	lv_obj_set_style_pad_all(main_screen.cont, 0, 0);
 
 	for(int i = 0; i < NB_BUTTON; i++)
 	{
@@ -94,6 +89,5 @@ int main_screen_enter(void)
 
 int main_screen_exit(void)
 {
-	lvgl_helper_destroy_status_bar();
 	return 0;
 }

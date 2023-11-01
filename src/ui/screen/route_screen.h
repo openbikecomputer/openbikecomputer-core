@@ -19,7 +19,7 @@
 #ifndef _ROUTE_SCREEN_HEADER_
 #define _ROUTE_SCREEN_HEADER_
 
-int route_screen_enter(void);
+int route_screen_enter(lv_obj_t *screen);
 int route_screen_exit(void);
 
 #endif //_ROUTE_SCREEN_HEADER_

@@ -46,12 +46,21 @@
 #include "fifo.h"
 #include "log.h"
 #include "system.h"
-#include "ui_style.h"
 #include "ui.h"
 
+#define STATUS_BAR_SIZE ((ui_get_resolution_ver() / 10))
+#define STATUS_BAR_TIMER_DELAY (1000) //ms
 #define SCREEN_FIFO_DEPTH 8
+#define STR_TIME_SIZE (8)
+
 static struct {
-	int (*enter)(void);
+	lv_obj_t *bar;
+	lv_obj_t *label;
+	lv_timer_t *timer;
+} status_bar = {0};
+
+static struct {
+	int (*enter)(lv_obj_t * screen);
 	int (*exit)(void);
 } screen_table[E_SCREEN_ID_MAX] = {
 	[E_MAIN_SCREEN]        = {.enter = &main_screen_enter, .exit = &main_screen_exit},
@@ -80,6 +89,8 @@ static struct {
 
 	/* lvgl display */
 	lv_disp_t *display;
+	lv_style_t default_style;
+	lv_obj_t *virt_screen;
 
 	/* threads */
 	pthread_t tick_thread;
@@ -108,6 +119,78 @@ static int _push_next_screen_in_fifo(E_screen_id next)
 	return 0;
 }
 
+static int _get_local_time(char *str, int size)
+{
+	fail_if_null(str, -1, "Error: str is null\n");
+
+	time_t t;
+	struct tm * tmp;
+
+	t = time(NULL);
+	tmp = localtime(&t);
+	fail_if_null(tmp, -2, "Error: tmp is null\n");
+
+	strftime(str, size, "%H:%M", tmp);
+
+	return 0;
+}
+
+static void _statusbar_timer_handler(lv_timer_t * timer)
+{
+	int ret = 0;
+
+	lv_obj_t *label = timer->user_data;
+
+	char str[STR_TIME_SIZE];
+	ret = _get_local_time(str, sizeof(str));
+	if(ret < 0)
+	{
+		log_error("Error: _get_local_time failed, return %d\n");
+		return;
+	}
+	lv_label_set_text_fmt(label, LV_SYMBOL_GPS " " LV_SYMBOL_WIFI " " LV_SYMBOL_BATTERY_FULL " %s", str);
+}
+
+static int _create_status_bar(void)
+{
+	int ret = 0;
+
+	/* Create the status bar */
+	status_bar.bar = lv_obj_create(lv_scr_act());
+	lv_obj_set_size(status_bar.bar, ui_get_resolution_hor(), STATUS_BAR_SIZE);
+	lv_obj_align(status_bar.bar, LV_ALIGN_TOP_MID, 0, 0);
+	lv_obj_add_style(status_bar.bar, &ui.default_style, 0);
+
+	/* status bar like virt screen are without padding, border and outline */
+	lv_obj_set_style_border_width(status_bar.bar, 0, 0);
+	lv_obj_set_style_outline_width(status_bar.bar, 0, 0);
+	//lv_obj_set_style_pad_all(status_bar.bar, 0, 0);
+
+	/* Fill the status bar with widgets */
+	status_bar.label = lv_label_create(status_bar.bar);
+	char str[STR_TIME_SIZE];
+	ret = _get_local_time(str, sizeof(str));
+	fail_if_negative(ret, -2, "Error: _get_local_time failed, return %d\n", ret);
+	lv_label_set_text_fmt(status_bar.label, LV_SYMBOL_GPS " " LV_SYMBOL_WIFI " " LV_SYMBOL_BATTERY_FULL " %s", str);
+    lv_obj_align(status_bar.label, LV_ALIGN_RIGHT_MID, 0, 0);
+
+	/* Create lvgl timer that update the bar each secondes */
+	status_bar.timer = lv_timer_create(&_statusbar_timer_handler, STATUS_BAR_TIMER_DELAY, status_bar.label);
+	lv_timer_set_repeat_count(status_bar.timer, -1); // repeat indefinitly
+
+	return 0;
+}
+
+static int _destroy_status_bar(void)
+{
+	if(status_bar.timer != NULL)
+	{
+		lv_timer_del(status_bar.timer);
+		status_bar.timer = NULL;
+	}
+	return 0;
+}
+
 static void * screen_thread_handler(void *data)
 {
 	int ret = 0;
@@ -122,48 +205,104 @@ static void * screen_thread_handler(void *data)
 			continue;
 		}
 
+		/* Check enter and exit handler, if null print log and skip the screen change */
+		if(screen_table[next].enter == NULL)
+		{
+			log_error("Error: next screen (%d) enter handler is NULL\n", next);
+			continue;
+		}
+		if(screen_table[ui.actual_screen].exit == NULL)
+		{
+			log_error("Error: actual screen (%d) exit handler is NULL\n", ui.actual_screen);
+			continue;
+		}
+
 		/* Clean the actual_screen screen before continuing */
 		log_debug("LVGL: Clean actual screen\n");
 		pthread_mutex_lock(&ui.lvgl_mutex);
+		/* Destroy the status bar before cleaning the display */
+		_destroy_status_bar();
+		/* Clean the display */
 		lv_obj_clean(lv_scr_act());
 		pthread_mutex_unlock(&ui.lvgl_mutex);
 
-		/* Exit the actual_screen screen, exit handler is not mandatory */
-		if(screen_table[ui.actual_screen].exit != NULL)
+		log_debug("Run actual screen exit handler\n");
+		pthread_mutex_lock(&ui.lvgl_mutex);
+		ret = screen_table[ui.actual_screen].exit();
+		pthread_mutex_unlock(&ui.lvgl_mutex);
+		if(ret < 0)
 		{
-			log_debug("Run actual screen exit handler\n");
-			pthread_mutex_lock(&ui.lvgl_mutex);
-			ret = screen_table[ui.actual_screen].exit();
-			pthread_mutex_unlock(&ui.lvgl_mutex);
-			if(ret < 0)
-			{
-				log_error("Error: exiting screen %d failed, returned: %d\n", ui.actual_screen, ret);
-			}
+			log_error("Error: exiting screen %d failed, returned: %d\n", ui.actual_screen, ret);
+			/* If it fail we take the shot and continue */
 		}
+
+		/* Create an LVGL objet that is the size of the screen minus the size
+		 * of the statusbar if the status bar is needed, if not the size of the
+		 * fullscreen.
+		 * Each screen enter handler will use that to create the children objects.
+		 * */
+		pthread_mutex_lock(&ui.lvgl_mutex);
+
+		/* Create the virtual screen object */
+		ui.virt_screen = lv_obj_create(lv_scr_act());
+
+		/* Apply global style on the virt screen */
+		lv_obj_add_style(ui.virt_screen, &ui.default_style, 0);
+
+		/* status bar like virt screen are without padding, border and outline */
+		lv_obj_set_style_border_width(ui.virt_screen, 0, 0);
+		lv_obj_set_style_outline_width(ui.virt_screen, 0, 0);
+		//lv_obj_set_style_pad_all(ui.virt_screen, 0, 0);
+
+		switch(next)
+		{
+			case E_MAIN_SCREEN:
+			case E_DATA_SCREEN:
+			case E_NAVIGATION_SCREEN:
+			case E_RESULT_SCREEN:
+			case E_ROUTE_SCREEN:
+			case E_PROFILE_SCREEN:
+				/* screen were the statusbar is displayed */
+				lv_obj_set_size(ui.virt_screen, ui_get_resolution_hor(), ui_get_resolution_ver() - STATUS_BAR_SIZE);
+				lv_obj_align(ui.virt_screen, LV_ALIGN_TOP_MID, 0, STATUS_BAR_SIZE);
+
+				/* Create the status bar in the same display */
+				ret = _create_status_bar();
+				if(ret < 0)
+				{
+					log_error("Error: _create_status_bar failed, return: %d\n", ret);
+					exit(-1);
+				}
+				break;
+			case E_RIDER_CONF_SCREEN:
+			case E_BIKE_CONF_SCREEN:
+			case E_SYSTEM_CONF_SCREEN:
+			case E_USER_CONF_SCREEN:
+			case E_SETTINGS_SCREEN:
+			case E_SETTINGS_GPS_SCREEN:
+			case E_SETTINGS_ANT_SCREEN:
+			case E_SETTINGS_BLUETOOTH_SCREEN:
+			case E_SETTINGS_WIFI_SCREEN:
+				/* screen were the statusbar is not displayed */
+				lv_obj_set_size(ui.virt_screen, ui_get_resolution_hor(), ui_get_resolution_ver());
+				lv_obj_align(ui.virt_screen, LV_ALIGN_TOP_MID, 0, 0);
+				break;
+			default:
+				log_error("Error: unknown screen_id (%d), abort\n", next);
+				exit(-1);
+				break;
+		}
+		pthread_mutex_unlock(&ui.lvgl_mutex);
 
 		/* Enter the next screen */
 		log_debug("Run next screen enter handler\n");
 		pthread_mutex_lock(&ui.lvgl_mutex);
-		ret = screen_table[next].enter();
+		ret = screen_table[next].enter(ui.virt_screen);
 		pthread_mutex_unlock(&ui.lvgl_mutex);
 		if(ret < 0)
 		{
 			log_error("Error: entering screen %d failed, returned: %d\n", next, ret);
-
-			/* Go to the previous_screen screen (failsafe mode) */
-			pthread_mutex_lock(&ui.lvgl_mutex);
-			ret = screen_table[ui.actual_screen].enter();
-			pthread_mutex_unlock(&ui.lvgl_mutex);
-			if(ret < 0)
-			{
-				/* At this point nothing more can be done, exit the application */
-				log_error("Error: entering previous_screen screen %d failed, returned: %d, exit application\n", ui.actual_screen, ret);
-				exit(-1);
-			}
-			else
-			{
-				log_error("UI display change failsafe mode did recover an error by loading screen: %d\n", ui.actual_screen);
-			}
+			exit(-1);
 		}
 
 		/* Actualize the screen manager state */
@@ -237,6 +376,24 @@ static void * draw_thread_handler(void *data)
 
 	return NULL;
 }
+
+int _init_default_style(void)
+{
+	lv_style_init(&ui.default_style);
+	lv_style_set_text_font(&ui.default_style, &lv_font_montserrat_48);
+
+	return 0;
+}
+
+//int ui_style_get_default_style(lv_style_t *style)
+//{
+//	fail_if_false(ui_style.is_initialized, -1, "Error: ui_style is not initialized\n");
+//	fail_if_null(style, -2, "Error: style is null\n");
+//
+//	memcpy(style, &ui_style.default_style, sizeof(lv_style_t));
+//
+//	return 0;
+//}
 
 int ui_change_screen(E_screen_id next)
 {
@@ -339,7 +496,7 @@ int ui_init(int resolution_hor, int resolution_ver, int screen_rotation)
 	lv_disp_set_rotation(ui.display, ui.rotation);
 
 	/* Init ui style */
-	ret = ui_style_init();
+	ret = _init_default_style();
 	fail_if_negative(ret, -4, "Error: ui_style_init failed, return: %d\n", ret);
 
 	/* Create a thread to tell lvgl the elapsed time */

@@ -19,7 +19,7 @@
 #ifndef _NAVIGATION_SCREEN_HEADER_
 #define _NAVIGATION_SCREEN_HEADER_
 
-int navigation_screen_enter(void);
+int navigation_screen_enter(lv_obj_t *screen);
 int navigation_screen_exit(void);
 
 #endif //_NAVIGATION_SCREEN_HEADER_

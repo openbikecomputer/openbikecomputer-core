@@ -19,7 +19,7 @@
 #ifndef _USER_CONF_SCREEN_HEADER_
 #define _USER_CONF_SCREEN_HEADER_
 
-int user_conf_screen_enter(void);
+int user_conf_screen_enter(lv_obj_t *screen);
 int user_conf_screen_exit(void);
 
 #endif //_USER_CONF_SCREEN_HEADER_

@@ -19,7 +19,7 @@
 #ifndef _MAIN_SCREEN_HEADER_
 #define _MAIN_SCREEN_HEADER_
 
-int main_screen_enter(void);
+int main_screen_enter(lv_obj_t *screen);
 int main_screen_exit(void);
 
 #endif //_MAIN_SCREEN_HEADER_

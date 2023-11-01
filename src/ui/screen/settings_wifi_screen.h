@@ -19,7 +19,7 @@
 #ifndef _SETTINGS_WIFI_SCREEN_HEADER_
 #define _SETTINGS_WIFI_SCREEN_HEADER_
 
-int settings_wifi_screen_enter(void);
+int settings_wifi_screen_enter(lv_obj_t *screen);
 int settings_wifi_screen_exit(void);
 
 #endif //_SETTINGS_WIFI_SCREEN_HEADER_

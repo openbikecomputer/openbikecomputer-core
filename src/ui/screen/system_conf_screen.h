@@ -19,7 +19,7 @@
 #ifndef _SYSTEM_SCREEN_HEADER_
 #define _SYSTEM_SCREEN_HEADER_
 
-int system_screen_enter(void);
+int system_screen_enter(lv_obj_t *screen);
 int system_screen_exit(void);
 
 #endif //_SYSTEM_SCREEN_HEADER_

@@ -19,7 +19,7 @@
 #ifndef _PROFILE_SCREEN_HEADER_
 #define _PROFILE_SCREEN_HEADER_
 
-int profile_screen_enter(void);
+int profile_screen_enter(lv_obj_t *screen);
 int profile_screen_exit(void);
 
 #endif //_PROFILE_SCREEN_HEADER_

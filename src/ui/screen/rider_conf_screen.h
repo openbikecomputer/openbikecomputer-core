@@ -19,7 +19,7 @@
 #ifndef _RIDER_CONF_SCREEN_HEADER_
 #define _RIDER_CONF_SCREEN_HEADER_
 
-int rider_conf_screen_enter(void);
+int rider_conf_screen_enter(lv_obj_t *screen);
 int rider_conf_screen_exit(void);
 
 #endif //_RIDER_CONF_SCREEN_HEADER_

@@ -19,7 +19,7 @@
 #ifndef _BIKE_CONF_SCREEN_HEADER_
 #define _BIKE_CONF_SCREEN_HEADER_
 
-int bike_conf_screen_enter(void);
+int bike_conf_screen_enter(lv_obj_t *screen);
 int bike_conf_screen_exit(void);
 
 #endif //_BIKE_CONF_SCREEN_HEADER_
