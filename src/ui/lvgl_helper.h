@@ -16,13 +16,19 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef _UI_HELPER_HEADER_
-#define _UI_HELPER_HEADER_
+#ifndef _LVGL_HELPER_HEADER_
+#define _LVGL_HELPER_HEADER_
 
 #include <lvgl.h>
 
+typedef struct {
+	lv_obj_t *btn;
+	lv_obj_t *label;
+	lv_style_t style;
+} T_lv_btn;
+
 typedef void (*btn_handler)(lv_event_t *event);
 
-int ui_helper_create_button(int size_x, int size_y, lv_align_t align, int pos_x, int pos_y, char *text, btn_handler handler);
+int lvgl_helper_create_button(T_lv_btn *obj, int size_x, int size_y, lv_align_t align, int pos_x, int pos_y, char *text, btn_handler handler);
 
-#endif //_UI_HELPER_HEADER_
+#endif //_LVGL_HELPER_HEADER_

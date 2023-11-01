@@ -18,30 +18,30 @@
 
 #include "log.h"
 #include "ui_style.h"
-#include "ui_helper.h"
+#include "lvgl_helper.h"
 
-int ui_helper_create_button(int size_x, int size_y, lv_align_t align, int pos_x, int pos_y, char *text, btn_handler handler)
+int lvgl_helper_create_button(T_lv_btn *obj, int size_x, int size_y, lv_align_t align, int pos_x, int pos_y, char *text, btn_handler handler)
 {
 	fail_if_null(text, -1, "Error: text is null\n");
 	fail_if_null(handler, -2, "Error: handler is null\n");
+	fail_if_null(obj, -3, "Error: btn is null\n");
 
 	int ret = 0;
 
-	static lv_style_t default_style;
-	ret = ui_style_get_default_style(&default_style);
-	fail_if_negative(ret, -3, "Error: ui_style_get_default_style failed, return %d\n");
+	ret = ui_style_get_default_style(&obj->style);
+	fail_if_negative(ret, -4, "Error: ui_style_get_default_style failed, return %d\n");
 
 	/* Create button */
-	lv_obj_t * button = lv_btn_create(lv_scr_act());
-	lv_obj_add_event_cb(button, handler, LV_EVENT_ALL, NULL);
-	lv_obj_set_size(button, size_x, size_y);
-	lv_obj_align(button, align, pos_x, pos_y);
-	lv_obj_add_style(button, &default_style, 0);
+	obj->btn = lv_btn_create(lv_scr_act());
+	lv_obj_add_event_cb(obj->btn, handler, LV_EVENT_ALL, NULL);
+	lv_obj_set_size(obj->btn, size_x, size_y);
+	lv_obj_align(obj->btn, align, pos_x, pos_y);
+	lv_obj_add_style(obj->btn, &obj->style, 0);
 
-	lv_obj_t * label_button;
-	label_button = lv_label_create(button);
-	lv_label_set_text(label_button, text);
-    lv_obj_center(label_button);
+	/* Put the text in the label */
+	obj->label = lv_label_create(obj->btn);
+	lv_label_set_text(obj->label, text);
+    lv_obj_center(obj->label);
 
 	return 0;
 }

@@ -23,7 +23,6 @@
 
 #include "log.h"
 #include "system.h"
-#include "ui_helper.h"
 #include "ui_style.h"
 #include "main_screen.h"
 #include "ui.h"

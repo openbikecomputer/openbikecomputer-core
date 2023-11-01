@@ -23,7 +23,7 @@ SRC = src/main.c \
       src/ui/screen/settings_screen.c \
       src/ui/screen/settings_wifi_screen.c \
       src/ui/ui_style.c \
-      src/ui/ui_helper.c \
+      src/ui/lvgl_helper.c \
       src/config/obc_config.c \
       src/config/bike_config.c \
       src/config/rider_config.c \
