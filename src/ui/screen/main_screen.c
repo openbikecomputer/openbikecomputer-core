@@ -38,8 +38,8 @@ static void button_event_handler(lv_event_t *event)
 
 typedef struct {
 	lv_obj_t *obj;
-	lv_obj_t *label;
 	char *name;
+	char *image;
 	E_screen_id next_screen;
 } T_button;
 
@@ -52,12 +52,12 @@ static struct {
 	lv_obj_t * cont;
 	T_button button_array[NB_BUTTON];
 } main_screen = {
-	.button_array[0] = {.name = "Data",       .next_screen = E_DATA_SCREEN},
-	.button_array[1] = {.name = "Navigation", .next_screen = E_NAVIGATION_SCREEN},
-	.button_array[2] = {.name = "Results",    .next_screen = E_RESULT_SCREEN},
-	.button_array[3] = {.name = "Routes",     .next_screen = E_ROUTE_SCREEN},
-	.button_array[4] = {.name = "Profiles",   .next_screen = E_PROFILE_SCREEN},
-	.button_array[5] = {.name = "Settings",   .next_screen = E_SETTINGS_SCREEN},
+	.button_array[0] = {.name = "Data",       .image = "D:/usr/share/openbikecomputer/images/counter.png", .next_screen = E_DATA_SCREEN},
+	.button_array[1] = {.name = "Navigation", .image = "D:/usr/share/openbikecomputer/images/navigation.png", .next_screen = E_NAVIGATION_SCREEN},
+	.button_array[2] = {.name = "Results",    .image = "D:/usr/share/openbikecomputer/images/results.png", .next_screen = E_RESULT_SCREEN},
+	.button_array[3] = {.name = "Routes",     .image = "D:/usr/share/openbikecomputer/images/routes.png", .next_screen = E_ROUTE_SCREEN},
+	.button_array[4] = {.name = "Profiles",   .image = "D:/usr/share/openbikecomputer/images/profiles.png", .next_screen = E_PROFILE_SCREEN},
+	.button_array[5] = {.name = "Settings",   .image = "D:/usr/share/openbikecomputer/images/settings.png", .next_screen = E_SETTINGS_SCREEN},
 };
 
 int main_screen_enter(void)
@@ -76,15 +76,13 @@ int main_screen_enter(void)
 		T_button *btn = &main_screen.button_array[i];
 
 		/* Create the button */
-		btn->obj = lv_btn_create(main_screen.cont);
+		btn->obj = lv_imgbtn_create(main_screen.cont);
+		lv_imgbtn_set_src(btn->obj, LV_IMGBTN_STATE_RELEASED, btn->image, NULL, NULL);
 
 		/* Change button size */
 		lv_obj_set_size(btn->obj, BUTTON_SIZE, BUTTON_SIZE);
 
-		/* Create label in button */
-		btn->label = lv_label_create(btn->obj);
-		lv_label_set_text_fmt(btn->label, "%s", btn->name);
-		lv_obj_center(btn->label);
+		/* Link the button click to the event callback */
 		lv_obj_add_event_cb(btn->obj, &button_event_handler, LV_EVENT_CLICKED, (void*)&btn->next_screen);
 	}
 
