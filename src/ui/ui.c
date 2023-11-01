@@ -305,7 +305,7 @@ int ui_init(int resolution_hor, int resolution_ver, int screen_rotation)
 	ret = fifo_create(&ui.screen_fifo, sizeof(int), SCREEN_FIFO_DEPTH);
 	fail_if_negative(ret, -2, "Error: fifo_create fail, return: %d\n", ret);
 
-	printf("Init display %dx%d, rotation: %d\n", resolution_hor, resolution_ver, screen_rotation);
+	log_debug("display %dx%d, rotation: %d\n", resolution_hor, resolution_ver, screen_rotation);
 
 	/* Create a display */
 	ui.resolution_hor = resolution_hor;
@@ -353,6 +353,9 @@ int ui_init(int resolution_hor, int resolution_ver, int screen_rotation)
 	/* Create a thread to handle lvgl drawing */
 	ret = pthread_create(&ui.screen_thread, NULL, &screen_thread_handler, NULL);
 	fail_if_negative(ret, -7, "Error: Create screen manager thread failed, return: %d\n", ret);
+
+	/* Wait 150ms to let thread settle */
+	usleep(150*1000);
 
 	/* Display the main screen */
 	ret = _push_next_screen_in_fifo(E_MAIN_SCREEN);
