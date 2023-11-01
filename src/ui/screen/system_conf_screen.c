@@ -22,39 +22,18 @@
 #include <lvgl.h>
 
 #include "log.h"
+#include "lvgl_helper.h"
 #include "system.h"
 #include "system_conf_screen.h"
 #include "ui.h"
 
-static void back_button_event_handler(lv_event_t *event)
-{ 
-	lv_event_code_t code = lv_event_get_code(event); 
-
-    if(code == LV_EVENT_CLICKED) {
-		ui_change_screen(E_MAIN_SCREEN);
-    }
-}
+static T_lv_btn back_btn;
 
 int system_screen_enter(void)
 {
-	lv_obj_t * label_back_button;
-
-	/* Create a style to increase the font size */
-	static lv_style_t style_btn;
-	lv_style_init(&style_btn);
-	lv_style_set_text_font(&style_btn, &lv_font_montserrat_48);
-
-	/* Create back button */
-	lv_obj_t * btn1 = lv_btn_create(lv_scr_act());
-	lv_obj_add_event_cb(btn1, back_button_event_handler, LV_EVENT_ALL, NULL);
-	lv_obj_set_size(btn1, 600, 200);
-	lv_obj_align(btn1, LV_ALIGN_TOP_MID, 0, 50);
-	lv_obj_add_style(btn1, &style_btn, 0);
-
-	label_back_button = lv_label_create(btn1);
-	lv_label_set_text(label_back_button, "Back");
-    lv_obj_center(label_back_button);
-
+	int ret = 0;
+	ret = lvgl_helper_create_button(&back_btn, BACK_BUTTON_SIZE_X, BACK_BUTTON_SIZE_Y, BACK_BUTTON_ALIGN, BACK_BUTTON_POS_X, BACK_BUTTON_POS_Y, BACK_BUTTON_TEXT, &lvgl_helper_back_button_event_handler);
+	fail_if_negative(ret, -1, "Error: lvgl_helper_create_button failed, return %d\n");
 	return 0;
 }
 

@@ -16,10 +16,17 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "log.h"
+#include "lvgl_helper.h"
 #include "settings_bluetooth_screen.h"
+
+static T_lv_btn back_btn;
 
 int settings_bluetooth_screen_enter(void)
 {
+	int ret = 0;
+	ret = lvgl_helper_create_button(&back_btn, BACK_BUTTON_SIZE_X, BACK_BUTTON_SIZE_Y, BACK_BUTTON_ALIGN, BACK_BUTTON_POS_X, BACK_BUTTON_POS_Y, BACK_BUTTON_TEXT, &lvgl_helper_back_button_event_handler);
+	fail_if_negative(ret, -1, "Error: lvgl_helper_create_button failed, return %d\n");
 	return 0;
 }
 int settings_bluetooth_screen_exit(void)

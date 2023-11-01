@@ -20,6 +20,17 @@
 #define _LVGL_HELPER_HEADER_
 
 #include <lvgl.h>
+#include "ui.h"
+
+#define TOP_BAR_SIZE ((ui_get_resolution_ver() / 10))
+
+/* Back button shared by all screen */
+#define BACK_BUTTON_SIZE_X ((ui_get_resolution_hor() / 4))
+#define BACK_BUTTON_SIZE_Y ((ui_get_resolution_ver() / 10))
+#define BACK_BUTTON_ALIGN (LV_ALIGN_TOP_LEFT)
+#define BACK_BUTTON_POS_X 0
+#define BACK_BUTTON_POS_Y (TOP_BAR_SIZE)
+#define BACK_BUTTON_TEXT "< Back"
 
 typedef struct {
 	lv_obj_t *btn;
@@ -29,6 +40,7 @@ typedef struct {
 
 typedef void (*btn_handler)(lv_event_t *event);
 
+void lvgl_helper_back_button_event_handler(lv_event_t *event);
 int lvgl_helper_create_button(T_lv_btn *obj, int size_x, int size_y, lv_align_t align, int pos_x, int pos_y, char *text, btn_handler handler);
 
 #endif //_LVGL_HELPER_HEADER_

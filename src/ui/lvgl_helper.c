@@ -20,6 +20,15 @@
 #include "ui_style.h"
 #include "lvgl_helper.h"
 
+void lvgl_helper_back_button_event_handler(lv_event_t *event)
+{
+	lv_event_code_t code = lv_event_get_code(event);
+
+    if(code == LV_EVENT_CLICKED) {
+		ui_change_screen(E_MAIN_SCREEN);
+    }
+}
+
 int lvgl_helper_create_button(T_lv_btn *obj, int size_x, int size_y, lv_align_t align, int pos_x, int pos_y, char *text, btn_handler handler)
 {
 	fail_if_null(text, -1, "Error: text is null\n");

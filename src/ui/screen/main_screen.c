@@ -24,6 +24,7 @@
 #include "log.h"
 #include "system.h"
 #include "ui_style.h"
+#include "lvgl_helper.h"
 #include "main_screen.h"
 #include "ui.h"
 
@@ -45,7 +46,6 @@ typedef struct {
 #define NB_BUTTON 6
 #define MARGIN 20
 #define BUTTON_SIZE ((ui_get_resolution_hor() / 2) - (2 * MARGIN))
-#define TOP_BAR_SIZE ((ui_get_resolution_ver() / 10))
 static struct {
 	lv_style_t style;
 	lv_obj_t * cont;
