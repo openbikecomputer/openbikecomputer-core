@@ -18,6 +18,8 @@
 #ifndef _UI_HEADER_
 #define _UI_HEADER_
 
+#include <lvgl.h>
+
 typedef enum {
 	E_MAIN_SCREEN = 0,
 	E_RIDER_CONF_SCREEN,
@@ -43,5 +45,6 @@ int ui_change_screen(E_screen_id next);
 int ui_go_to_previous_screen(void);
 int ui_get_resolution_hor(void);
 int ui_get_resolution_ver(void);
+int ui_apply_default_style_to_obj(lv_obj_t *obj);
 
 #endif //_UI_HEADER_

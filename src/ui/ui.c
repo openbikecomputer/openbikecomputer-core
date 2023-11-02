@@ -54,12 +54,6 @@
 #define STR_TIME_SIZE (8)
 
 static struct {
-	lv_obj_t *bar;
-	lv_obj_t *label;
-	lv_timer_t *timer;
-} status_bar = {0};
-
-static struct {
 	int (*enter)(lv_obj_t * screen);
 	int (*exit)(void);
 } screen_table[E_SCREEN_ID_MAX] = {
@@ -80,6 +74,12 @@ static struct {
 	[E_SETTINGS_WIFI_SCREEN]      = {.enter = &settings_wifi_screen_enter, .exit = &settings_wifi_screen_exit},
 };
 
+typedef struct {
+	lv_obj_t *bar;
+	lv_obj_t *label;
+	lv_timer_t *timer;
+} T_status_bar;
+
 static struct {
 	bool is_initialized;
 	/* display settings */
@@ -89,8 +89,9 @@ static struct {
 
 	/* lvgl display */
 	lv_disp_t *display;
-	lv_style_t default_style;
 	lv_obj_t *virt_screen;
+	lv_style_t virt_screen_style;
+	lv_style_t default_style;
 
 	/* threads */
 	pthread_t tick_thread;
@@ -104,11 +105,15 @@ static struct {
 	E_screen_id previous_screen;
 	E_screen_id actual_screen;
 	T_fifo screen_fifo;
+
+	/* status bar */
+	T_status_bar status_bar;
 } ui = {
 	.is_initialized = false,
 	.lvgl_mutex = PTHREAD_MUTEX_INITIALIZER,
 	.actual_screen = E_MAIN_SCREEN,
 	.previous_screen = E_MAIN_SCREEN,
+	.status_bar = {0},
 };
 
 static int _push_next_screen_in_fifo(E_screen_id next)
@@ -156,37 +161,32 @@ static int _create_status_bar(void)
 	int ret = 0;
 
 	/* Create the status bar */
-	status_bar.bar = lv_obj_create(lv_scr_act());
-	lv_obj_set_size(status_bar.bar, ui_get_resolution_hor(), STATUS_BAR_SIZE);
-	lv_obj_align(status_bar.bar, LV_ALIGN_TOP_MID, 0, 0);
-	lv_obj_add_style(status_bar.bar, &ui.default_style, 0);
-
-	/* status bar like virt screen are without padding, border and outline */
-	lv_obj_set_style_border_width(status_bar.bar, 0, 0);
-	lv_obj_set_style_outline_width(status_bar.bar, 0, 0);
-	//lv_obj_set_style_pad_all(status_bar.bar, 0, 0);
+	ui.status_bar.bar = lv_obj_create(lv_scr_act());
+	lv_obj_set_size(ui.status_bar.bar, ui_get_resolution_hor(), STATUS_BAR_SIZE);
+	lv_obj_align(ui.status_bar.bar, LV_ALIGN_TOP_MID, 0, 0);
+	lv_obj_add_style(ui.status_bar.bar, &ui.default_style, 0);
 
 	/* Fill the status bar with widgets */
-	status_bar.label = lv_label_create(status_bar.bar);
+	ui.status_bar.label = lv_label_create(ui.status_bar.bar);
 	char str[STR_TIME_SIZE];
 	ret = _get_local_time(str, sizeof(str));
 	fail_if_negative(ret, -2, "Error: _get_local_time failed, return %d\n", ret);
-	lv_label_set_text_fmt(status_bar.label, LV_SYMBOL_GPS " " LV_SYMBOL_WIFI " " LV_SYMBOL_BATTERY_FULL " %s", str);
-    lv_obj_align(status_bar.label, LV_ALIGN_RIGHT_MID, 0, 0);
+	lv_label_set_text_fmt(ui.status_bar.label, LV_SYMBOL_GPS " " LV_SYMBOL_WIFI " " LV_SYMBOL_BATTERY_FULL " %s", str);
+    lv_obj_align(ui.status_bar.label, LV_ALIGN_RIGHT_MID, 0, 0);
 
 	/* Create lvgl timer that update the bar each secondes */
-	status_bar.timer = lv_timer_create(&_statusbar_timer_handler, STATUS_BAR_TIMER_DELAY, status_bar.label);
-	lv_timer_set_repeat_count(status_bar.timer, -1); // repeat indefinitly
+	ui.status_bar.timer = lv_timer_create(&_statusbar_timer_handler, STATUS_BAR_TIMER_DELAY, ui.status_bar.label);
+	lv_timer_set_repeat_count(ui.status_bar.timer, -1); // repeat indefinitly
 
 	return 0;
 }
 
 static int _destroy_status_bar(void)
 {
-	if(status_bar.timer != NULL)
+	if(ui.status_bar.timer != NULL)
 	{
-		lv_timer_del(status_bar.timer);
-		status_bar.timer = NULL;
+		lv_timer_del(ui.status_bar.timer);
+		ui.status_bar.timer = NULL;
 	}
 	return 0;
 }
@@ -247,12 +247,7 @@ static void * screen_thread_handler(void *data)
 		ui.virt_screen = lv_obj_create(lv_scr_act());
 
 		/* Apply global style on the virt screen */
-		lv_obj_add_style(ui.virt_screen, &ui.default_style, 0);
-
-		/* status bar like virt screen are without padding, border and outline */
-		lv_obj_set_style_border_width(ui.virt_screen, 0, 0);
-		lv_obj_set_style_outline_width(ui.virt_screen, 0, 0);
-		//lv_obj_set_style_pad_all(ui.virt_screen, 0, 0);
+		lv_obj_add_style(ui.virt_screen, &ui.virt_screen_style, 0);
 
 		switch(next)
 		{
@@ -377,23 +372,30 @@ static void * draw_thread_handler(void *data)
 	return NULL;
 }
 
-int _init_default_style(void)
+int _init_defaults_style(void)
 {
+	/* Screen widget default style */
 	lv_style_init(&ui.default_style);
-	lv_style_set_text_font(&ui.default_style, &lv_font_montserrat_48);
+	lv_style_set_text_font(&ui.default_style, &DEFAULT_FONT);
+
+	/* Virtual screen default style */
+	lv_style_init(&ui.virt_screen_style);
+	lv_style_set_text_font(&ui.virt_screen_style, &DEFAULT_FONT);
+	lv_style_set_border_width(&ui.virt_screen_style, 0);
+	lv_style_set_outline_width(&ui.virt_screen_style, 0);
+	lv_style_set_pad_all(&ui.virt_screen_style, 0);
 
 	return 0;
 }
 
-//int ui_style_get_default_style(lv_style_t *style)
-//{
-//	fail_if_false(ui_style.is_initialized, -1, "Error: ui_style is not initialized\n");
-//	fail_if_null(style, -2, "Error: style is null\n");
-//
-//	memcpy(style, &ui_style.default_style, sizeof(lv_style_t));
-//
-//	return 0;
-//}
+int ui_apply_default_style_to_obj(lv_obj_t *obj)
+{
+	fail_if_false(ui.is_initialized, -1, "Error: ui is not initialized\n");
+
+	lv_obj_add_style(obj, &ui.default_style, 0);
+
+	return 0;
+}
 
 int ui_change_screen(E_screen_id next)
 {
@@ -496,7 +498,7 @@ int ui_init(int resolution_hor, int resolution_ver, int screen_rotation)
 	lv_disp_set_rotation(ui.display, ui.rotation);
 
 	/* Init ui style */
-	ret = _init_default_style();
+	ret = _init_defaults_style();
 	fail_if_negative(ret, -4, "Error: ui_style_init failed, return: %d\n", ret);
 
 	/* Create a thread to tell lvgl the elapsed time */

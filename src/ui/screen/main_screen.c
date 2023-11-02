@@ -60,14 +60,16 @@ static struct {
 
 int main_screen_enter(lv_obj_t *screen)
 {
-	main_screen.cont = lv_obj_create(screen);
-    lv_obj_set_size(main_screen.cont, lv_pct(100), lv_pct(100));
-    lv_obj_align(main_screen.cont, LV_ALIGN_BOTTOM_MID, 0, 0);
-    lv_obj_set_flex_flow(main_screen.cont, LV_FLEX_FLOW_ROW_WRAP);
+	int ret = 0;
 
-	//lv_obj_set_style_border_width(main_screen.cont, 0, 0);
-	//lv_obj_set_style_outline_width(main_screen.cont, 0, 0);
-	lv_obj_set_style_pad_all(main_screen.cont, 0, 0);
+	/* Create flexbox container and apply ui default style */
+	main_screen.cont = lv_obj_create(screen);
+	ret = ui_apply_default_style_to_obj(main_screen.cont);
+	fail_if_negative(ret, -1, "Error: ui_apply_default_style_to_obj failed, return: %d\n", ret);
+
+	lv_obj_set_size(main_screen.cont, lv_pct(100), lv_pct(100));
+	lv_obj_align(main_screen.cont, LV_ALIGN_BOTTOM_MID, 0, 0);
+	lv_obj_set_flex_flow(main_screen.cont, LV_FLEX_FLOW_ROW_WRAP);
 
 	for(int i = 0; i < NB_BUTTON; i++)
 	{

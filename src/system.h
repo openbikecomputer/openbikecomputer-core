@@ -23,6 +23,7 @@
 #define SCREEN_VER_SIZE (1920)
 #define SCREEN_ROTATION 0 /* Other possible value 90, 180 or 270 */
 #define LVGL_REFRESH_TICK_RATE 30 /*milliseconds*/
+#define DEFAULT_FONT lv_font_montserrat_48
 
 /* System configuration file */
 #define SYSTEM_CONF_FILE_PATH "/etc/openbikecomputer/system.conf"
