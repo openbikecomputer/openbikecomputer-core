@@ -119,21 +119,21 @@ static struct {
 static int _push_next_screen_in_fifo(E_screen_id next)
 {
 	int ret = fifo_push(&ui.screen_fifo, (int*)&next);
-	fail_if_negative(ret, -1, "Error: fifo_push next screen (%d) failed, return %d\n", next, ret);
+	fail_if_negative(ret, -1, "fifo_push next screen (%d) failed, return %d\n", next, ret);
 
 	return 0;
 }
 
 static int _get_local_time(char *str, int size)
 {
-	fail_if_null(str, -1, "Error: str is null\n");
+	fail_if_null(str, -1, "str is null\n");
 
 	time_t t;
 	struct tm * tmp;
 
 	t = time(NULL);
 	tmp = localtime(&t);
-	fail_if_null(tmp, -2, "Error: tmp is null\n");
+	fail_if_null(tmp, -2, "tmp is null\n");
 
 	strftime(str, size, "%H:%M", tmp);
 
@@ -150,7 +150,7 @@ static void _statusbar_timer_handler(lv_timer_t * timer)
 	ret = _get_local_time(str, sizeof(str));
 	if(ret < 0)
 	{
-		log_error("Error: _get_local_time failed, return %d\n");
+		log_error("_get_local_time failed, return %d\n");
 		return;
 	}
 	lv_label_set_text_fmt(label, LV_SYMBOL_GPS " " LV_SYMBOL_WIFI " " LV_SYMBOL_BATTERY_FULL " %s", str);
@@ -170,7 +170,7 @@ static int _create_status_bar(void)
 	ui.status_bar.label = lv_label_create(ui.status_bar.bar);
 	char str[STR_TIME_SIZE];
 	ret = _get_local_time(str, sizeof(str));
-	fail_if_negative(ret, -2, "Error: _get_local_time failed, return %d\n", ret);
+	fail_if_negative(ret, -2, "_get_local_time failed, return %d\n", ret);
 	lv_label_set_text_fmt(ui.status_bar.label, LV_SYMBOL_GPS " " LV_SYMBOL_WIFI " " LV_SYMBOL_BATTERY_FULL " %s", str);
     lv_obj_align(ui.status_bar.label, LV_ALIGN_RIGHT_MID, 0, 0);
 
@@ -201,19 +201,19 @@ static void * screen_thread_handler(void *data)
 		ret = fifo_pop_wait(&ui.screen_fifo, &next);
 		if(ret < 0)
 		{
-			log_error("Error: fifo_pop_wait failed, return: %d\n", ret);
+			log_error("fifo_pop_wait failed, return: %d\n", ret);
 			continue;
 		}
 
 		/* Check enter and exit handler, if null print log and skip the screen change */
 		if(screen_table[next].enter == NULL)
 		{
-			log_error("Error: next screen (%d) enter handler is NULL\n", next);
+			log_error("next screen (%d) enter handler is NULL\n", next);
 			continue;
 		}
 		if(screen_table[ui.actual_screen].exit == NULL)
 		{
-			log_error("Error: actual screen (%d) exit handler is NULL\n", ui.actual_screen);
+			log_error("actual screen (%d) exit handler is NULL\n", ui.actual_screen);
 			continue;
 		}
 
@@ -232,7 +232,7 @@ static void * screen_thread_handler(void *data)
 		pthread_mutex_unlock(&ui.lvgl_mutex);
 		if(ret < 0)
 		{
-			log_error("Error: exiting screen %d failed, returned: %d\n", ui.actual_screen, ret);
+			log_error("exiting screen %d failed, returned: %d\n", ui.actual_screen, ret);
 			/* If it fail we take the shot and continue */
 		}
 
@@ -265,7 +265,7 @@ static void * screen_thread_handler(void *data)
 				ret = _create_status_bar();
 				if(ret < 0)
 				{
-					log_error("Error: _create_status_bar failed, return: %d\n", ret);
+					log_error("_create_status_bar failed, return: %d\n", ret);
 					exit(-1);
 				}
 				break;
@@ -283,7 +283,7 @@ static void * screen_thread_handler(void *data)
 				lv_obj_align(ui.virt_screen, LV_ALIGN_TOP_MID, 0, 0);
 				break;
 			default:
-				log_error("Error: unknown screen_id (%d), abort\n", next);
+				log_error("unknown screen_id (%d), abort\n", next);
 				exit(-1);
 				break;
 		}
@@ -296,7 +296,7 @@ static void * screen_thread_handler(void *data)
 		pthread_mutex_unlock(&ui.lvgl_mutex);
 		if(ret < 0)
 		{
-			log_error("Error: entering screen %d failed, returned: %d\n", next, ret);
+			log_error("entering screen %d failed, returned: %d\n", next, ret);
 			exit(-1);
 		}
 
@@ -390,7 +390,7 @@ int _init_defaults_style(void)
 
 int ui_apply_default_style_to_obj(lv_obj_t *obj)
 {
-	fail_if_false(ui.is_initialized, -1, "Error: ui is not initialized\n");
+	fail_if_false(ui.is_initialized, -1, "ui is not initialized\n");
 
 	lv_obj_add_style(obj, &ui.default_style, 0);
 
@@ -401,11 +401,11 @@ int ui_change_screen(E_screen_id next)
 {
 	int ret = 0;
 
-	fail_if_false(ui.is_initialized, -1, "Error: ui is not initialized\n");
+	fail_if_false(ui.is_initialized, -1, "ui is not initialized\n");
 
 	if(next < 0 || next > E_SCREEN_ID_MAX)
 	{
-		fail(-2, "Error: Invalid screen id given\n");
+		fail(-2, "Invalid screen id given\n");
 	}
 
 	if(next == ui.actual_screen)
@@ -418,7 +418,7 @@ int ui_change_screen(E_screen_id next)
 
 	/* Display the next screen */
 	ret = _push_next_screen_in_fifo(next);
-	fail_if_negative(ret, -3, "Error: _push_next_screen_in_fifo failed, return %d\n", ret);
+	fail_if_negative(ret, -3, "_push_next_screen_in_fifo failed, return %d\n", ret);
 
 	return 0;
 }
@@ -427,26 +427,26 @@ int ui_go_to_previous_screen(void)
 {
 	int ret = 0;
 
-	fail_if_false(ui.is_initialized, -1, "Error: ui is not initialized\n");
+	fail_if_false(ui.is_initialized, -1, "ui is not initialized\n");
 
 	/* Display the next screen */
 	// TODO unsafe, need mutex
 	ret = _push_next_screen_in_fifo(ui.previous_screen);
-	fail_if_negative(ret, -3, "Error: _push_next_screen_in_fifo failed, return %d\n", ret);
+	fail_if_negative(ret, -3, "_push_next_screen_in_fifo failed, return %d\n", ret);
 
 	return 0;
 }
 
 int ui_get_resolution_hor(void)
 {
-	fail_if_false(ui.is_initialized, -1, "Error: ui is not initialized\n");
+	fail_if_false(ui.is_initialized, -1, "ui is not initialized\n");
 	
 	return ui.resolution_hor;
 }
 
 int ui_get_resolution_ver(void)
 {
-	fail_if_false(ui.is_initialized, -1, "Error: ui is not initialized\n");
+	fail_if_false(ui.is_initialized, -1, "ui is not initialized\n");
 	
 	return ui.resolution_ver;
 }
@@ -455,14 +455,14 @@ int ui_init(int resolution_hor, int resolution_ver, int screen_rotation)
 {
 	int ret;
 
-	fail_if_true(ui.is_initialized, -1, "Error: ui is already initialized\n");
+	fail_if_true(ui.is_initialized, -1, "ui is already initialized\n");
 
 	/* Init lvgl lib and wayland driver */
 	lv_init();
 	lv_wayland_init();
 
 	ret = fifo_create(&ui.screen_fifo, sizeof(int), SCREEN_FIFO_DEPTH);
-	fail_if_negative(ret, -2, "Error: fifo_create fail, return: %d\n", ret);
+	fail_if_negative(ret, -2, "fifo_create fail, return: %d\n", ret);
 
 	log_debug("display %dx%d, rotation: %d\n", resolution_hor, resolution_ver, screen_rotation);
 
@@ -470,7 +470,7 @@ int ui_init(int resolution_hor, int resolution_ver, int screen_rotation)
 	ui.resolution_hor = resolution_hor;
 	ui.resolution_ver = resolution_ver;
 	ui.display = lv_wayland_create_window(ui.resolution_hor, ui.resolution_ver, "openbikecomputer", NULL /*close_cb*/);
-	fail_if_null(ui.display, -3, "Error: lv_wayland_create_window return NULL\n");
+	fail_if_null(ui.display, -3, "lv_wayland_create_window return NULL\n");
 
 	/* Set window in fullscreen mode */
 	lv_wayland_window_set_fullscreen(ui.display, true);
@@ -499,26 +499,26 @@ int ui_init(int resolution_hor, int resolution_ver, int screen_rotation)
 
 	/* Init ui style */
 	ret = _init_defaults_style();
-	fail_if_negative(ret, -4, "Error: ui_style_init failed, return: %d\n", ret);
+	fail_if_negative(ret, -4, "ui_style_init failed, return: %d\n", ret);
 
 	/* Create a thread to tell lvgl the elapsed time */
 	ret = pthread_create(&ui.tick_thread, NULL, &tick_thread_handler, NULL);
-	fail_if_negative(ret, -5, "Error: Create lvgl tick thread failed, return: %d\n", ret);
+	fail_if_negative(ret, -5, "Create lvgl tick thread failed, return: %d\n", ret);
 
 	/* Create a thread to handle lvgl drawing */
 	ret = pthread_create(&ui.draw_thread, NULL, &draw_thread_handler, NULL);
-	fail_if_negative(ret, -6, "Error: Create lvgl draw thread failed, return: %d\n", ret);
+	fail_if_negative(ret, -6, "Create lvgl draw thread failed, return: %d\n", ret);
 
 	/* Create a thread to handle lvgl drawing */
 	ret = pthread_create(&ui.screen_thread, NULL, &screen_thread_handler, NULL);
-	fail_if_negative(ret, -7, "Error: Create screen manager thread failed, return: %d\n", ret);
+	fail_if_negative(ret, -7, "Create screen manager thread failed, return: %d\n", ret);
 
 	/* Wait 150ms to let thread settle */
 	usleep(150*1000);
 
 	/* Display the main screen */
 	ret = _push_next_screen_in_fifo(E_MAIN_SCREEN);
-	fail_if_negative(ret, -8, "Error: _push_next_screen_in_fifo failed, return %d\n", ret);
+	fail_if_negative(ret, -8, "_push_next_screen_in_fifo failed, return %d\n", ret);
 
 	/* Mark the ui module as initialized */
 	ui.is_initialized = true;

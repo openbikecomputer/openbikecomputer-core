@@ -26,9 +26,9 @@
 
 int libconfig_helper_get_int(const char *file, const char *conf, int *value)
 {
-	fail_if_null(file, -1, "Error: file is null\n");
-	fail_if_null(conf, -2, "Error: conf is null\n");
-	fail_if_null(value, -3, "Error: value is null\n");
+	fail_if_null(file, -1, "file is null\n");
+	fail_if_null(conf, -2, "conf is null\n");
+	fail_if_null(value, -3, "value is null\n");
 
 	int ret = 0;
 	config_t cfg;
@@ -56,10 +56,10 @@ int libconfig_helper_get_int(const char *file, const char *conf, int *value)
 
 int libconfig_helper_get_string(const char *file, const char *conf, char *buff, int size)
 {
-	fail_if_null(file, -1, "Error: file is null\n");
-	fail_if_null(conf, -2, "Error: conf is null\n");
-	fail_if_null(buff, -3, "Error: buff is null\n");
-	fail_if_negative_or_zero(size, -4, "Error: size is not valid\n");
+	fail_if_null(file, -1, "file is null\n");
+	fail_if_null(conf, -2, "conf is null\n");
+	fail_if_null(buff, -3, "buff is null\n");
+	fail_if_negative_or_zero(size, -4, "size is not valid\n");
 
 	int ret = 0;
 	config_t cfg;
@@ -69,7 +69,7 @@ int libconfig_helper_get_string(const char *file, const char *conf, char *buff, 
 	if(!config_read_file(&cfg, file))
 	{
 		config_destroy(&cfg);
-		fail(-5, "Error: read configuration file %s fail\n", file);
+		fail(-5, "read configuration file %s fail\n", file);
 	}
 
 	const char* str;
@@ -92,8 +92,8 @@ int libconfig_helper_get_string(const char *file, const char *conf, char *buff, 
 
 int libconfig_helper_set_int(const char *file, const char *conf, const int value)
 {
-	fail_if_null(file, -1, "Error: file is null\n");
-	fail_if_null(conf, -2, "Error: conf is null\n");
+	fail_if_null(file, -1, "file is null\n");
+	fail_if_null(conf, -2, "conf is null\n");
 
 	int ret = 0;
 	config_t cfg;
@@ -103,7 +103,7 @@ int libconfig_helper_set_int(const char *file, const char *conf, const int value
 	if(!config_read_file(&cfg, file))
 	{
 		config_destroy(&cfg);
-		fail(-3, "Error: Reading file failed\n");
+		fail(-3, "Reading file failed\n");
 	}
 
 	/* Get the settings */
@@ -111,21 +111,21 @@ int libconfig_helper_set_int(const char *file, const char *conf, const int value
 	if(setting == NULL)
 	{
 		config_destroy(&cfg);
-		fail(-4, "Error: lookup settings failed\n");
+		fail(-4, "lookup settings failed\n");
 	}
 
 	ret = config_setting_set_int(setting, value);
 	if(ret != CONFIG_TRUE)
 	{
 		config_destroy(&cfg);
-		fail(-5, "Error: setting int failed\n");
+		fail(-5, "setting int failed\n");
 	}
 
 	ret = config_write_file(&cfg, file);
 	if(ret != CONFIG_TRUE)
 	{
 		config_destroy(&cfg);
-		fail(-6, "Error: write file failed\n");
+		fail(-6, "write file failed\n");
 	}
 
 	/* Cleanup before exiting*/
@@ -134,9 +134,9 @@ int libconfig_helper_set_int(const char *file, const char *conf, const int value
 
 int libconfig_helper_set_string(const char *file, const char *conf, const char *value)
 {
-	fail_if_null(file, -1, "Error: file is null\n");
-	fail_if_null(conf, -2, "Error: conf is null\n");
-	fail_if_null(value, -3, "Error: value is null\n");
+	fail_if_null(file, -1, "file is null\n");
+	fail_if_null(conf, -2, "conf is null\n");
+	fail_if_null(value, -3, "value is null\n");
 
 	int ret = 0;
 	config_t cfg;
@@ -146,7 +146,7 @@ int libconfig_helper_set_string(const char *file, const char *conf, const char *
 	if(!config_read_file(&cfg, file))
 	{
 		config_destroy(&cfg);
-		fail(-4, "Error: Reading file failed\n");
+		fail(-4, "Reading file failed\n");
 	}
 
 	/* Get the settings */
@@ -154,21 +154,21 @@ int libconfig_helper_set_string(const char *file, const char *conf, const char *
 	if(setting == NULL)
 	{
 		config_destroy(&cfg);
-		fail(-5, "Error: lookup settings failed\n");
+		fail(-5, "lookup settings failed\n");
 	}
 
 	ret = config_setting_set_string(setting, value);
 	if(ret != CONFIG_TRUE)
 	{
 		config_destroy(&cfg);
-		fail(-6, "Error: setting int failed\n");
+		fail(-6, "setting int failed\n");
 	}
 
 	ret = config_write_file(&cfg, file);
 	if(ret != CONFIG_TRUE)
 	{
 		config_destroy(&cfg);
-		fail(-7, "Error: write file failed\n");
+		fail(-7, "write file failed\n");
 	}
 
 	/* Cleanup before exiting*/

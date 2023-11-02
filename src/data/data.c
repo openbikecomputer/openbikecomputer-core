@@ -26,10 +26,10 @@ int data_init(void)
 	int ret = 0;
 
 	ret = data_manager_init();
-	fail_if_negative(ret, -1, "Error: data_manager_init failed, return: %d\n", ret);
+	fail_if_negative(ret, -1, "data_manager_init failed, return: %d\n", ret);
 
 	ret = data_recorder_init();
-	fail_if_negative(ret, -2, "Error: data_manager_init failed, return: %d\n", ret);
+	fail_if_negative(ret, -2, "data_manager_init failed, return: %d\n", ret);
 
 	return 0;
 }

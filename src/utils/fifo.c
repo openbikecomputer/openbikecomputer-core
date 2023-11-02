@@ -35,14 +35,14 @@ int fifo_create(T_fifo *fifo, int nb_element, size_t element_size)
 	errno = 0;
 
 	ret = sem_init(&fifo->sem, 0, 0);
-	fail_if_not_zero(ret, -1, "Error: sem_init failed, errno: %d\n", errno);
+	fail_if_not_zero(ret, -1, "sem_init failed, errno: %d\n", errno);
 
 	ret = pthread_mutex_init(&fifo->mutex, NULL);
-	fail_if_not_zero(ret, -2, "Error: pthread_mutex_init failed, return %d\n", ret);
+	fail_if_not_zero(ret, -2, "pthread_mutex_init failed, return %d\n", ret);
 
 	/* alloc buffer */
 	fifo->buffer = malloc(nb_element * element_size);
-	fail_if_null(fifo->buffer, -3, "Error: malloc fifo buffer failed\n");
+	fail_if_null(fifo->buffer, -3, "malloc fifo buffer failed\n");
 
 	/* Init all struct variables */
 	fifo->nb_element = nb_element;
@@ -83,7 +83,7 @@ int fifo_push(T_fifo *fifo, void *element)
 
 	if(fifo->element_count == fifo->nb_element)
 	{
-		log_error("Error: fifo is full\n");
+		log_error("fifo is full\n");
 		ret = -3;
 		goto push_cleanup;
 	}
@@ -91,7 +91,7 @@ int fifo_push(T_fifo *fifo, void *element)
 	char *dest = &fifo->buffer[fifo->element_size * fifo->write_index];
 	if(!memcpy(dest, element, fifo->element_size))
 	{
-		log_error("Error: memcpy %p in %p failed\n", element, dest);
+		log_error("memcpy %p in %p failed\n", element, dest);
 		ret = -4;
 		goto push_cleanup;
 	}
@@ -107,7 +107,7 @@ int fifo_push(T_fifo *fifo, void *element)
 
 	if(sem_post(&fifo->sem) != 0)
 	{
-		log_error("Error: sem_post failed, errno: %d\n", errno);
+		log_error("sem_post failed, errno: %d\n", errno);
 		ret = -5;
 		goto push_cleanup;
 	}
@@ -125,7 +125,7 @@ static int _pop(T_fifo *fifo, void *element)
 
 	if(fifo->element_count == 0)
 	{
-		log_error("Error: fifo is empty\n");
+		log_error("fifo is empty\n");
 		ret = -1;
 		goto pop_cleanup;
 	}
@@ -133,7 +133,7 @@ static int _pop(T_fifo *fifo, void *element)
 	char *src = &fifo->buffer[fifo->element_size * fifo->read_index];
 	if(!memcpy(element, src, fifo->element_size))
 	{
-		log_error("Error: memcpy %p in %p failed\n", src, element);
+		log_error("memcpy %p in %p failed\n", src, element);
 		ret = -4;
 		goto pop_cleanup;
 	}
@@ -172,7 +172,7 @@ int fifo_pop_wait(T_fifo *fifo, void *element)
 	int ret = 0;
 
 	ret = sem_wait(&fifo->sem);
-	fail_if_not_zero(ret, -3, "Error: sem_wait failed, errno: %d\n", errno);
+	fail_if_not_zero(ret, -3, "sem_wait failed, errno: %d\n", errno);
 
 	return _pop(fifo, element);
 }

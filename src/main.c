@@ -126,21 +126,21 @@ int main(int argc, char **argv)
 
 	/* Init all configuration system, bike, rider and user */
 	ret = obc_config_init();
-	fail_if_negative(ret, -1, "Error: obc_config_init failed, return: %d\n", ret);
+	fail_if_negative(ret, -1, "obc_config_init failed, return: %d\n", ret);
 
 	/* Init the data manager and recorder subsystem */
 	ret = data_init();
-	fail_if_negative(ret, -2, "Error: data_init failed, return: %d\n", ret);
+	fail_if_negative(ret, -2, "data_init failed, return: %d\n", ret);
 
 	/* Init the ui and display the main screen */
 	ret = ui_init(resolution_hor, resolution_ver, screen_rotation);
-	fail_if_negative(ret, -3, "Error: ui initialization failed, return: %d\n", ret);
+	fail_if_negative(ret, -3, "ui initialization failed, return: %d\n", ret);
 
 	/* If simulation mode is set, play the simulation file */
 	if(simulation_mode)
 	{
 		ret = simulator_init(simulation_file);
-		fail_if_negative(ret, -4, "Error: simulator initialization failed, return: %d\n", ret);
+		fail_if_negative(ret, -4, "simulator initialization failed, return: %d\n", ret);
 	}
 
 	/* Don't exit the application */

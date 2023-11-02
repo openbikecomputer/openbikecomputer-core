@@ -36,20 +36,20 @@ static struct {
 
 int system_config_init(void)
 {
-	fail_if_true(system_conf.is_initialized, -1, "Error: system_conf is already initialized\n");
+	fail_if_true(system_conf.is_initialized, -1, "system_conf is already initialized\n");
 	int ret = 0;
 
 	/* Get all the config from the file */
 	ret = libconfig_helper_get_string(SYSTEM_CONF_FILE_PATH, "devicename", system_conf.devicename, sizeof(system_conf.devicename));
-	fail_if_negative(ret, -1, "Error: getting system devicename conf failed\n");
+	fail_if_negative(ret, -1, "getting system devicename conf failed\n");
 	ret = libconfig_helper_get_int(SYSTEM_CONF_FILE_PATH, "enable_gps", &system_conf.enable_gps);
-	fail_if_negative(ret, -2, "Error: getting system enable_gps conf failed\n");
+	fail_if_negative(ret, -2, "getting system enable_gps conf failed\n");
 	ret = libconfig_helper_get_int(SYSTEM_CONF_FILE_PATH, "enable_ant", &system_conf.enable_ant);
-	fail_if_negative(ret, -3, "Error: getting system enable_ant conf failed\n");
+	fail_if_negative(ret, -3, "getting system enable_ant conf failed\n");
 	ret = libconfig_helper_get_int(SYSTEM_CONF_FILE_PATH, "enable_bluetooth", &system_conf.enable_bluetooth);
-	fail_if_negative(ret, -4, "Error: getting system enable_bluetooth conf failed\n");
+	fail_if_negative(ret, -4, "getting system enable_bluetooth conf failed\n");
 	ret = libconfig_helper_get_int(SYSTEM_CONF_FILE_PATH, "enable_wifi", &system_conf.enable_wifi);
-	fail_if_negative(ret, -5, "Error: getting system enable_wifi conf failed\n");
+	fail_if_negative(ret, -5, "getting system enable_wifi conf failed\n");
 
 	system_conf.is_initialized = true;
 	return 0;
@@ -57,9 +57,9 @@ int system_config_init(void)
 
 int system_config_get_device_name(char *name, int size)
 {
-	fail_if_false(system_conf.is_initialized, -1, "Error: system_conf is not initialized\n");
-	fail_if_null(name, -2, "Error: name is null\n");
-	fail_if_negative_or_zero(size, -3, "Error: size is negative or zero\n");
+	fail_if_false(system_conf.is_initialized, -1, "system_conf is not initialized\n");
+	fail_if_null(name, -2, "name is null\n");
+	fail_if_negative_or_zero(size, -3, "size is negative or zero\n");
 
 	if(size < CONFIG_VALUE_STRING_LENGHT)
 	{
@@ -74,28 +74,28 @@ int system_config_get_device_name(char *name, int size)
 
 int system_config_get_enable_gps(void)
 {
-	fail_if_false(system_conf.is_initialized, -1, "Error: system_conf is not initialized\n");
+	fail_if_false(system_conf.is_initialized, -1, "system_conf is not initialized\n");
 
 	return system_conf.enable_gps;
 }
 
 int system_config_get_enable_ant(void)
 {
-	fail_if_false(system_conf.is_initialized, -1, "Error: system_conf is not initialized\n");
+	fail_if_false(system_conf.is_initialized, -1, "system_conf is not initialized\n");
 
 	return system_conf.enable_ant;
 }
 
 int system_config_get_enable_bluetooth(void)
 {
-	fail_if_false(system_conf.is_initialized, -1, "Error: system_conf is not initialized\n");
+	fail_if_false(system_conf.is_initialized, -1, "system_conf is not initialized\n");
 
 	return system_conf.enable_bluetooth;
 }
 
 int system_config_get_enable_wifi(void)
 {
-	fail_if_false(system_conf.is_initialized, -1, "Error: system_conf is not initialized\n");
+	fail_if_false(system_conf.is_initialized, -1, "system_conf is not initialized\n");
 
 	return system_conf.enable_wifi;
 }

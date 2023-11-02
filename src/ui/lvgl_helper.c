@@ -32,9 +32,9 @@ void lvgl_helper_back_button_event_handler(lv_event_t *event)
 
 int lvgl_helper_create_button(T_lv_btn *obj, lv_obj_t *parent_obj, int size_x, int size_y, lv_align_t align, int pos_x, int pos_y, char *text, btn_handler handler)
 {
-	fail_if_null(text, -1, "Error: text is null\n");
-	fail_if_null(handler, -2, "Error: handler is null\n");
-	fail_if_null(obj, -3, "Error: btn is null\n");
+	fail_if_null(text, -1, "text is null\n");
+	fail_if_null(handler, -2, "handler is null\n");
+	fail_if_null(obj, -3, "btn is null\n");
 
 	/* Create button */
 	obj->btn = lv_btn_create(parent_obj);

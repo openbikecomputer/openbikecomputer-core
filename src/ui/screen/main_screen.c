@@ -65,7 +65,7 @@ int main_screen_enter(lv_obj_t *screen)
 	/* Create flexbox container and apply ui default style */
 	main_screen.cont = lv_obj_create(screen);
 	ret = ui_apply_default_style_to_obj(main_screen.cont);
-	fail_if_negative(ret, -1, "Error: ui_apply_default_style_to_obj failed, return: %d\n", ret);
+	fail_if_negative(ret, -1, "ui_apply_default_style_to_obj failed, return: %d\n", ret);
 
 	lv_obj_set_size(main_screen.cont, lv_pct(100), lv_pct(100));
 	lv_obj_align(main_screen.cont, LV_ALIGN_BOTTOM_MID, 0, 0);

@@ -37,7 +37,7 @@ static void * simu_thread_handler(void *data)
 {
 	/* Cast the data void data into char* */
 	char *file = (char*)data;
-	fail_if_null(file, NULL, "Error: file is NULL\n");
+	fail_if_null(file, NULL, "file is NULL\n");
 
 	FILE * fd;
     char * line = NULL;
@@ -47,12 +47,12 @@ static void * simu_thread_handler(void *data)
 
 	if(access(file, F_OK) != 0)
 	{
-		fail(NULL, "Error: file %s doesn't exist\n", file);
+		fail(NULL, "file %s doesn't exist\n", file);
 	}
 
 	/* Open file */
 	fd = fopen(file, "r");
-	fail_if_null(fd, NULL, "Error: fopen failed\n");
+	fail_if_null(fd, NULL, "fopen failed\n");
 
 	while ((read = getline(&line, &len, fd)) != -1) {
 		/* Count line read in file */
@@ -81,7 +81,7 @@ static void * simu_thread_handler(void *data)
 		errno = 0;
 		int ret = sscanf(line, "%f;%f;%d;%d;%d;%d;%d;%d;", &latitude, &longitude, &speed, &altitude, &temperature, &heart_rate, &power, &cadence);
 		if (ret != 8 || errno != 0) {
-			log_error("Error: simulation file %s, line %d is malformed, ignoring it\n", file, line_counter);
+			log_error("simulation file %s, line %d is malformed, ignoring it\n", file, line_counter);
 			continue;
 		}
 
@@ -106,13 +106,13 @@ int simulator_init(char *file_path)
 {
 	int ret = 0;
 
-	fail_if_null(file_path, -1, "Error: file_path is NULL\n");
+	fail_if_null(file_path, -1, "file_path is NULL\n");
 
 	log_info("simulator is in simulation mode with file %s\n", file_path);
 
 	/* Create a thread to read the file line by line and push fake data */
 	ret = pthread_create(&simulator.simu_thread, NULL, &simu_thread_handler, file_path);
-	fail_if_negative(ret, -1, "Error: Create simulation thread failed, return: %d\n", ret);
+	fail_if_negative(ret, -1, "Create simulation thread failed, return: %d\n", ret);
 
 	// TODO
 	return 0;
