@@ -37,9 +37,6 @@
 #include <errno.h>
 extern char * program_invocation_short_name;
 
-#define DEFAULT_LOG_FOLDER "/tmp/"
-#define DEFAULT_LOG_FILE_NAME "log_file.log"
-#define LOG_FILE_PATH_MAX_LENGTH 256
 #define MAX_LOG_LENGTH 256
 
 //Log color
@@ -48,13 +45,7 @@ extern char * program_invocation_short_name;
 #define BLACKBOLD "\033[1m"
 #define REDBOLD   "\033[31m"
 
-struct{
-	bool use_color;
-} g_log = {
-	.use_color = false,
-};
-
-void _write_log(const char * filename, const char * function, int line, const char * format, ...){
+void _write_log(char* log_level_txt, const char * filename, const char * function, int line, const char * format, ...){
 	int ret;
 	struct timeval tv;
 	struct tm * ptm;
@@ -67,9 +58,9 @@ void _write_log(const char * filename, const char * function, int line, const ch
 	/*
 	 * Get va_args into log_va_list_buffer
 	 */
-	va_start( args,format);
-	vsnprintf( log_va_list_buffer, sizeof(log_va_list_buffer), format, args);
-	va_end( args);
+	va_start(args,format);
+	vsnprintf(log_va_list_buffer, sizeof(log_va_list_buffer), format, args);
+	va_end(args);
 
 	/*
 	 * make string from time
@@ -93,18 +84,7 @@ void _write_log(const char * filename, const char * function, int line, const ch
 	/*
 	 * Print log on console
 	 */
-	if( g_log.use_color == true ){
-		printf( "%s "GREEN" %s [%d:%d]"NORMAL" ["BLACKBOLD"%s:%d:%s"NORMAL"] "REDBOLD"%s"NORMAL, time_string, program_invocation_short_name, getpid(),(int)syscall( SYS_gettid), filename, line, function, log_va_list_buffer);
-	}else{
-		printf( "%s %s [%d:%d] [%s:%d:%s] %s", time_string, program_invocation_short_name,getpid(),(int)syscall( SYS_gettid), filename, line, function, log_va_list_buffer);
-	}
+	printf( "%s %s [%d:%d][%s:%d:%s]%s %s", time_string, program_invocation_short_name,getpid(),(int)syscall( SYS_gettid), filename, line, function, log_level_txt, log_va_list_buffer);
 
 	return;
-}
-
-int log_set_color(bool value){
-	g_log.use_color = value;
-
-	log_info("Set log color: %s\n", value ? "ON" : "OFF");
-	return 0;
 }
