@@ -28,20 +28,14 @@
 #include <semaphore.h>
 
 #include "main_screen.h"
-#include "bike_conf_screen.h"
-#include "rider_conf_screen.h"
-#include "system_conf_screen.h"
 #include "data_screen.h"
-#include "user_conf_screen.h"
 #include "navigation_screen.h"
-#include "profile_screen.h"
-#include "result_screen.h"
-#include "route_screen.h"
-#include "settings_ant_screen.h"
-#include "settings_bluetooth_screen.h"
-#include "settings_gps_screen.h"
+#include "profiles_screen.h"
+#include "profiles_riders_screen.h"
+#include "profiles_bikes_screen.h"
+#include "results_screen.h"
+#include "routes_screen.h"
 #include "settings_screen.h"
-#include "settings_wifi_screen.h"
 
 #include "fifo.h"
 #include "log.h"
@@ -57,21 +51,15 @@ static struct {
 	int (*enter)(lv_obj_t * screen);
 	int (*exit)(void);
 } screen_table[E_SCREEN_ID_MAX] = {
-	[E_MAIN_SCREEN]        = {.enter = &main_screen_enter, .exit = &main_screen_exit},
-	[E_RIDER_CONF_SCREEN]  = {.enter = &rider_conf_screen_enter, .exit = &rider_conf_screen_exit},
-	[E_BIKE_CONF_SCREEN]   = {.enter = &bike_conf_screen_enter, .exit = &bike_conf_screen_exit},
-	[E_SYSTEM_CONF_SCREEN] = {.enter = &system_screen_enter, .exit = &system_screen_exit},
-	[E_USER_CONF_SCREEN]   = {.enter = &user_conf_screen_enter, .exit = &user_conf_screen_exit},
-	[E_DATA_SCREEN]        = {.enter = &data_screen_enter, .exit = &data_screen_exit},
+	[E_MAIN_SCREEN]               = {.enter = &main_screen_enter, .exit = &main_screen_exit},
+	[E_DATA_SCREEN]               = {.enter = &data_screen_enter, .exit = &data_screen_exit},
 	[E_NAVIGATION_SCREEN]         = {.enter = &navigation_screen_enter, .exit = &navigation_screen_exit},
-	[E_RESULT_SCREEN]             = {.enter = &result_screen_enter, .exit = &result_screen_exit},
-	[E_ROUTE_SCREEN]              = {.enter = &route_screen_enter, .exit = &route_screen_exit},
-	[E_PROFILE_SCREEN]            = {.enter = &profile_screen_enter, .exit = &profile_screen_exit},
+	[E_RESULTS_SCREEN]            = {.enter = &results_screen_enter, .exit = &results_screen_exit},
+	[E_ROUTES_SCREEN]             = {.enter = &routes_screen_enter, .exit = &routes_screen_exit},
+	[E_PROFILES_SCREEN]           = {.enter = &profiles_screen_enter, .exit = &profiles_screen_exit},
+	[E_PROFILES_RIDER_SCREEN]     = {.enter = &profiles_riders_screen_enter, .exit = &profiles_riders_screen_exit},
+	[E_PROFILES_BIKE_SCREEN]      = {.enter = &profiles_bikes_screen_enter, .exit = &profiles_bikes_screen_exit},
 	[E_SETTINGS_SCREEN]           = {.enter = &settings_screen_enter, .exit = &settings_screen_exit},
-	[E_SETTINGS_GPS_SCREEN]       = {.enter = &settings_gps_screen_enter, .exit = &settings_gps_screen_exit},
-	[E_SETTINGS_ANT_SCREEN]       = {.enter = &settings_ant_screen_enter, .exit = &settings_ant_screen_exit},
-	[E_SETTINGS_BLUETOOTH_SCREEN] = {.enter = &settings_bluetooth_screen_enter, .exit = &settings_bluetooth_screen_exit},
-	[E_SETTINGS_WIFI_SCREEN]      = {.enter = &settings_wifi_screen_enter, .exit = &settings_wifi_screen_exit},
 };
 
 typedef struct {
@@ -253,10 +241,9 @@ static void * screen_thread_handler(void *data)
 		{
 			case E_MAIN_SCREEN:
 			case E_DATA_SCREEN:
-			case E_NAVIGATION_SCREEN:
-			case E_RESULT_SCREEN:
-			case E_ROUTE_SCREEN:
-			case E_PROFILE_SCREEN:
+			case E_RESULTS_SCREEN:
+			case E_ROUTES_SCREEN:
+			case E_PROFILES_SCREEN:
 				/* screen were the statusbar is displayed */
 				lv_obj_set_size(ui.virt_screen, ui_get_resolution_hor(), ui_get_resolution_ver() - STATUS_BAR_SIZE);
 				lv_obj_align(ui.virt_screen, LV_ALIGN_TOP_MID, 0, STATUS_BAR_SIZE);
@@ -269,15 +256,10 @@ static void * screen_thread_handler(void *data)
 					exit(-1);
 				}
 				break;
-			case E_RIDER_CONF_SCREEN:
-			case E_BIKE_CONF_SCREEN:
-			case E_SYSTEM_CONF_SCREEN:
-			case E_USER_CONF_SCREEN:
+			case E_NAVIGATION_SCREEN:
 			case E_SETTINGS_SCREEN:
-			case E_SETTINGS_GPS_SCREEN:
-			case E_SETTINGS_ANT_SCREEN:
-			case E_SETTINGS_BLUETOOTH_SCREEN:
-			case E_SETTINGS_WIFI_SCREEN:
+			case E_PROFILES_RIDER_SCREEN:
+			case E_PROFILES_BIKE_SCREEN:
 				/* screen were the statusbar is not displayed */
 				lv_obj_set_size(ui.virt_screen, ui_get_resolution_hor(), ui_get_resolution_ver());
 				lv_obj_align(ui.virt_screen, LV_ALIGN_TOP_MID, 0, 0);

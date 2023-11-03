@@ -52,9 +52,9 @@ static struct {
 } main_screen = {
 	.button_array[0] = {.name = "Data",       .image = "D:/usr/share/openbikecomputer/images/counter.png", .next_screen = E_DATA_SCREEN},
 	.button_array[1] = {.name = "Navigation", .image = "D:/usr/share/openbikecomputer/images/navigation.png", .next_screen = E_NAVIGATION_SCREEN},
-	.button_array[2] = {.name = "Results",    .image = "D:/usr/share/openbikecomputer/images/results.png", .next_screen = E_RESULT_SCREEN},
-	.button_array[3] = {.name = "Routes",     .image = "D:/usr/share/openbikecomputer/images/routes.png", .next_screen = E_ROUTE_SCREEN},
-	.button_array[4] = {.name = "Profiles",   .image = "D:/usr/share/openbikecomputer/images/profiles.png", .next_screen = E_PROFILE_SCREEN},
+	.button_array[2] = {.name = "Results",    .image = "D:/usr/share/openbikecomputer/images/results.png", .next_screen = E_RESULTS_SCREEN},
+	.button_array[3] = {.name = "Routes",     .image = "D:/usr/share/openbikecomputer/images/routes.png", .next_screen = E_ROUTES_SCREEN},
+	.button_array[4] = {.name = "Profiles",   .image = "D:/usr/share/openbikecomputer/images/profiles.png", .next_screen = E_PROFILES_SCREEN},
 	.button_array[5] = {.name = "Settings",   .image = "D:/usr/share/openbikecomputer/images/settings.png", .next_screen = E_SETTINGS_SCREEN},
 };
 

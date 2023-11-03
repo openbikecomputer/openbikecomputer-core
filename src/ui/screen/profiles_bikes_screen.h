@@ -16,10 +16,10 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef _USER_CONF_SCREEN_HEADER_
-#define _USER_CONF_SCREEN_HEADER_
+#ifndef _PROFILES_BIKES_SCREEN_HEADER_
+#define _PROFILES_BIKES_SCREEN_HEADER_
 
-int user_conf_screen_enter(lv_obj_t *screen);
-int user_conf_screen_exit(void);
+int profiles_bikes_screen_enter(lv_obj_t *screen);
+int profiles_bikes_screen_exit(void);
 
-#endif //_USER_CONF_SCREEN_HEADER_
+#endif //_PROFILES_BIKES_SCREEN_HEADER_

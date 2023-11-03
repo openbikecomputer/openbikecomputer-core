@@ -18,18 +18,18 @@
 
 #include "log.h"
 #include "lvgl_helper.h"
-#include "settings_wifi_screen.h"
+#include "routes_screen.h"
 
 static T_lv_btn back_btn;
 
-int settings_wifi_screen_enter(lv_obj_t *screen)
+int routes_screen_enter(lv_obj_t *screen)
 {
 	int ret = 0;
 	ret = lvgl_helper_create_button(&back_btn, screen, BACK_BUTTON_SIZE_X, BACK_BUTTON_SIZE_Y, BACK_BUTTON_ALIGN, BACK_BUTTON_POS_X, BACK_BUTTON_POS_Y, BACK_BUTTON_TEXT, &lvgl_helper_back_button_event_handler);
 	fail_if_negative(ret, -1, "lvgl_helper_create_button failed, return %d\n");
 	return 0;
 }
-int settings_wifi_screen_exit(void)
+int routes_screen_exit(void)
 {
 	return 0;
 }

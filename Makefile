@@ -8,20 +8,14 @@ SRC = src/main.c \
       src/log/log.c \
       src/ui/ui.c \
       src/ui/screen/main_screen.c \
-      src/ui/screen/bike_conf_screen.c \
-      src/ui/screen/rider_conf_screen.c \
-      src/ui/screen/system_conf_screen.c \
-      src/ui/screen/user_conf_screen.c \
       src/ui/screen/data_screen.c \
       src/ui/screen/navigation_screen.c \
-      src/ui/screen/profile_screen.c \
-      src/ui/screen/result_screen.c \
-      src/ui/screen/route_screen.c \
-      src/ui/screen/settings_ant_screen.c \
-      src/ui/screen/settings_bluetooth_screen.c \
-      src/ui/screen/settings_gps_screen.c \
+      src/ui/screen/profiles_screen.c \
+      src/ui/screen/profiles_riders_screen.c \
+      src/ui/screen/profiles_bikes_screen.c \
+      src/ui/screen/results_screen.c \
+      src/ui/screen/routes_screen.c \
       src/ui/screen/settings_screen.c \
-      src/ui/screen/settings_wifi_screen.c \
       src/ui/lvgl_helper.c \
       src/config/obc_config.c \
       src/config/bike_config.c \

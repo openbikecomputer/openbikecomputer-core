@@ -1,5 +1,5 @@
 /*
-	OpenBikeComputer core application
+    OpenBikeComputer core application
     Copyright (C) 2023  LAMBS Pierre-Antoine
 
     This program is free software: you can redistribute it and/or modify
@@ -16,10 +16,11 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef _RIDER_CONF_SCREEN_HEADER_
-#define _RIDER_CONF_SCREEN_HEADER_
+#ifndef _RESULTS_SCREEN_HEADER_
+#define _RESULTS_SCREEN_HEADER_
 
-int rider_conf_screen_enter(lv_obj_t *screen);
-int rider_conf_screen_exit(void);
+int results_screen_enter(lv_obj_t *screen);
+int results_screen_exit(void);
 
-#endif //_RIDER_CONF_SCREEN_HEADER_
+#endif //_RESULTS_SCREEN_HEADER_
+

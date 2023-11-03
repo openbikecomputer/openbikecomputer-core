@@ -16,11 +16,11 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef _ROUTE_SCREEN_HEADER_
-#define _ROUTE_SCREEN_HEADER_
+#ifndef _ROUTES_SCREEN_HEADER_
+#define _ROUTES_SCREEN_HEADER_
 
-int route_screen_enter(lv_obj_t *screen);
-int route_screen_exit(void);
+int routes_screen_enter(lv_obj_t *screen);
+int routes_screen_exit(void);
 
-#endif //_ROUTE_SCREEN_HEADER_
+#endif //_ROUTES_SCREEN_HEADER_
 
