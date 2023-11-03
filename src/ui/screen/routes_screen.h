@@ -19,6 +19,8 @@
 #ifndef _ROUTES_SCREEN_HEADER_
 #define _ROUTES_SCREEN_HEADER_
 
+#include <lvgl.h>
+
 int routes_screen_enter(lv_obj_t *screen);
 int routes_screen_exit(void);
 

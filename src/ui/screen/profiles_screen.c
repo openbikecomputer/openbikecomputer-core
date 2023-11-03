@@ -40,7 +40,6 @@ typedef struct {
 #define BUTTON_SIZE ((ui_get_resolution_hor() / 2) - (2 * MARGIN))
 
 static struct {
-	T_lv_btn back_btn;
 	T_button button[NB_BUTTON];
 } profiles_screen = {
 	.button[0] = {.image = "D:/usr/share/openbikecomputer/images/counter.png", .next_screen = E_PROFILES_RIDER_SCREEN},
@@ -49,11 +48,6 @@ static struct {
 
 int profiles_screen_enter(lv_obj_t *screen)
 {
-	int ret = 0;
-
-	ret = lvgl_helper_create_button(&profiles_screen.back_btn, screen, BACK_BUTTON_SIZE_X, BACK_BUTTON_SIZE_Y, BACK_BUTTON_ALIGN, BACK_BUTTON_POS_X, BACK_BUTTON_POS_Y, BACK_BUTTON_TEXT, &lvgl_helper_back_button_event_handler);
-	fail_if_negative(ret, -1, "lvgl_helper_create_button failed, return %d\n");
-
 	for(int i = 0; i < NB_BUTTON; i++)
 	{
 		T_button *btn = &profiles_screen.button[i];

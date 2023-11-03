@@ -19,6 +19,8 @@
 #ifndef _RESULTS_SCREEN_HEADER_
 #define _RESULTS_SCREEN_HEADER_
 
+#include <lvgl.h>
+
 int results_screen_enter(lv_obj_t *screen);
 int results_screen_exit(void);
 

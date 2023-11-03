@@ -17,7 +17,6 @@
 */
 
 #include "log.h"
-#include "lvgl_helper.h"
 #include "settings_screen.h"
 
 static T_lv_btn back_btn;
