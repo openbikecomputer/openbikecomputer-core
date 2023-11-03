@@ -306,7 +306,7 @@ static void * screen_thread_handler(void *data)
 	}
 
 	/* If we are here something wrong happen, kill the application */
-	log_error("LVGL tick thread exit, kill the application\n");
+	log_error("LVGL draw thread exit, kill the application\n");
 	exit(-1);
 
 	return NULL;
