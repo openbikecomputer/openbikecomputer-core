@@ -42,8 +42,8 @@ typedef struct {
 static struct {
 	T_button button[NB_BUTTON];
 } profiles_screen = {
-	.button[0] = {.image = "D:/usr/share/openbikecomputer/images/counter.png", .next_screen = E_PROFILES_RIDER_SCREEN},
-	.button[1] = {.image = "D:/usr/share/openbikecomputer/images/navigation.png", .next_screen = E_PROFILES_BIKE_SCREEN},
+	.button[0] = {.image = "D:/usr/share/openbikecomputer/images/profiles_riders.png", .next_screen = E_PROFILES_RIDER_SCREEN},
+	.button[1] = {.image = "D:/usr/share/openbikecomputer/images/profiles_bikes.png", .next_screen = E_PROFILES_BIKE_SCREEN},
 };
 
 int profiles_screen_enter(lv_obj_t *screen)
