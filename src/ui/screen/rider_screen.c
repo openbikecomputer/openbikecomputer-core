@@ -23,15 +23,15 @@
 
 #include "log.h"
 #include "system.h"
-#include "profiles_riders_screen.h"
+#include "rider_screen.h"
 #include "ui.h"
 
-int profiles_riders_screen_enter(lv_obj_t *screen)
+int rider_screen_enter(lv_obj_t *screen)
 {
 	return 0;
 }
 
-int profiles_riders_screen_exit(void)
+int rider_screen_exit(void)
 {
 	return 0;
 }

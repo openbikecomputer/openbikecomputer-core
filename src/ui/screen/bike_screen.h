@@ -16,22 +16,10 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <lvgl.h>
+#ifndef _BIKE_SCREEN_HEADER_
+#define _BIKE_SCREEN_HEADER_
 
-#include "log.h"
-#include "system.h"
-#include "profiles_bikes_screen.h"
-#include "ui.h"
+int bike_screen_enter(lv_obj_t *screen);
+int bike_screen_exit(void);
 
-int profiles_bikes_screen_enter(lv_obj_t *screen)
-{
-	return 0;
-}
-
-int profiles_bikes_screen_exit(void)
-{
-	return 0;
-}
+#endif //_BIKE_SCREEN_HEADER_

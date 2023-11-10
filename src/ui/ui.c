@@ -30,9 +30,9 @@
 #include "main_screen.h"
 #include "data_screen.h"
 #include "navigation_screen.h"
-#include "profiles_screen.h"
-#include "profiles_riders_screen.h"
-#include "profiles_bikes_screen.h"
+#include "profile_screen.h"
+#include "rider_screen.h"
+#include "bike_screen.h"
 #include "results_screen.h"
 #include "routes_screen.h"
 #include "settings_screen.h"
@@ -59,10 +59,10 @@ static struct {
 	[E_NAVIGATION_SCREEN]     = {.enter = &navigation_screen_enter,      .exit = &navigation_screen_exit,     .bar_visible = false, .bar_back_button = false, .bar_back_button_screen = 0},
 	[E_RESULTS_SCREEN]        = {.enter = &results_screen_enter,         .exit = &results_screen_exit,        .bar_visible = true,  .bar_back_button = true,  .bar_back_button_screen = E_MAIN_SCREEN},
 	[E_ROUTES_SCREEN]         = {.enter = &routes_screen_enter,          .exit = &routes_screen_exit,         .bar_visible = true,  .bar_back_button = true,  .bar_back_button_screen = E_MAIN_SCREEN},
-	[E_PROFILES_SCREEN]       = {.enter = &profiles_screen_enter,        .exit = &profiles_screen_exit,       .bar_visible = true,  .bar_back_button = true,  .bar_back_button_screen = E_MAIN_SCREEN},
-	[E_PROFILES_RIDER_SCREEN] = {.enter = &profiles_riders_screen_enter, .exit = &profiles_riders_screen_exit,.bar_visible = true,  .bar_back_button = true,  .bar_back_button_screen = E_PROFILES_SCREEN},
-	[E_PROFILES_BIKE_SCREEN]  = {.enter = &profiles_bikes_screen_enter,  .exit = &profiles_bikes_screen_exit, .bar_visible = true,  .bar_back_button = true,  .bar_back_button_screen = E_PROFILES_SCREEN},
-	[E_SETTINGS_SCREEN]       = {.enter = &settings_screen_enter,        .exit = &settings_screen_exit,       .bar_visible = true,  .bar_back_button = true,  .bar_back_button_screen = E_MAIN_SCREEN},
+	[E_PROFILE_SCREEN]        = {.enter = &profile_screen_enter,         .exit = &profile_screen_exit,        .bar_visible = true,  .bar_back_button = true,  .bar_back_button_screen = E_MAIN_SCREEN},
+	[E_RIDER_SCREEN]          = {.enter = &rider_screen_enter,           .exit = &rider_screen_exit,          .bar_visible = false, .bar_back_button = false, .bar_back_button_screen = 0},
+	[E_BIKE_SCREEN]           = {.enter = &bike_screen_enter,            .exit = &bike_screen_exit,           .bar_visible = false, .bar_back_button = false, .bar_back_button_screen = 0},
+	[E_SETTINGS_SCREEN]       = {.enter = &settings_screen_enter,        .exit = &settings_screen_exit,       .bar_visible = false, .bar_back_button = false, .bar_back_button_screen = 0},
 };
 
 typedef struct {

@@ -16,10 +16,10 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef _PROFILES_RIDERS_SCREEN_HEADER_
-#define _PROFILES_RIDERS_SCREEN_HEADER_
+#ifndef _RIDER_SCREEN_HEADER_
+#define _RIDER_SCREEN_HEADER_
 
-int profiles_riders_screen_enter(lv_obj_t *screen);
-int profiles_riders_screen_exit(void);
+int rider_screen_enter(lv_obj_t *screen);
+int rider_screen_exit(void);
 
-#endif //_PROFILES_RIDERS_SCREEN_HEADER_
+#endif //_RIDER_SCREEN_HEADER_

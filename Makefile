@@ -10,9 +10,9 @@ SRC = src/main.c \
       src/ui/screen/main_screen.c \
       src/ui/screen/data_screen.c \
       src/ui/screen/navigation_screen.c \
-      src/ui/screen/profiles_screen.c \
-      src/ui/screen/profiles_riders_screen.c \
-      src/ui/screen/profiles_bikes_screen.c \
+      src/ui/screen/profile_screen.c \
+      src/ui/screen/rider_screen.c \
+      src/ui/screen/bike_screen.c \
       src/ui/screen/results_screen.c \
       src/ui/screen/routes_screen.c \
       src/ui/screen/settings_screen.c \
