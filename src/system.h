@@ -19,16 +19,17 @@
 #define _SYSTEM_HEADER_
 
 /* LVGL configuration */
-#define SCREEN_HOR_SIZE (1080)
-#define SCREEN_VER_SIZE (1920)
+#define SCREEN_HOR_SIZE (360)
+#define SCREEN_VER_SIZE (640)
 #define SCREEN_ROTATION 0 /* Other possible value 90, 180 or 270 */
-#define LVGL_REFRESH_TICK_RATE 30 /*milliseconds*/
+#define LVGL_REFRESH_TICK_RATE 10 /*milliseconds*/
+#define LVGL_TIMER_HANDLER_RATE 33 /*milliseconds*/
 #define DEFAULT_FONT lv_font_montserrat_48
 
 /* System configuration file */
-#define SYSTEM_CONF_FILE_PATH "/etc/openbikecomputer/system.conf"
-#define RIDER_CONF_FILE_PATH "/etc/openbikecomputer/rider.conf"
-#define BIKE_CONF_FILE_PATH "/etc/openbikecomputer/bike.conf"
-#define USER_CONF_FILE_PATH "/etc/openbikecomputer/user.conf"
+#define SYSTEM_CONF_FILE_PATH "./config/system.conf"
+#define RIDER_CONF_FILE_PATH "./config/rider.conf"
+#define BIKE_CONF_FILE_PATH "./config/bike.conf"
+#define USER_CONF_FILE_PATH "./config/user.conf"
 
 #endif //_SYSTEM_HEADER_

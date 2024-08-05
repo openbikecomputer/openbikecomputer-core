@@ -50,12 +50,12 @@ static struct {
 	lv_obj_t * cont;
 	T_button button_array[NB_BUTTON];
 } main_screen = {
-	.button_array[0] = {.name = "Data",       .image = "D:/usr/share/openbikecomputer/images/counter.png", .next_screen = E_DATA_SCREEN},
-	.button_array[1] = {.name = "Navigation", .image = "D:/usr/share/openbikecomputer/images/navigation.png", .next_screen = E_NAVIGATION_SCREEN},
-	.button_array[2] = {.name = "Results",    .image = "D:/usr/share/openbikecomputer/images/results.png", .next_screen = E_RESULTS_SCREEN},
-	.button_array[3] = {.name = "Routes",     .image = "D:/usr/share/openbikecomputer/images/routes.png", .next_screen = E_ROUTES_SCREEN},
-	.button_array[4] = {.name = "Profiles",   .image = "D:/usr/share/openbikecomputer/images/profiles.png", .next_screen = E_PROFILE_SCREEN},
-	.button_array[5] = {.name = "Settings",   .image = "D:/usr/share/openbikecomputer/images/settings.png", .next_screen = E_SETTINGS_SCREEN},
+	.button_array[0] = {.name = "Data",       .image = "D:./images/counter.png", .next_screen = E_DATA_SCREEN},
+	.button_array[1] = {.name = "Navigation", .image = "D:./images/navigation.png", .next_screen = E_NAVIGATION_SCREEN},
+	.button_array[2] = {.name = "Results",    .image = "D:./images/results.png", .next_screen = E_RESULTS_SCREEN},
+	.button_array[3] = {.name = "Routes",     .image = "D:./images/routes.png", .next_screen = E_ROUTES_SCREEN},
+	.button_array[4] = {.name = "Profiles",   .image = "D:./images/profiles.png", .next_screen = E_PROFILE_SCREEN},
+	.button_array[5] = {.name = "Settings",   .image = "D:./images/settings.png", .next_screen = E_SETTINGS_SCREEN},
 };
 
 int main_screen_enter(lv_obj_t *screen)

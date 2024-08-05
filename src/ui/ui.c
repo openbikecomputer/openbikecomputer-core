@@ -16,6 +16,12 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "ui.h"
+
+#if DISPLAY_BACKEND == WAYLAND
+#include <wayland.h>
+#endif
+
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -24,7 +30,6 @@
 #include <poll.h>
 #include <pthread.h>
 #include <lvgl.h>
-#include <wayland.h>
 #include <semaphore.h>
 
 #include "main_screen.h"
@@ -40,7 +45,6 @@
 #include "fifo.h"
 #include "log.h"
 #include "system.h"
-#include "ui.h"
 
 #define STATUS_BAR_SIZE ((ui_get_resolution_ver() / 10))
 #define STATUS_BAR_TIMER_DELAY (1000) //ms
@@ -332,6 +336,7 @@ static void * tick_thread_handler(void *data)
 
 static void * draw_thread_handler(void *data)
 {
+#if DISPLAY_BACKEND == WAYLAND
 	int sleep;
 	struct pollfd pfd;
 	uint32_t time_till_next;
@@ -362,6 +367,15 @@ static void * draw_thread_handler(void *data)
 
 		while ((poll(&pfd, 1, sleep) < 0) && (errno == EINTR));
 	}
+#else
+	while(1)
+	{
+		pthread_mutex_lock(&ui.lvgl_mutex);
+		lv_timer_handler();
+		pthread_mutex_unlock(&ui.lvgl_mutex);
+		usleep(LVGL_TIMER_HANDLER_RATE * 1000);
+	}
+#endif
 
 	/* If we are here something wrong happen, kill the application */
 	log_error("LVGL draw thread exit, kill the application\n");
@@ -455,9 +469,8 @@ int ui_init(int resolution_hor, int resolution_ver, int screen_rotation)
 
 	fail_if_true(ui.is_initialized, -1, "ui is already initialized\n");
 
-	/* Init lvgl lib and wayland driver */
+	/* Init lvgl lib */
 	lv_init();
-	lv_wayland_init();
 
 	ret = fifo_create(&ui.screen_fifo, sizeof(int), SCREEN_FIFO_DEPTH);
 	fail_if_negative(ret, -2, "fifo_create fail, return: %d\n", ret);
@@ -467,11 +480,23 @@ int ui_init(int resolution_hor, int resolution_ver, int screen_rotation)
 	/* Create a display */
 	ui.resolution_hor = resolution_hor;
 	ui.resolution_ver = resolution_ver;
-	ui.display = lv_wayland_create_window(ui.resolution_hor, ui.resolution_ver, "openbikecomputer", NULL /*close_cb*/);
-	fail_if_null(ui.display, -3, "lv_wayland_create_window return NULL\n");
 
-	/* Set window in fullscreen mode */
+#if DISPLAY_BACKEND == WAYLAND
+	lv_wayland_init();
+	ui.display = lv_wayland_create_window(ui.resolution_hor, ui.resolution_ver, "openbikecomputer", NULL /*close_cb*/);
 	lv_wayland_window_set_fullscreen(ui.display, true);
+#elif DISPLAY_BACKEND == SDL_X11
+	ui.display = lv_sdl_window_create(ui.resolution_hor, ui.resolution_ver);
+#elif DISPLAY_BACKEND == X11
+	ui.display = lv_x11_window_create("openbikecomputer", ui.resolution_hor, ui.resolution_ver);
+	// TODO add input management and display the mouse
+	lv_x11_inputs_create(ui.display, NULL);
+#elif DISPLAY_BACKEND == FRAMEBUFFER
+	ui.display = lv_linux_fbdev_create();
+	lv_linux_fbdev_set_file(ui.display, "/dev/fb0");
+#else
+	#error "DISPLAY_BACKEND is not set (choice: WAYLAND, SDL_X11, X11 or FRAMEBUFFER)"
+#endif
 
 	fail_if_null(ui.display, -3, "lv_wayland_create_window return NULL\n");
 
@@ -512,9 +537,6 @@ int ui_init(int resolution_hor, int resolution_ver, int screen_rotation)
 	/* Create a thread to handle lvgl drawing */
 	ret = pthread_create(&ui.screen_thread, NULL, &screen_thread_handler, NULL);
 	fail_if_negative(ret, -7, "Create screen manager thread failed, return: %d\n", ret);
-
-	/* Wait 150ms to let thread settle */
-	usleep(150*1000);
 
 	/* Display the main screen */
 	ret = _push_next_screen_in_fifo(E_MAIN_SCREEN);

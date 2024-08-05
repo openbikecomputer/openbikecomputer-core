@@ -20,6 +20,15 @@
 
 #include <lvgl.h>
 
+#define  WAYLAND 0
+#define  SDL_X11 1
+#define  X11 2
+#define  FRAMEBUFFER 3
+
+#ifndef DISPLAY_BACKEND
+	#define DISPLAY_BACKEND WAYLAND
+#endif
+
 typedef enum {
 	E_MAIN_SCREEN = 0,
 	E_DATA_SCREEN,

@@ -4,6 +4,8 @@ BINDIR ?= usr/bin
 CONFDIR ?= etc/openbikecomputer
 SHAREDIR ?= usr/share/openbikecomputer
 
+DISPLAY_BACKEND ?= X11
+
 SRC = src/main.c \
       src/log/log.c \
       src/ui/ui.c \
@@ -36,18 +38,34 @@ INCLUDE = -Isrc \
           -Isrc/data \
           -Isrc/config \
           -Isrc/utils \
-          -I$(SYSROOT)/usr/include \
-          -I$(SYSROOT)/usr/include/lvgl \
-          -I$(SYSROOT)/usr/include/lvgl/lv_drivers \
-          -I$(SYSROOT)/usr/include/lvgl/lv_drivers/wayland \
-          -I$(SYSROOT)/usr/include/lvgl/lv_drivers/wayland/protocols
+          -I$(SYSROOT)/usr/local/include \
+          -I$(SYSROOT)/usr/local/include/lvgl \
+
+ifeq ($(DISPLAY_BACKEND), WAYLAND)
+LIB_DISPLAY_BACKEND = -llv_drivers -llv-wayland-protocol -lwayland-client -lxkbcommon -lwayland-cursor
+INCLUDE += -I$(SYSROOT)/usr/local/include/lvgl/lv_drivers \
+           -I$(SYSROOT)/usr/local/include/lvgl/lv_drivers/wayland \
+           -I$(SYSROOT)/usr/local/include/lvgl/lv_drivers/wayland/protocols
+endif
+
+ifeq ($(DISPLAY_BACKEND), SDL_X11)
+LIB_DISPLAY_BACKEND = -lxkbcommon -lSDL2
+endif
+
+ifeq ($(DISPLAY_BACKEND), X11)
+LIB_DISPLAY_BACKEND = -lxkbcommon -lX11
+endif
+
+ifeq ($(DISPLAY_BACKEND), FRAMEBUFFER)
+LIB_DISPLAY_BACKEND =
+endif
 
 CC ?= gcc
 CCLD ?= gcc
 
-CFLAGS += $(INCLUDE) -D_DEFAULT_SOURCE -D_REENTRANT -Wall -Werror -pedantic -std=c99
+CFLAGS += $(INCLUDE) -D_DEFAULT_SOURCE -D_REENTRANT -Wall -Werror -pedantic -std=c99 -DDISPLAY_BACKEND=$(DISPLAY_BACKEND)
 LDFLAGS +=
-LIBS += -L$(SYSROOT)/usr/lib/ -llvgl -llv_drivers -llv-wayland-protocol -lwayland-client -lxkbcommon -lwayland-cursor -lpthread -lconfig
+LIBS += -L$(SYSROOT)/usr/lib/ -llvgl $(LIB_DISPLAY_BACKEND) -lpthread -lconfig -lpng
 
 OBJS = $(patsubst %.c, %.o, $(SRC))
 

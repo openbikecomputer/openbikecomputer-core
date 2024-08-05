@@ -26,7 +26,7 @@
 #include "bike_screen.h"
 #include "ui.h"
 
-int profiles_bikes_screen_enter(lv_obj_t *screen)
+int bike_screen_enter(lv_obj_t *screen)
 {
 	return 0;
 }
