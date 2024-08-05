@@ -26,6 +26,7 @@
 #include "lvgl_helper.h"
 #include "main_screen.h"
 #include "ui.h"
+#include "assets.h"
 
 static void button_event_handler(lv_event_t *event)
 {
@@ -50,12 +51,12 @@ static struct {
 	lv_obj_t * cont;
 	T_button button_array[NB_BUTTON];
 } main_screen = {
-	.button_array[0] = {.name = "Data",       .image = "D:./images/counter.png", .next_screen = E_DATA_SCREEN},
-	.button_array[1] = {.name = "Navigation", .image = "D:./images/navigation.png", .next_screen = E_NAVIGATION_SCREEN},
-	.button_array[2] = {.name = "Results",    .image = "D:./images/results.png", .next_screen = E_RESULTS_SCREEN},
-	.button_array[3] = {.name = "Routes",     .image = "D:./images/routes.png", .next_screen = E_ROUTES_SCREEN},
-	.button_array[4] = {.name = "Profiles",   .image = "D:./images/profiles.png", .next_screen = E_PROFILE_SCREEN},
-	.button_array[5] = {.name = "Settings",   .image = "D:./images/settings.png", .next_screen = E_SETTINGS_SCREEN},
+	.button_array[0] = {.name = "Data",       .image = IMAGE_COUNTER,    .next_screen = E_DATA_SCREEN},
+	.button_array[1] = {.name = "Navigation", .image = IMAGE_NAVIGATION, .next_screen = E_NAVIGATION_SCREEN},
+	.button_array[2] = {.name = "Results",    .image = IMAGE_RESULTS,    .next_screen = E_RESULTS_SCREEN},
+	.button_array[3] = {.name = "Routes",     .image = IMAGE_ROUTES,     .next_screen = E_ROUTES_SCREEN},
+	.button_array[4] = {.name = "Profiles",   .image = IMAGE_PROFILES,   .next_screen = E_PROFILE_SCREEN},
+	.button_array[5] = {.name = "Settings",   .image = IMAGE_SETTINGS,   .next_screen = E_SETTINGS_SCREEN},
 };
 
 int main_screen_enter(lv_obj_t *screen)
@@ -81,6 +82,7 @@ int main_screen_enter(lv_obj_t *screen)
 
 		/* Change button size */
 		lv_obj_set_size(btn->obj, BUTTON_SIZE, BUTTON_SIZE);
+		lv_obj_align(btn->obj, LV_ALIGN_CENTER, 0, 0);
 
 		/* Link the button click to the event callback */
 		lv_obj_add_event_cb(btn->obj, &button_event_handler, LV_EVENT_CLICKED, (void*)&btn->next_screen);

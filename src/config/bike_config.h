@@ -26,6 +26,7 @@ typedef enum {
 	E_GRAVEL,
 	E_TOURING,
 	E_SPEED,
+	E_OTHER,
 } E_bike_type;
 
 int bike_config_init(void);

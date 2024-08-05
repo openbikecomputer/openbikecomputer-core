@@ -19,6 +19,7 @@
 #include "log.h"
 #include "lvgl_helper.h"
 #include "profile_screen.h"
+#include "assets.h"
 
 
 static void button_event_handler(lv_event_t *event)
@@ -42,8 +43,8 @@ typedef struct {
 static struct {
 	T_button button[NB_BUTTON];
 } profiles_screen = {
-	.button[0] = {.image = "D:./images/profiles_riders.png", .next_screen = E_RIDER_SCREEN},
-	.button[1] = {.image = "D:./images/profiles_bikes.png", .next_screen = E_BIKE_SCREEN},
+	.button[0] = {.image = IMAGE_PROFILES_RIDER, .next_screen = E_RIDER_SCREEN},
+	.button[1] = {.image = IMAGE_PROFILES_BIKES, .next_screen = E_BIKE_SCREEN},
 };
 
 int profile_screen_enter(lv_obj_t *screen)

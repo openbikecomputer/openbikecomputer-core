@@ -20,13 +20,46 @@
 #include "settings_screen.h"
 #include "lvgl_helper.h"
 
-static T_lv_btn back_btn;
+static struct {
+	lv_obj_t *menu;
+} settings_screen;
 
 int settings_screen_enter(lv_obj_t *screen)
 {
-	int ret = 0;
-	ret = lvgl_helper_create_button(&back_btn, screen, BACK_BUTTON_SIZE_X, BACK_BUTTON_SIZE_Y, BACK_BUTTON_ALIGN, BACK_BUTTON_POS_X, BACK_BUTTON_POS_Y, BACK_BUTTON_TEXT, &lvgl_helper_back_button_event_handler);
-	fail_if_negative(ret, -1, "lvgl_helper_create_button failed, return %d\n");
+    /*Create a menu object*/
+    settings_screen.menu = lv_menu_create(screen);
+    lv_obj_set_size(settings_screen.menu, lv_pct(100), lv_pct(100));
+    lv_obj_center(settings_screen.menu);
+
+    lv_obj_t * cont;
+    lv_obj_t * label;
+
+    /*Create a sub page*/
+    lv_obj_t * sub_page = lv_menu_page_create(settings_screen.menu, NULL);
+
+    cont = lv_menu_cont_create(sub_page);
+    label = lv_label_create(cont);
+    lv_label_set_text(label, "Hello, I am hiding here");
+
+    /*Create a main page*/
+    lv_obj_t * main_page = lv_menu_page_create(settings_screen.menu, NULL);
+
+    cont = lv_menu_cont_create(main_page);
+    label = lv_label_create(cont);
+    lv_label_set_text(label, "Item 1");
+
+    cont = lv_menu_cont_create(main_page);
+    label = lv_label_create(cont);
+    lv_label_set_text(label, "Item 2");
+
+    cont = lv_menu_cont_create(main_page);
+    label = lv_label_create(cont);
+    lv_label_set_text(label, "Item 3 (Click me!)");
+    lv_menu_set_load_page_event(settings_screen.menu, cont, sub_page);
+
+    lv_menu_set_page(settings_screen.menu, main_page);
+
+
 	return 0;
 }
 int settings_screen_exit(void)
