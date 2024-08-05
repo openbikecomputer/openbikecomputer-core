@@ -53,8 +53,8 @@ int profile_screen_enter(lv_obj_t *screen)
 		T_button *btn = &profiles_screen.button[i];
 
 		/* Create the button */
-		btn->obj = lv_imgbtn_create(screen);
-		lv_imgbtn_set_src(btn->obj, LV_IMGBTN_STATE_RELEASED, btn->image, NULL, NULL);
+		btn->obj = lv_imagebutton_create(screen);
+		lv_imagebutton_set_src(btn->obj, LV_IMAGEBUTTON_STATE_RELEASED, btn->image, NULL, NULL);
 
 		/* Change button size */
 		lv_obj_set_size(btn->obj, BUTTON_SIZE, BUTTON_SIZE);

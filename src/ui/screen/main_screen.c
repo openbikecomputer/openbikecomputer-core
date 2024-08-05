@@ -76,8 +76,8 @@ int main_screen_enter(lv_obj_t *screen)
 		T_button *btn = &main_screen.button_array[i];
 
 		/* Create the button */
-		btn->obj = lv_imgbtn_create(main_screen.cont);
-		lv_imgbtn_set_src(btn->obj, LV_IMGBTN_STATE_RELEASED, btn->image, NULL, NULL);
+		btn->obj = lv_imagebutton_create(main_screen.cont);
+		lv_imagebutton_set_src(btn->obj, LV_IMAGEBUTTON_STATE_RELEASED, btn->image, NULL, NULL);
 
 		/* Change button size */
 		lv_obj_set_size(btn->obj, BUTTON_SIZE, BUTTON_SIZE);

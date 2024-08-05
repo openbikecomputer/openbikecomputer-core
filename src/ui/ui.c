@@ -78,10 +78,10 @@ static struct {
 	/* display settings */
 	int resolution_hor;
 	int resolution_ver;
-	lv_disp_rot_t rotation;
+	lv_display_rotation_t rotation;
 
 	/* lvgl display */
-	lv_disp_t *display;
+	lv_display_t *display;
 	lv_obj_t *virt_screen;
 	lv_style_t virt_screen_style;
 	lv_style_t default_style;
@@ -370,7 +370,7 @@ static void * draw_thread_handler(void *data)
 	return NULL;
 }
 
-int _init_defaults_style(void)
+static int _init_defaults_style(void)
 {
 	/* Screen widget default style */
 	lv_style_init(&ui.default_style);
@@ -438,14 +438,14 @@ int ui_go_to_previous_screen(void)
 int ui_get_resolution_hor(void)
 {
 	fail_if_false(ui.is_initialized, -1, "ui is not initialized\n");
-	
+
 	return ui.resolution_hor;
 }
 
 int ui_get_resolution_ver(void)
 {
 	fail_if_false(ui.is_initialized, -1, "ui is not initialized\n");
-	
+
 	return ui.resolution_ver;
 }
 
@@ -473,20 +473,22 @@ int ui_init(int resolution_hor, int resolution_ver, int screen_rotation)
 	/* Set window in fullscreen mode */
 	lv_wayland_window_set_fullscreen(ui.display, true);
 
-	ui.rotation = LV_DISP_ROT_NONE;
+	fail_if_null(ui.display, -3, "lv_wayland_create_window return NULL\n");
+
+	ui.rotation = LV_DISPLAY_ROTATION_0;
 	switch(screen_rotation)
 	{
 		case 0:
-			ui.rotation = LV_DISP_ROT_NONE;
+			ui.rotation = LV_DISPLAY_ROTATION_0;
 			break;
 		case 90:
-			ui.rotation = LV_DISP_ROT_90;
+			ui.rotation = LV_DISPLAY_ROTATION_90;
 			break;
 		case 180:
-			ui.rotation = LV_DISP_ROT_180;
+			ui.rotation = LV_DISPLAY_ROTATION_180;
 			break;
 		case 270:
-			ui.rotation = LV_DISP_ROT_270;
+			ui.rotation = LV_DISPLAY_ROTATION_270;
 			break;
 		default:
 			log_error("Invalid screen rotation %d, value 0, 90, 180 or 270\n", screen_rotation);
