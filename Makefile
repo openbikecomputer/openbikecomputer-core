@@ -9,6 +9,7 @@ DISPLAY_BACKEND ?= X11
 SRC = src/main.c \
       src/log/log.c \
       src/ui/ui.c \
+      src/ui/mouse_img.c \
       src/ui/screen/main_screen.c \
       src/ui/screen/data_screen.c \
       src/ui/screen/navigation_screen.c \

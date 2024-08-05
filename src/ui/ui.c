@@ -51,6 +51,8 @@
 #define SCREEN_FIFO_DEPTH 8
 #define STR_TIME_SIZE (8)
 
+LV_IMAGE_DECLARE(mouse_img);
+
 static struct {
 	int (*enter)(lv_obj_t * screen);
 	int (*exit)(void);
@@ -489,8 +491,7 @@ int ui_init(int resolution_hor, int resolution_ver, int screen_rotation)
 	ui.display = lv_sdl_window_create(ui.resolution_hor, ui.resolution_ver);
 #elif DISPLAY_BACKEND == X11
 	ui.display = lv_x11_window_create("openbikecomputer", ui.resolution_hor, ui.resolution_ver);
-	// TODO add input management and display the mouse
-	lv_x11_inputs_create(ui.display, NULL);
+	lv_x11_inputs_create(ui.display, &mouse_img);
 #elif DISPLAY_BACKEND == FRAMEBUFFER
 	ui.display = lv_linux_fbdev_create();
 	lv_linux_fbdev_set_file(ui.display, "/dev/fb0");
