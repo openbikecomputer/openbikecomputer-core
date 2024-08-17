@@ -19,8 +19,8 @@
 #define _SYSTEM_HEADER_
 
 /* LVGL configuration */
-#define SCREEN_HOR_SIZE (360)
-#define SCREEN_VER_SIZE (640)
+#define SCREEN_HOR_SIZE (480)
+#define SCREEN_VER_SIZE (800)
 #define SCREEN_ROTATION 0 /* Other possible value 90, 180 or 270 */
 #define LVGL_REFRESH_TICK_RATE 10 /*milliseconds*/
 #define LVGL_TIMER_HANDLER_RATE 33 /*milliseconds*/
