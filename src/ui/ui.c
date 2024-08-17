@@ -89,7 +89,6 @@ static struct {
 	/* lvgl display */
 	lv_display_t *display;
 	lv_obj_t *virt_screen;
-	lv_style_t virt_screen_style;
 	lv_style_t default_style;
 
 	/* threads */
@@ -276,8 +275,8 @@ static void * screen_thread_handler(void *data)
 		/* Create the virtual screen object */
 		ui.virt_screen = lv_obj_create(lv_scr_act());
 
-		/* Apply global style on the virt screen */
-		lv_obj_add_style(ui.virt_screen, &ui.virt_screen_style, 0);
+		/* Remove all style from virt screen */
+		lv_obj_remove_style_all(ui.virt_screen);
 
 		if(screen_table[next].bar_visible)
 		{
@@ -399,13 +398,6 @@ static int _init_defaults_style(void)
 	/* Screen widget default style */
 	lv_style_init(&ui.default_style);
 	lv_style_set_text_font(&ui.default_style, &DEFAULT_FONT);
-
-	/* Virtual screen default style */
-	lv_style_init(&ui.virt_screen_style);
-	lv_style_set_text_font(&ui.virt_screen_style, &DEFAULT_FONT);
-	lv_style_set_border_width(&ui.virt_screen_style, 0);
-	lv_style_set_outline_width(&ui.virt_screen_style, 0);
-	lv_style_set_pad_all(&ui.virt_screen_style, 0);
 
 	return 0;
 }
