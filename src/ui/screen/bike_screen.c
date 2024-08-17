@@ -45,9 +45,6 @@ static void _create_subpage(void)
 	/* Create the menu subpage */
     sub_page = lv_menu_page_create(bike_screen.menu, NULL);
 
-	/* Apply ui defaut style to the menu */
-	ui_apply_default_style_to_obj(sub_page);
-
 	/* Populate subpage content */
 	/* Name */
     cont = lv_menu_cont_create(sub_page);
@@ -194,9 +191,6 @@ int bike_screen_enter(lv_obj_t *screen)
 	/* Set size and center the menu */
     lv_obj_set_size(bike_screen.menu, lv_pct(100), lv_pct(100));
     lv_obj_center(bike_screen.menu);
-
-	/* Apply ui defaut style to the menu */
-	ui_apply_default_style_to_obj(bike_screen.menu);
 
 	printf("Create menu main page\n");
     /*Create a main page that will contain the bike list */

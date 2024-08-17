@@ -41,6 +41,8 @@
 #include "results_screen.h"
 #include "routes_screen.h"
 #include "settings_screen.h"
+#include "styles.h"
+#include "topbar_styles.h"
 
 #include "fifo.h"
 #include "log.h"
@@ -171,7 +173,7 @@ static int _create_topbar(bool back_button_visible, E_screen_id *back_screen)
 	ui.topbar.bar = lv_obj_create(lv_scr_act());
 	lv_obj_set_size(ui.topbar.bar, ui_get_resolution_hor(), TOPBAR_SIZE);
 	lv_obj_align(ui.topbar.bar, LV_ALIGN_TOP_MID, 0, 0);
-	lv_obj_add_style(ui.topbar.bar, &ui.default_style, 0);
+	lv_obj_add_style(ui.topbar.bar, topbar_styles_get_general_style(), LV_PART_MAIN | LV_STATE_DEFAULT);
 
 	/* Create the top bar back button if needed */
 	if(back_button_visible)
@@ -205,7 +207,7 @@ static int _create_topbar(bool back_button_visible, E_screen_id *back_screen)
 	lv_timer_set_repeat_count(ui.topbar.timer, -1); // repeat indefinitly
 
 	/* Disable scrollbar in topbar */
-	lv_obj_set_scrollbar_mode(ui.topbar.bar, LV_SCROLLBAR_MODE_OFF);
+	styles_disable_scrollbar(ui.topbar.bar);
 
 	return 0;
 }
@@ -275,8 +277,9 @@ static void * screen_thread_handler(void *data)
 		/* Create the virtual screen object */
 		ui.virt_screen = lv_obj_create(lv_scr_act());
 
-		/* Remove all style from virt screen */
+		/* Remove all style from virt screen and reapply virtual screen style */
 		lv_obj_remove_style_all(ui.virt_screen);
+		lv_obj_add_style(ui.virt_screen, styles_get_virtual_screen_style(), LV_PART_MAIN | LV_STATE_DEFAULT);
 
 		if(screen_table[next].top_bar_visible)
 		{
@@ -393,24 +396,6 @@ static void * draw_thread_handler(void *data)
 	return NULL;
 }
 
-static int _init_defaults_style(void)
-{
-	/* Screen widget default style */
-	lv_style_init(&ui.default_style);
-	lv_style_set_text_font(&ui.default_style, &DEFAULT_FONT);
-
-	return 0;
-}
-
-int ui_apply_default_style_to_obj(lv_obj_t *obj)
-{
-	fail_if_false(ui.is_initialized, -1, "ui is not initialized\n");
-
-	lv_obj_add_style(obj, &ui.default_style, 0);
-
-	return 0;
-}
-
 int ui_change_screen(E_screen_id next)
 {
 	int ret = 0;
@@ -524,8 +509,8 @@ int ui_init(int resolution_hor, int resolution_ver, int screen_rotation)
 	lv_disp_set_rotation(ui.display, ui.rotation);
 
 	/* Init ui style */
-	ret = _init_defaults_style();
-	fail_if_negative(ret, -4, "ui_style_init failed, return: %d\n", ret);
+	ret = styles_init();
+	fail_if_negative(ret, -4, "styles_init failed, return: %d\n", ret);
 
 	/* Create a thread to tell lvgl the elapsed time */
 	ret = pthread_create(&ui.tick_thread, NULL, &tick_thread_handler, NULL);

@@ -30,12 +30,15 @@ SRC = src/main.c \
       src/data/data_manager.c \
       src/data/data_recorder.c \
       src/utils/simulator.c \
-      src/utils/fifo.c
+      src/utils/fifo.c \
+      src/ui/styles/styles.c \
+      src/ui/styles/topbar_styles.c
 
 INCLUDE = -Isrc \
           -Isrc/log \
           -Isrc/ui \
           -Isrc/ui/screen \
+          -Isrc/ui/styles \
           -Isrc/data \
           -Isrc/config \
           -Isrc/utils \
