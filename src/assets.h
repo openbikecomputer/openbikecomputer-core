@@ -34,5 +34,6 @@
 #define IMAGE_RESULTS        LVGL_FS_LETTER RESOURCES_FOLDER "images/results.png"
 #define IMAGE_ROUTES         LVGL_FS_LETTER RESOURCES_FOLDER "images/routes.png"
 #define IMAGE_SETTINGS       LVGL_FS_LETTER RESOURCES_FOLDER "images/settings.png"
+#define IMAGE_MAP            LVGL_FS_LETTER RESOURCES_FOLDER "images/map.png"
 
 #endif /* _ASSETS_HEADER_ */
