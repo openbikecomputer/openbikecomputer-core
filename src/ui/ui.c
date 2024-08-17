@@ -68,7 +68,7 @@ static struct {
 	[E_PROFILE_SCREEN]        = {.enter = &profile_screen_enter,         .exit = &profile_screen_exit,        .bar_visible = true,  .bar_back_button = true,  .bar_back_button_screen = E_MAIN_SCREEN},
 	[E_RIDER_SCREEN]          = {.enter = &rider_screen_enter,           .exit = &rider_screen_exit,          .bar_visible = false, .bar_back_button = false, .bar_back_button_screen = 0},
 	[E_BIKE_SCREEN]           = {.enter = &bike_screen_enter,            .exit = &bike_screen_exit,           .bar_visible = false, .bar_back_button = false, .bar_back_button_screen = 0},
-	[E_SETTINGS_SCREEN]       = {.enter = &settings_screen_enter,        .exit = &settings_screen_exit,       .bar_visible = false, .bar_back_button = false, .bar_back_button_screen = 0},
+	[E_SETTINGS_SCREEN]       = {.enter = &settings_screen_enter,        .exit = &settings_screen_exit,       .bar_visible = true,  .bar_back_button = true,  .bar_back_button_screen = E_MAIN_SCREEN},
 };
 
 typedef struct {
@@ -152,7 +152,8 @@ static void _statusbar_timer_handler(lv_timer_t * timer)
 		log_error("_get_local_time failed, return %d\n");
 		return;
 	}
-	lv_label_set_text_fmt(label, LV_SYMBOL_GPS " " LV_SYMBOL_WIFI " " LV_SYMBOL_BATTERY_FULL " %s", str);
+	//lv_label_set_text_fmt(label, LV_SYMBOL_GPS " " LV_SYMBOL_WIFI " " LV_SYMBOL_BATTERY_FULL " %s", str);
+	lv_label_set_text_fmt(label, LV_SYMBOL_BATTERY_FULL " %s", str);
 }
 
 static void _status_bar_back_btn_handler(lv_event_t *event)
@@ -179,13 +180,16 @@ static int _create_status_bar(bool back_button_visible, E_screen_id *back_screen
 		/* Create back button */
 		ui.status_bar.back_btn = lv_btn_create(ui.status_bar.bar);
 		lv_obj_add_event_cb(ui.status_bar.back_btn, &_status_bar_back_btn_handler, LV_EVENT_CLICKED, (void*)back_screen);
-		lv_obj_set_size(ui.status_bar.back_btn, lv_pct(25), lv_pct(90));
+		lv_obj_set_size(ui.status_bar.back_btn, lv_pct(35), lv_pct(90));
 		lv_obj_align(ui.status_bar.back_btn, LV_ALIGN_LEFT_MID, 0, 0);
 
 		/* Put the text in the back button label */
 		ui.status_bar.back_btn_label = lv_label_create(ui.status_bar.back_btn);
 		lv_label_set_text(ui.status_bar.back_btn_label, "< Back");
 		lv_obj_center(ui.status_bar.back_btn_label);
+
+		/* Change style of text */
+		lv_obj_set_style_text_font(ui.status_bar.back_btn_label, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
 	}
 
 	/* Fill the status bar with widgets */
@@ -193,12 +197,16 @@ static int _create_status_bar(bool back_button_visible, E_screen_id *back_screen
 	char str[STR_TIME_SIZE];
 	ret = _get_local_time(str, sizeof(str));
 	fail_if_negative(ret, -2, "_get_local_time failed, return %d\n", ret);
-	lv_label_set_text_fmt(ui.status_bar.label, LV_SYMBOL_GPS " " LV_SYMBOL_WIFI " " LV_SYMBOL_BATTERY_FULL " %s", str);
+	//lv_label_set_text_fmt(ui.status_bar.label, LV_SYMBOL_GPS " " LV_SYMBOL_WIFI " " LV_SYMBOL_BATTERY_FULL " %s", str);
+	lv_label_set_text_fmt(ui.status_bar.label, LV_SYMBOL_BATTERY_FULL " %s", str);
     lv_obj_align(ui.status_bar.label, LV_ALIGN_RIGHT_MID, 0, 0);
 
 	/* Create lvgl timer that update the bar each secondes */
 	ui.status_bar.timer = lv_timer_create(&_statusbar_timer_handler, STATUS_BAR_TIMER_DELAY, ui.status_bar.label);
 	lv_timer_set_repeat_count(ui.status_bar.timer, -1); // repeat indefinitly
+
+	/* Disable scrollbar in topbar */
+	lv_obj_set_scrollbar_mode(ui.status_bar.bar, LV_SCROLLBAR_MODE_OFF);
 
 	return 0;
 }

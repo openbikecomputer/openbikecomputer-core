@@ -74,15 +74,22 @@ int main_screen_enter(lv_obj_t *screen)
 
 	for(int i = 0; i < NB_BUTTON; i++)
 	{
+		/* Get the pointer on the actual button data we need */
 		T_button *btn = &main_screen.button_array[i];
 
 		/* Create the button */
-		btn->obj = lv_imagebutton_create(main_screen.cont);
-		lv_imagebutton_set_src(btn->obj, LV_IMAGEBUTTON_STATE_RELEASED, btn->image, NULL, NULL);
+		btn->obj = lv_button_create(main_screen.cont);
+		lv_obj_t* label = lv_label_create(btn->obj);
+		lv_label_set_text(label, btn->name);
+		lv_obj_center(label);
+
+		/* Change style of text */
+		lv_obj_set_style_text_font(label, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
 
 		/* Change button size */
 		lv_obj_set_size(btn->obj, BUTTON_SIZE, BUTTON_SIZE);
 		lv_obj_align(btn->obj, LV_ALIGN_CENTER, 0, 0);
+		lv_obj_update_layout(btn->obj);
 
 		/* Link the button click to the event callback */
 		lv_obj_add_event_cb(btn->obj, &button_event_handler, LV_EVENT_CLICKED, (void*)&btn->next_screen);

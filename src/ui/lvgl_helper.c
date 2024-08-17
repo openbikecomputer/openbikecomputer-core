@@ -47,6 +47,9 @@ int lvgl_helper_create_button(T_lv_btn *obj, lv_obj_t *parent_obj, int size_x, i
 	lv_label_set_text(obj->label, text);
     lv_obj_center(obj->label);
 
+	/* Change style of text */
+	lv_obj_set_style_text_font(obj->label, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
+
 	return 0;
 }
 

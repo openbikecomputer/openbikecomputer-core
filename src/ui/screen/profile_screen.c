@@ -32,6 +32,7 @@ static void button_event_handler(lv_event_t *event)
 
 typedef struct {
 	lv_obj_t *obj;
+	char *name;
 	char *image;
 	E_screen_id next_screen;
 } T_button;
@@ -43,8 +44,8 @@ typedef struct {
 static struct {
 	T_button button[NB_BUTTON];
 } profiles_screen = {
-	.button[0] = {.image = IMAGE_PROFILES_RIDER, .next_screen = E_RIDER_SCREEN},
-	.button[1] = {.image = IMAGE_PROFILES_BIKES, .next_screen = E_BIKE_SCREEN},
+	.button[0] = {.name = "Rider", .image = IMAGE_PROFILES_RIDER, .next_screen = E_RIDER_SCREEN},
+	.button[1] = {.name = "Bike", .image = IMAGE_PROFILES_BIKES, .next_screen = E_BIKE_SCREEN},
 };
 
 int profile_screen_enter(lv_obj_t *screen)
@@ -54,8 +55,15 @@ int profile_screen_enter(lv_obj_t *screen)
 		T_button *btn = &profiles_screen.button[i];
 
 		/* Create the button */
-		btn->obj = lv_imagebutton_create(screen);
-		lv_imagebutton_set_src(btn->obj, LV_IMAGEBUTTON_STATE_RELEASED, btn->image, NULL, NULL);
+		btn->obj = lv_button_create(screen);
+
+		/* Create the label */
+		lv_obj_t* label = lv_label_create(btn->obj);
+		lv_label_set_text(label, btn->name);
+		lv_obj_center(label);
+
+		/* Change style of text */
+		lv_obj_set_style_text_font(label, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
 
 		/* Change button size */
 		lv_obj_set_size(btn->obj, BUTTON_SIZE, BUTTON_SIZE);
