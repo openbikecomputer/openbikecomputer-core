@@ -46,8 +46,8 @@
 #include "log.h"
 #include "system.h"
 
-#define STATUS_BAR_SIZE ((ui_get_resolution_ver() / 10))
-#define STATUS_BAR_TIMER_DELAY (1000) //ms
+#define TOPBAR_SIZE ((ui_get_resolution_ver() / 10))
+#define TOPBAR_TIMER_DELAY (1000) //ms
 #define SCREEN_FIFO_DEPTH 8
 #define STR_TIME_SIZE (8)
 
@@ -56,19 +56,19 @@ LV_IMAGE_DECLARE(mouse_img);
 static struct {
 	int (*enter)(lv_obj_t * screen);
 	int (*exit)(void);
-	bool bar_visible; /* display or not the status bar */
-	bool bar_back_button; /* display or not the back button in the status bar */
-	E_screen_id bar_back_button_screen; /* screen id where the back button lead */
+	bool top_bar_visible; /* display or not the top bar */
+	bool top_bar_has_back_button; /* display or not the back button in the top bar */
+	E_screen_id top_bar_has_back_button_screen; /* screen id where the back button lead */
 } screen_table[E_SCREEN_ID_MAX] = {
-	[E_MAIN_SCREEN]           = {.enter = &main_screen_enter,            .exit = &main_screen_exit,           .bar_visible = true,  .bar_back_button = false, .bar_back_button_screen = 0},
-	[E_DATA_SCREEN]           = {.enter = &data_screen_enter,            .exit = &data_screen_exit,           .bar_visible = true,  .bar_back_button = true,  .bar_back_button_screen = E_MAIN_SCREEN},
-	[E_NAVIGATION_SCREEN]     = {.enter = &navigation_screen_enter,      .exit = &navigation_screen_exit,     .bar_visible = false, .bar_back_button = false, .bar_back_button_screen = 0},
-	[E_RESULTS_SCREEN]        = {.enter = &results_screen_enter,         .exit = &results_screen_exit,        .bar_visible = true,  .bar_back_button = true,  .bar_back_button_screen = E_MAIN_SCREEN},
-	[E_ROUTES_SCREEN]         = {.enter = &routes_screen_enter,          .exit = &routes_screen_exit,         .bar_visible = true,  .bar_back_button = true,  .bar_back_button_screen = E_MAIN_SCREEN},
-	[E_PROFILE_SCREEN]        = {.enter = &profile_screen_enter,         .exit = &profile_screen_exit,        .bar_visible = true,  .bar_back_button = true,  .bar_back_button_screen = E_MAIN_SCREEN},
-	[E_RIDER_SCREEN]          = {.enter = &rider_screen_enter,           .exit = &rider_screen_exit,          .bar_visible = false, .bar_back_button = false, .bar_back_button_screen = 0},
-	[E_BIKE_SCREEN]           = {.enter = &bike_screen_enter,            .exit = &bike_screen_exit,           .bar_visible = false, .bar_back_button = false, .bar_back_button_screen = 0},
-	[E_SETTINGS_SCREEN]       = {.enter = &settings_screen_enter,        .exit = &settings_screen_exit,       .bar_visible = true,  .bar_back_button = true,  .bar_back_button_screen = E_MAIN_SCREEN},
+	[E_MAIN_SCREEN]           = {.enter = &main_screen_enter,            .exit = &main_screen_exit,           .top_bar_visible = true,  .top_bar_has_back_button = false, .top_bar_has_back_button_screen = 0},
+	[E_DATA_SCREEN]           = {.enter = &data_screen_enter,            .exit = &data_screen_exit,           .top_bar_visible = true,  .top_bar_has_back_button = true,  .top_bar_has_back_button_screen = E_MAIN_SCREEN},
+	[E_NAVIGATION_SCREEN]     = {.enter = &navigation_screen_enter,      .exit = &navigation_screen_exit,     .top_bar_visible = false, .top_bar_has_back_button = false, .top_bar_has_back_button_screen = 0},
+	[E_RESULTS_SCREEN]        = {.enter = &results_screen_enter,         .exit = &results_screen_exit,        .top_bar_visible = true,  .top_bar_has_back_button = true,  .top_bar_has_back_button_screen = E_MAIN_SCREEN},
+	[E_ROUTES_SCREEN]         = {.enter = &routes_screen_enter,          .exit = &routes_screen_exit,         .top_bar_visible = true,  .top_bar_has_back_button = true,  .top_bar_has_back_button_screen = E_MAIN_SCREEN},
+	[E_PROFILE_SCREEN]        = {.enter = &profile_screen_enter,         .exit = &profile_screen_exit,        .top_bar_visible = true,  .top_bar_has_back_button = true,  .top_bar_has_back_button_screen = E_MAIN_SCREEN},
+	[E_RIDER_SCREEN]          = {.enter = &rider_screen_enter,           .exit = &rider_screen_exit,          .top_bar_visible = false, .top_bar_has_back_button = false, .top_bar_has_back_button_screen = 0},
+	[E_BIKE_SCREEN]           = {.enter = &bike_screen_enter,            .exit = &bike_screen_exit,           .top_bar_visible = false, .top_bar_has_back_button = false, .top_bar_has_back_button_screen = 0},
+	[E_SETTINGS_SCREEN]       = {.enter = &settings_screen_enter,        .exit = &settings_screen_exit,       .top_bar_visible = true,  .top_bar_has_back_button = true,  .top_bar_has_back_button_screen = E_MAIN_SCREEN},
 };
 
 typedef struct {
@@ -77,7 +77,7 @@ typedef struct {
 	lv_obj_t *back_btn_label;
 	lv_obj_t *label;
 	lv_timer_t *timer;
-} T_status_bar;
+} T_topbar;
 
 static struct {
 	bool is_initialized;
@@ -104,14 +104,14 @@ static struct {
 	E_screen_id actual_screen;
 	T_fifo screen_fifo;
 
-	/* status bar */
-	T_status_bar status_bar;
+	/* top bar */
+	T_topbar topbar;
 } ui = {
 	.is_initialized = false,
 	.lvgl_mutex = PTHREAD_MUTEX_INITIALIZER,
 	.actual_screen = E_MAIN_SCREEN,
 	.previous_screen = E_MAIN_SCREEN,
-	.status_bar = {0},
+	.topbar = {0},
 };
 
 static int _push_next_screen_in_fifo(E_screen_id next)
@@ -138,7 +138,7 @@ static int _get_local_time(char *str, int size)
 	return 0;
 }
 
-static void _statusbar_timer_handler(lv_timer_t * timer)
+static void _topbar_timer_handler(lv_timer_t * timer)
 {
 	int ret = 0;
 
@@ -155,7 +155,7 @@ static void _statusbar_timer_handler(lv_timer_t * timer)
 	lv_label_set_text_fmt(label, LV_SYMBOL_BATTERY_FULL " %s", str);
 }
 
-static void _status_bar_back_btn_handler(lv_event_t *event)
+static void _topbar_back_btn_handler(lv_event_t *event)
 {
 	int *user_data = lv_event_get_user_data(event);
 	E_screen_id next_screen = *user_data;
@@ -163,59 +163,59 @@ static void _status_bar_back_btn_handler(lv_event_t *event)
 	ui_change_screen(next_screen);
 }
 
-static int _create_status_bar(bool back_button_visible, E_screen_id *back_screen)
+static int _create_topbar(bool back_button_visible, E_screen_id *back_screen)
 {
 	int ret = 0;
 
-	/* Create the status bar */
-	ui.status_bar.bar = lv_obj_create(lv_scr_act());
-	lv_obj_set_size(ui.status_bar.bar, ui_get_resolution_hor(), STATUS_BAR_SIZE);
-	lv_obj_align(ui.status_bar.bar, LV_ALIGN_TOP_MID, 0, 0);
-	lv_obj_add_style(ui.status_bar.bar, &ui.default_style, 0);
+	/* Create the top bar */
+	ui.topbar.bar = lv_obj_create(lv_scr_act());
+	lv_obj_set_size(ui.topbar.bar, ui_get_resolution_hor(), TOPBAR_SIZE);
+	lv_obj_align(ui.topbar.bar, LV_ALIGN_TOP_MID, 0, 0);
+	lv_obj_add_style(ui.topbar.bar, &ui.default_style, 0);
 
-	/* Create the status bar back button if needed */
+	/* Create the top bar back button if needed */
 	if(back_button_visible)
 	{
 		/* Create back button */
-		ui.status_bar.back_btn = lv_btn_create(ui.status_bar.bar);
-		lv_obj_add_event_cb(ui.status_bar.back_btn, &_status_bar_back_btn_handler, LV_EVENT_CLICKED, (void*)back_screen);
-		lv_obj_set_size(ui.status_bar.back_btn, lv_pct(35), lv_pct(90));
-		lv_obj_align(ui.status_bar.back_btn, LV_ALIGN_LEFT_MID, 0, 0);
+		ui.topbar.back_btn = lv_btn_create(ui.topbar.bar);
+		lv_obj_add_event_cb(ui.topbar.back_btn, &_topbar_back_btn_handler, LV_EVENT_CLICKED, (void*)back_screen);
+		lv_obj_set_size(ui.topbar.back_btn, lv_pct(35), lv_pct(90));
+		lv_obj_align(ui.topbar.back_btn, LV_ALIGN_LEFT_MID, 0, 0);
 
 		/* Put the text in the back button label */
-		ui.status_bar.back_btn_label = lv_label_create(ui.status_bar.back_btn);
-		lv_label_set_text(ui.status_bar.back_btn_label, "< Back");
-		lv_obj_center(ui.status_bar.back_btn_label);
+		ui.topbar.back_btn_label = lv_label_create(ui.topbar.back_btn);
+		lv_label_set_text(ui.topbar.back_btn_label, "< Back");
+		lv_obj_center(ui.topbar.back_btn_label);
 
 		/* Change style of text */
-		lv_obj_set_style_text_font(ui.status_bar.back_btn_label, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
+		lv_obj_set_style_text_font(ui.topbar.back_btn_label, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
 	}
 
-	/* Fill the status bar with widgets */
-	ui.status_bar.label = lv_label_create(ui.status_bar.bar);
+	/* Fill the top bar with widgets */
+	ui.topbar.label = lv_label_create(ui.topbar.bar);
 	char str[STR_TIME_SIZE];
 	ret = _get_local_time(str, sizeof(str));
 	fail_if_negative(ret, -2, "_get_local_time failed, return %d\n", ret);
-	//lv_label_set_text_fmt(ui.status_bar.label, LV_SYMBOL_GPS " " LV_SYMBOL_WIFI " " LV_SYMBOL_BATTERY_FULL " %s", str);
-	lv_label_set_text_fmt(ui.status_bar.label, LV_SYMBOL_BATTERY_FULL " %s", str);
-    lv_obj_align(ui.status_bar.label, LV_ALIGN_RIGHT_MID, 0, 0);
+	//lv_label_set_text_fmt(ui.topbar.label, LV_SYMBOL_GPS " " LV_SYMBOL_WIFI " " LV_SYMBOL_BATTERY_FULL " %s", str);
+	lv_label_set_text_fmt(ui.topbar.label, LV_SYMBOL_BATTERY_FULL " %s", str);
+    lv_obj_align(ui.topbar.label, LV_ALIGN_RIGHT_MID, 0, 0);
 
 	/* Create lvgl timer that update the bar each secondes */
-	ui.status_bar.timer = lv_timer_create(&_statusbar_timer_handler, STATUS_BAR_TIMER_DELAY, ui.status_bar.label);
-	lv_timer_set_repeat_count(ui.status_bar.timer, -1); // repeat indefinitly
+	ui.topbar.timer = lv_timer_create(&_topbar_timer_handler, TOPBAR_TIMER_DELAY, ui.topbar.label);
+	lv_timer_set_repeat_count(ui.topbar.timer, -1); // repeat indefinitly
 
 	/* Disable scrollbar in topbar */
-	lv_obj_set_scrollbar_mode(ui.status_bar.bar, LV_SCROLLBAR_MODE_OFF);
+	lv_obj_set_scrollbar_mode(ui.topbar.bar, LV_SCROLLBAR_MODE_OFF);
 
 	return 0;
 }
 
-static int _destroy_status_bar(void)
+static int _destroy_topbar(void)
 {
-	if(ui.status_bar.timer != NULL)
+	if(ui.topbar.timer != NULL)
 	{
-		lv_timer_del(ui.status_bar.timer);
-		ui.status_bar.timer = NULL;
+		lv_timer_del(ui.topbar.timer);
+		ui.topbar.timer = NULL;
 	}
 	return 0;
 }
@@ -249,8 +249,8 @@ static void * screen_thread_handler(void *data)
 		/* Clean the actual_screen screen before continuing */
 		log_debug("LVGL: Clean actual screen\n");
 		pthread_mutex_lock(&ui.lvgl_mutex);
-		/* Destroy the status bar before cleaning the display */
-		_destroy_status_bar();
+		/* Destroy the top bar before cleaning the display */
+		_destroy_topbar();
 		/* Clean the display */
 		lv_obj_clean(lv_scr_act());
 		pthread_mutex_unlock(&ui.lvgl_mutex);
@@ -266,7 +266,7 @@ static void * screen_thread_handler(void *data)
 		}
 
 		/* Create an LVGL objet that is the size of the screen minus the size
-		 * of the statusbar if the status bar is needed, if not the size of the
+		 * of the topbar if the top bar is needed, if not the size of the
 		 * fullscreen.
 		 * Each screen enter handler will use that to create the children objects.
 		 * */
@@ -278,23 +278,23 @@ static void * screen_thread_handler(void *data)
 		/* Remove all style from virt screen */
 		lv_obj_remove_style_all(ui.virt_screen);
 
-		if(screen_table[next].bar_visible)
+		if(screen_table[next].top_bar_visible)
 		{
 			/* Bar is visible, resize the virtual screen object to the correct dimensions */
-			lv_obj_set_size(ui.virt_screen, ui_get_resolution_hor(), ui_get_resolution_ver() - STATUS_BAR_SIZE);
-			lv_obj_align(ui.virt_screen, LV_ALIGN_TOP_MID, 0, STATUS_BAR_SIZE);
+			lv_obj_set_size(ui.virt_screen, ui_get_resolution_hor(), ui_get_resolution_ver() - TOPBAR_SIZE);
+			lv_obj_align(ui.virt_screen, LV_ALIGN_TOP_MID, 0, TOPBAR_SIZE);
 
-			/* Create the status bar in the same display */
-			ret = _create_status_bar(screen_table[next].bar_back_button, &screen_table[next].bar_back_button_screen);
+			/* Create the top bar in the same display */
+			ret = _create_topbar(screen_table[next].top_bar_has_back_button, &screen_table[next].top_bar_has_back_button_screen);
 			if(ret < 0)
 			{
-				log_error("_create_status_bar failed, return: %d\n", ret);
+				log_error("_create_topbar failed, return: %d\n", ret);
 				exit(-1);
 			}
 		}
 		else
 		{
-			/* screen were the statusbar is not displayed */
+			/* screen were the topbar is not displayed */
 			lv_obj_set_size(ui.virt_screen, ui_get_resolution_hor(), ui_get_resolution_ver());
 			lv_obj_align(ui.virt_screen, LV_ALIGN_TOP_MID, 0, 0);
 		}
