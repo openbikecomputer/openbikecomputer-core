@@ -47,6 +47,7 @@
 #include "fifo.h"
 #include "log.h"
 #include "system.h"
+#include "locales.h"
 
 #define TOPBAR_SIZE ((ui_get_resolution_ver() / 10))
 #define TOPBAR_TIMER_DELAY (1000) //ms
@@ -186,7 +187,7 @@ static int _create_topbar(bool back_button_visible, E_screen_id *back_screen)
 
 		/* Put the text in the back button label */
 		ui.topbar.back_btn_label = lv_label_create(ui.topbar.back_btn);
-		lv_label_set_text(ui.topbar.back_btn_label, "< Back");
+		lv_label_set_text(ui.topbar.back_btn_label, _("Back"));
 		lv_obj_center(ui.topbar.back_btn_label);
 
 		/* Change style of text */

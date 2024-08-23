@@ -29,6 +29,7 @@ SRC = src/main.c \
       src/data/data.c \
       src/data/data_manager.c \
       src/data/data_recorder.c \
+      src/utils/locales.c \
       src/utils/simulator.c \
       src/utils/fifo.c \
       src/ui/styles/styles.c \
