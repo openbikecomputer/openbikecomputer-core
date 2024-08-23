@@ -1,4 +1,12 @@
-protocols
+# Build files
 *.o
 openbikecomputer-core
+
+# Locales files
+*.pot
+*.po~
+*.mo
+
+# Others files
+protocols
 tags
