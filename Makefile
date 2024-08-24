@@ -74,7 +74,7 @@ LIBS += -L$(SYSROOT)/usr/lib/ -llvgl $(LIB_DISPLAY_BACKEND) -lpthread -lconfig -
 
 OBJS = $(patsubst %.c, %.o, $(SRC))
 
-all: $(BIN)
+all: $(BIN) translations
 
 %.o : %.c
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -90,6 +90,9 @@ install:
 	install simulation/*.csv $(ROOTDIR)/$(SHAREDIR)/simulation
 	install -d $(ROOTDIR)/$(SHAREDIR)/images
 	install images/* $(ROOTDIR)/$(SHAREDIR)/images
+
+translations:
+	./resources/locales/locales.sh build
 
 clean:
 	rm -f $(OBJS) $(BIN)
