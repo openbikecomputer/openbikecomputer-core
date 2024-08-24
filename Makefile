@@ -10,15 +10,15 @@ SRC = src/main.c \
       src/log/log.c \
       src/ui/ui.c \
       src/ui/mouse_img.c \
-      src/ui/screen/main_screen.c \
-      src/ui/screen/data_screen.c \
-      src/ui/screen/navigation_screen.c \
-      src/ui/screen/profile_screen.c \
-      src/ui/screen/rider_screen.c \
-      src/ui/screen/bike_screen.c \
-      src/ui/screen/results_screen.c \
-      src/ui/screen/routes_screen.c \
-      src/ui/screen/settings_screen.c \
+      src/ui/screens/main_screen.c \
+      src/ui/screens/data_screen.c \
+      src/ui/screens/navigation_screen.c \
+      src/ui/screens/profile_screen.c \
+      src/ui/screens/rider_screen.c \
+      src/ui/screens/bike_screen.c \
+      src/ui/screens/results_screen.c \
+      src/ui/screens/routes_screen.c \
+      src/ui/screens/settings_screen.c \
       src/ui/lvgl_helper.c \
       src/config/obc_config.c \
       src/config/bike_config.c \
@@ -38,7 +38,7 @@ SRC = src/main.c \
 INCLUDE = -Isrc \
           -Isrc/log \
           -Isrc/ui \
-          -Isrc/ui/screen \
+          -Isrc/ui/screens \
           -Isrc/ui/styles \
           -Isrc/data \
           -Isrc/config \
