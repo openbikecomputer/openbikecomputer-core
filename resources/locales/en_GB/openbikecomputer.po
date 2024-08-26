@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: V0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-26 14:38+0200\n"
+"POT-Creation-Date: 2024-08-26 15:12+0200\n"
 "PO-Revision-Date: 2024-08-21 14:32+0200\n"
 "Last-Translator: LAMBS Pierre-Antoine <pierreantoine.lambs@gmail.com>\n"
 "Language: en_GB\n"
@@ -17,6 +17,10 @@ msgstr ""
 #: resources/locales/../../src/ui/ui.c:190
 msgid "Back"
 msgstr "Back"
+
+#: resources/locales/../../src/ui/screens/profile_screen.c:42
+msgid "Bike"
+msgstr "Bike"
 
 #: resources/locales/../../src/ui/screens/main_screen.c:83
 msgid "Data"
@@ -33,6 +37,10 @@ msgstr "Profiles"
 #: resources/locales/../../src/ui/screens/main_screen.c:89
 msgid "Results"
 msgstr "Results"
+
+#: resources/locales/../../src/ui/screens/profile_screen.c:39
+msgid "Rider"
+msgstr "Rider"
 
 #: resources/locales/../../src/ui/screens/main_screen.c:92
 msgid "Routes"
