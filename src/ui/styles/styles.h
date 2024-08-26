@@ -31,7 +31,13 @@
 
 int styles_init(void);
 lv_style_t* styles_get_virtual_screen_style(void);
+lv_style_t* styles_get_main_button_style(void);
 void styles_disable_scrollbar(lv_obj_t *obj);
+
+/* Helper to display obj border */
+void styles_highlight_obj_green(lv_obj_t *obj);
+void styles_highlight_obj_blue(lv_obj_t *obj);
+void styles_highlight_obj_red(lv_obj_t *obj);
 
 #endif /* _STYLES_HEADER_ */
 

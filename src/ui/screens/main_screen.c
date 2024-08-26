@@ -27,6 +27,10 @@
 #include "main_screen.h"
 #include "ui.h"
 #include "assets.h"
+#include "locales.h"
+#include "styles.h"
+
+#define GAP_BETWEEN_BUTTON_LABEL_PX 10
 
 static void button_event_handler(lv_event_t *event)
 {
@@ -37,59 +41,114 @@ static void button_event_handler(lv_event_t *event)
 }
 
 typedef struct {
-	lv_obj_t *obj;
-	char *name;
-	char *image;
+	/* Elements set during screen creation */
+	lv_obj_t *container;
+	lv_obj_t *button;
+	lv_obj_t *image;
+	lv_obj_t *label;
+
+	/* Elements set statically, DO NOT CHANGE */
+	int bg_color;
+	char *image_path;
 	E_screen_id next_screen;
 } T_button;
 
-#define NB_BUTTON 6
-#define MARGIN 20
-#define BUTTON_SIZE ((ui_get_resolution_hor() / 2) - (2 * MARGIN))
+typedef enum {
+	E_MAIN_BUTTON_DATA = 0,
+	E_MAIN_BUTTON_NAVIGATION,
+	E_MAIN_BUTTON_RESULTS,
+	E_MAIN_BUTTON_ROUTES,
+	E_MAIN_BUTTON_PROFILES,
+	E_MAIN_BUTTON_SETTINGS,
+	E_MAIN_BUTTON_NUMBER, // must be last
+} E_main_button_id;
+
 static struct {
 	lv_style_t style;
-	lv_obj_t * cont;
-	T_button button_array[NB_BUTTON];
+	T_button button_array[E_MAIN_BUTTON_NUMBER];
 } main_screen = {
-	.button_array[0] = {.name = "Data",       .image = IMAGE_COUNTER,    .next_screen = E_DATA_SCREEN},
-	.button_array[1] = {.name = "Navigation", .image = IMAGE_NAVIGATION, .next_screen = E_NAVIGATION_SCREEN},
-	.button_array[2] = {.name = "Results",    .image = IMAGE_RESULTS,    .next_screen = E_RESULTS_SCREEN},
-	.button_array[3] = {.name = "Routes",     .image = IMAGE_ROUTES,     .next_screen = E_ROUTES_SCREEN},
-	.button_array[4] = {.name = "Profiles",   .image = IMAGE_PROFILES,   .next_screen = E_PROFILE_SCREEN},
-	.button_array[5] = {.name = "Settings",   .image = IMAGE_SETTINGS,   .next_screen = E_SETTINGS_SCREEN},
+	.button_array[E_MAIN_BUTTON_DATA]       = {.image_path = IMAGE_COUNTER,    .bg_color = 0xcf6c1b, .next_screen = E_DATA_SCREEN},
+	.button_array[E_MAIN_BUTTON_NAVIGATION] = {.image_path = IMAGE_NAVIGATION, .bg_color = 0x53bf45, .next_screen = E_NAVIGATION_SCREEN},
+	.button_array[E_MAIN_BUTTON_RESULTS]    = {.image_path = IMAGE_RESULTS,    .bg_color = 0xb16ccc, .next_screen = E_RESULTS_SCREEN},
+	.button_array[E_MAIN_BUTTON_ROUTES]     = {.image_path = IMAGE_ROUTES,     .bg_color = 0x368aad, .next_screen = E_ROUTES_SCREEN},
+	.button_array[E_MAIN_BUTTON_PROFILES]   = {.image_path = IMAGE_PROFILES,   .bg_color = 0xe69ae0, .next_screen = E_PROFILE_SCREEN},
+	.button_array[E_MAIN_BUTTON_SETTINGS]   = {.image_path = IMAGE_SETTINGS,   .bg_color = 0x624791, .next_screen = E_SETTINGS_SCREEN},
 };
+
+static const char *_get_button_name(E_main_button_id button_id)
+{
+	switch(button_id)
+	{
+		case E_MAIN_BUTTON_DATA:
+			return _("Data");
+			break;
+		case E_MAIN_BUTTON_NAVIGATION:
+			return _("Navigation");
+			break;
+		case E_MAIN_BUTTON_RESULTS:
+			return _("Results");
+			break;
+		case E_MAIN_BUTTON_ROUTES:
+			return _("Routes");
+			break;
+		case E_MAIN_BUTTON_PROFILES:
+			return _("Profiles");
+			break;
+		case E_MAIN_BUTTON_SETTINGS:
+			return _("Settings");
+			break;
+		default:
+			/* No translation */
+			return "id_invalid";
+			break;
+	};
+}
 
 int main_screen_enter(lv_obj_t *screen)
 {
-	/* Create flexbox container and apply ui default style */
-	main_screen.cont = lv_obj_create(screen);
-
-	lv_obj_set_size(main_screen.cont, lv_pct(100), lv_pct(100));
-	lv_obj_align(main_screen.cont, LV_ALIGN_BOTTOM_MID, 0, 0);
-	lv_obj_set_flex_flow(main_screen.cont, LV_FLEX_FLOW_ROW_WRAP);
-
-	for(int i = 0; i < NB_BUTTON; i++)
+	for(int i = 0; i < E_MAIN_BUTTON_NUMBER; i++)
 	{
 		/* Get the pointer on the actual button data we need */
-		T_button *btn = &main_screen.button_array[i];
+		T_button *element = &main_screen.button_array[i];
+
+		/* Create the container for the button and the label */
+		element->container = lv_obj_create(screen);
+		lv_obj_set_size(element->container, lv_pct(50), lv_pct(33));
+		lv_obj_add_style(element->container, styles_get_main_button_style(), LV_PART_MAIN | LV_STATE_DEFAULT);
 
 		/* Create the button */
-		btn->obj = lv_button_create(main_screen.cont);
-		lv_obj_t* label = lv_label_create(btn->obj);
-		lv_label_set_text(label, btn->name);
-		lv_obj_center(label);
+		element->button = lv_button_create(element->container);
+		lv_obj_set_size(element->button, lv_pct(100), lv_pct(85));
+		lv_obj_align(element->button, LV_ALIGN_TOP_MID, 0, 0);
+		lv_obj_add_style(element->button, styles_get_main_button_style(), LV_PART_MAIN | LV_STATE_DEFAULT);
 
-		/* Change style of text */
-		lv_obj_set_style_text_font(label, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
+		/* Set button background color */
+		lv_obj_set_style_bg_color(element->button, lv_color_hex(element->bg_color), LV_PART_MAIN | LV_STATE_DEFAULT);
+		lv_obj_set_style_bg_opa(element->button, LV_OPA_COVER, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-		/* Change button size */
-		lv_obj_set_size(btn->obj, BUTTON_SIZE, BUTTON_SIZE);
-		lv_obj_align(btn->obj, LV_ALIGN_CENTER, 0, 0);
-		lv_obj_update_layout(btn->obj);
+		/* Create the image inside the button */
+		element->image = lv_image_create(element->button);
+		lv_image_set_src(element->image, element->image_path);
+		lv_obj_center(element->image);
+		lv_obj_add_style(element->image, styles_get_main_button_style(), LV_PART_MAIN | LV_STATE_DEFAULT);
+
+		/* Create the label under the button */
+		element->label = lv_label_create(element->container);
+		lv_label_set_text(element->label, _get_button_name(i));
+		lv_obj_align_to(element->label, element->button, LV_ALIGN_OUT_BOTTOM_MID, 0, GAP_BETWEEN_BUTTON_LABEL_PX);
+		lv_obj_add_style(element->label, styles_get_main_button_style(), LV_PART_MAIN | LV_STATE_DEFAULT);
 
 		/* Link the button click to the event callback */
-		lv_obj_add_event_cb(btn->obj, &button_event_handler, LV_EVENT_CLICKED, (void*)&btn->next_screen);
+		lv_obj_add_event_cb(element->button, &button_event_handler, LV_EVENT_CLICKED, (void*)&element->next_screen);
 	}
+
+	/* Align each container in the screen */
+	lv_obj_align(main_screen.button_array[E_MAIN_BUTTON_DATA].container, LV_ALIGN_TOP_LEFT, 0, 0);
+	lv_obj_align(main_screen.button_array[E_MAIN_BUTTON_NAVIGATION].container, LV_ALIGN_TOP_RIGHT, 0, 0);
+	lv_obj_align_to(main_screen.button_array[E_MAIN_BUTTON_RESULTS].container, main_screen.button_array[E_MAIN_BUTTON_DATA].container, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 0);
+	lv_obj_align_to(main_screen.button_array[E_MAIN_BUTTON_ROUTES].container, main_screen.button_array[E_MAIN_BUTTON_NAVIGATION].container, LV_ALIGN_OUT_BOTTOM_RIGHT, 0, 0);
+	lv_obj_align_to(main_screen.button_array[E_MAIN_BUTTON_PROFILES].container, main_screen.button_array[E_MAIN_BUTTON_RESULTS].container, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 0);
+	lv_obj_align_to(main_screen.button_array[E_MAIN_BUTTON_SETTINGS].container, main_screen.button_array[E_MAIN_BUTTON_ROUTES].container, LV_ALIGN_OUT_BOTTOM_RIGHT, 0, 0);
 
 	return 0;
 }

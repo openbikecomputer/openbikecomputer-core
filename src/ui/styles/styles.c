@@ -26,6 +26,7 @@
 static struct {
 	bool is_initialized;
 	lv_style_t virtual_screen;
+	lv_style_t main_button;
 } styles = {
 	.is_initialized = false,
 };
@@ -65,6 +66,32 @@ static int _virtual_screen_style_init(void)
 	return 0;
 }
 
+static int _main_button_style_init(void)
+{
+	/* Initialized main_button topbar style */
+	lv_style_init(&styles.main_button);
+
+	/* Border width and transp */
+	lv_style_set_border_width(&styles.main_button, 0);
+	lv_style_set_border_opa(&styles.main_button, LV_OPA_TRANSP);
+
+	/* shadow transp */
+	lv_style_set_shadow_opa(&styles.main_button, LV_OPA_TRANSP);
+
+	/* Background opacity */
+	lv_style_set_bg_opa(&styles.main_button, LV_OPA_TRANSP);
+
+	/* Text color and opacity */
+	lv_style_set_text_color(&styles.main_button, lv_color_black());
+	lv_style_set_text_opa(&styles.main_button, LV_OPA_100);
+	lv_style_set_text_font(&styles.main_button, &lv_font_montserrat_14);
+
+	/* Clip corner */
+	lv_style_set_clip_corner(&styles.main_button, true);
+
+	return 0;
+}
+
 /* This is the entry point for all LVGL styles initialization */
 int styles_init(void)
 {
@@ -75,6 +102,9 @@ int styles_init(void)
 
 	ret = _virtual_screen_style_init();
 	fail_if_negative(ret, -2, " _virtual_screen_style_init failed, returned: %d\n", ret);
+
+	ret = _main_button_style_init();
+	fail_if_negative(ret, -3, " _main_button_style_init failed, returned: %d\n", ret);
 
 	styles.is_initialized = true;
 
@@ -88,7 +118,37 @@ lv_style_t* styles_get_virtual_screen_style(void)
 	return &styles.virtual_screen;
 }
 
+lv_style_t* styles_get_main_button_style(void)
+{
+	fail_if_false(styles.is_initialized, NULL, "styles is not initialized\n");
+
+	return &styles.main_button;
+}
+
+
 void styles_disable_scrollbar(lv_obj_t *obj)
 {
 	lv_obj_set_scrollbar_mode(obj, LV_SCROLLBAR_MODE_OFF);
+}
+
+static void _highlight_obj(lv_obj_t *obj, int color_hex)
+{
+	lv_obj_set_style_border_color(obj, lv_color_hex(color_hex), LV_PART_MAIN | LV_STATE_DEFAULT);
+	lv_obj_set_style_border_width(obj, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+	lv_obj_set_style_border_opa(obj, LV_OPA_COVER, LV_PART_MAIN | LV_STATE_DEFAULT);
+}
+
+void styles_highlight_obj_green(lv_obj_t *obj)
+{
+	_highlight_obj(obj, 0x00ff00);
+}
+
+void styles_highlight_obj_blue(lv_obj_t *obj)
+{
+	_highlight_obj(obj, 0x0000ff);
+}
+
+void styles_highlight_obj_red(lv_obj_t *obj)
+{
+	_highlight_obj(obj, 0xff0000);
 }
