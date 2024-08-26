@@ -69,7 +69,7 @@ static struct {
 	[E_RESULTS_SCREEN]        = {.enter = &results_screen_enter,         .exit = &results_screen_exit,        .top_bar_visible = true,  .top_bar_has_back_button = true,  .top_bar_has_back_button_screen = E_MAIN_SCREEN},
 	[E_ROUTES_SCREEN]         = {.enter = &routes_screen_enter,          .exit = &routes_screen_exit,         .top_bar_visible = true,  .top_bar_has_back_button = true,  .top_bar_has_back_button_screen = E_MAIN_SCREEN},
 	[E_PROFILE_SCREEN]        = {.enter = &profile_screen_enter,         .exit = &profile_screen_exit,        .top_bar_visible = true,  .top_bar_has_back_button = true,  .top_bar_has_back_button_screen = E_MAIN_SCREEN},
-	[E_RIDER_SCREEN]          = {.enter = &rider_screen_enter,           .exit = &rider_screen_exit,          .top_bar_visible = false, .top_bar_has_back_button = false, .top_bar_has_back_button_screen = 0},
+	[E_RIDER_SCREEN]          = {.enter = &rider_screen_enter,           .exit = &rider_screen_exit,          .top_bar_visible = true,  .top_bar_has_back_button = true,  .top_bar_has_back_button_screen = E_PROFILE_SCREEN},
 	[E_BIKE_SCREEN]           = {.enter = &bike_screen_enter,            .exit = &bike_screen_exit,           .top_bar_visible = false, .top_bar_has_back_button = false, .top_bar_has_back_button_screen = 0},
 	[E_SETTINGS_SCREEN]       = {.enter = &settings_screen_enter,        .exit = &settings_screen_exit,       .top_bar_visible = true,  .top_bar_has_back_button = true,  .top_bar_has_back_button_screen = E_MAIN_SCREEN},
 };
