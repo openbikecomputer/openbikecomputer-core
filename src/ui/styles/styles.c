@@ -27,6 +27,7 @@ static struct {
 	bool is_initialized;
 	lv_style_t virtual_screen;
 	lv_style_t main_button;
+	lv_style_t no_border;
 } styles = {
 	.is_initialized = false,
 };
@@ -92,6 +93,18 @@ static int _main_button_style_init(void)
 	return 0;
 }
 
+static int _no_border_style_init(void)
+{
+	/* Initialized main_button topbar style */
+	lv_style_init(&styles.no_border);
+
+	/* Border width and transp */
+	lv_style_set_border_width(&styles.no_border, 0);
+	lv_style_set_border_opa(&styles.no_border, LV_OPA_TRANSP);
+
+	return 0;
+}
+
 /* This is the entry point for all LVGL styles initialization */
 int styles_init(void)
 {
@@ -105,6 +118,9 @@ int styles_init(void)
 
 	ret = _main_button_style_init();
 	fail_if_negative(ret, -3, " _main_button_style_init failed, returned: %d\n", ret);
+
+	ret = _no_border_style_init();
+	fail_if_negative(ret, -4, " _no_border_style_init failed, returned: %d\n", ret);
 
 	styles.is_initialized = true;
 
@@ -123,6 +139,13 @@ lv_style_t* styles_get_main_button_style(void)
 	fail_if_false(styles.is_initialized, NULL, "styles is not initialized\n");
 
 	return &styles.main_button;
+}
+
+lv_style_t* styles_get_no_border_style(void)
+{
+	fail_if_false(styles.is_initialized, NULL, "styles is not initialized\n");
+
+	return &styles.no_border;
 }
 
 

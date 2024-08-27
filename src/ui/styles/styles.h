@@ -32,6 +32,7 @@
 int styles_init(void);
 lv_style_t* styles_get_virtual_screen_style(void);
 lv_style_t* styles_get_main_button_style(void);
+lv_style_t* styles_get_no_border_style(void);
 void styles_disable_scrollbar(lv_obj_t *obj);
 
 /* Helper to display obj border */
