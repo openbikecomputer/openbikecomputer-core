@@ -22,8 +22,15 @@
 #include <lvgl.h>
 
 #define TOPBAR_LABEL_X_OFFSET (-16)
+#define TOPBAR_BACK_BUTTON_X_OFFSET (16)
+#define TOPBAR_BACK_BUTTON_Y_OFFSET (0)
+#define TOPBAR_BACK_BUTTON_X_SIZE_PERCENT (35)
+#define TOPBAR_BACK_BUTTON_Y_SIZE_PERCENT (75)
+#define TOPBAR_BACK_BUTTON_COLOR 0x489c48
+#define TOPBAR_BACK_BUTTON_OPACITY LV_OPA_COVER
 
 int topbar_styles_init(void);
 lv_style_t* topbar_styles_get_general_style(void);
+lv_style_t* topbar_styles_get_back_button_style(void);
 
 #endif /* _TOPBAR_STYLES_HEADER_ */

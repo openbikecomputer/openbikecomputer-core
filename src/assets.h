@@ -25,6 +25,7 @@
 #define RESOURCES_FOLDER "./resources/"
 #endif
 
+/* Images path list, images are 128x128px */
 #define IMAGE_COUNTER        LVGL_FS_LETTER RESOURCES_FOLDER "images/counter.png"
 #define IMAGE_NAVIGATION     LVGL_FS_LETTER RESOURCES_FOLDER "images/navigation.png"
 #define IMAGE_NO_IMAGE       LVGL_FS_LETTER RESOURCES_FOLDER "images/no_image.png"
@@ -35,5 +36,8 @@
 #define IMAGE_ROUTES         LVGL_FS_LETTER RESOURCES_FOLDER "images/routes.png"
 #define IMAGE_SETTINGS       LVGL_FS_LETTER RESOURCES_FOLDER "images/settings.png"
 #define IMAGE_MAP            LVGL_FS_LETTER RESOURCES_FOLDER "images/map.png"
+
+/* Icons path list, icon are 32x32px */
+#define ICON_BACK            LVGL_FS_LETTER RESOURCES_FOLDER "icons/back.png"
 
 #endif /* _ASSETS_HEADER_ */

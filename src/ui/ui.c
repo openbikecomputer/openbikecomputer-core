@@ -48,6 +48,7 @@
 #include "log.h"
 #include "system.h"
 #include "locales.h"
+#include "assets.h"
 
 #define TOPBAR_SIZE ((ui_get_resolution_ver() / 10))
 #define TOPBAR_TIMER_DELAY (1000) //ms
@@ -56,28 +57,35 @@
 
 LV_IMAGE_DECLARE(mouse_img);
 
+
+typedef struct {
+	bool back_button; /* display or not the back button in the top bar */
+	E_screen_id back_screen; /* screen id where the back button lead (if no function is set) */
+	int (*back_function)(void); /* Function that must be run instead of going to the back_screen */
+} T_topbar_config;
+
 static struct {
 	int (*enter)(lv_obj_t * screen);
 	int (*exit)(void);
-	bool top_bar_visible; /* display or not the top bar */
-	bool top_bar_has_back_button; /* display or not the back button in the top bar */
-	E_screen_id top_bar_has_back_button_screen; /* screen id where the back button lead */
+	bool topbar_present; /* display or not the top bar */
+	T_topbar_config topbar_config;
 } screen_table[E_SCREEN_ID_MAX] = {
-	[E_MAIN_SCREEN]           = {.enter = &main_screen_enter,            .exit = &main_screen_exit,           .top_bar_visible = true,  .top_bar_has_back_button = false, .top_bar_has_back_button_screen = 0},
-	[E_DATA_SCREEN]           = {.enter = &data_screen_enter,            .exit = &data_screen_exit,           .top_bar_visible = true,  .top_bar_has_back_button = true,  .top_bar_has_back_button_screen = E_MAIN_SCREEN},
-	[E_NAVIGATION_SCREEN]     = {.enter = &navigation_screen_enter,      .exit = &navigation_screen_exit,     .top_bar_visible = false, .top_bar_has_back_button = false, .top_bar_has_back_button_screen = 0},
-	[E_RESULTS_SCREEN]        = {.enter = &results_screen_enter,         .exit = &results_screen_exit,        .top_bar_visible = true,  .top_bar_has_back_button = true,  .top_bar_has_back_button_screen = E_MAIN_SCREEN},
-	[E_ROUTES_SCREEN]         = {.enter = &routes_screen_enter,          .exit = &routes_screen_exit,         .top_bar_visible = true,  .top_bar_has_back_button = true,  .top_bar_has_back_button_screen = E_MAIN_SCREEN},
-	[E_PROFILE_SCREEN]        = {.enter = &profile_screen_enter,         .exit = &profile_screen_exit,        .top_bar_visible = true,  .top_bar_has_back_button = true,  .top_bar_has_back_button_screen = E_MAIN_SCREEN},
-	[E_RIDER_SCREEN]          = {.enter = &rider_screen_enter,           .exit = &rider_screen_exit,          .top_bar_visible = true,  .top_bar_has_back_button = true,  .top_bar_has_back_button_screen = E_PROFILE_SCREEN},
-	[E_BIKE_SCREEN]           = {.enter = &bike_screen_enter,            .exit = &bike_screen_exit,           .top_bar_visible = false, .top_bar_has_back_button = false, .top_bar_has_back_button_screen = 0},
-	[E_SETTINGS_SCREEN]       = {.enter = &settings_screen_enter,        .exit = &settings_screen_exit,       .top_bar_visible = true,  .top_bar_has_back_button = true,  .top_bar_has_back_button_screen = E_MAIN_SCREEN},
+	[E_MAIN_SCREEN]           = {.enter = &main_screen_enter,            .exit = &main_screen_exit,           .topbar_present = true,  .topbar_config = {.back_button = false, .back_screen = 0,                .back_function = NULL}},
+	[E_DATA_SCREEN]           = {.enter = &data_screen_enter,            .exit = &data_screen_exit,           .topbar_present = true,  .topbar_config = {.back_button = true,  .back_screen = E_MAIN_SCREEN,    .back_function = NULL}},
+	[E_NAVIGATION_SCREEN]     = {.enter = &navigation_screen_enter,      .exit = &navigation_screen_exit,     .topbar_present = false, .topbar_config = {0}},
+	[E_RESULTS_SCREEN]        = {.enter = &results_screen_enter,         .exit = &results_screen_exit,        .topbar_present = true,  .topbar_config = {.back_button = true,  .back_screen = E_MAIN_SCREEN,    .back_function = NULL}},
+	[E_ROUTES_SCREEN]         = {.enter = &routes_screen_enter,          .exit = &routes_screen_exit,         .topbar_present = true,  .topbar_config = {.back_button = true,  .back_screen = E_MAIN_SCREEN,    .back_function = NULL}},
+	[E_PROFILE_SCREEN]        = {.enter = &profile_screen_enter,         .exit = &profile_screen_exit,        .topbar_present = true,  .topbar_config = {.back_button = true,  .back_screen = E_MAIN_SCREEN,    .back_function = NULL}},
+	[E_RIDER_SCREEN]          = {.enter = &rider_screen_enter,           .exit = &rider_screen_exit,          .topbar_present = true,  .topbar_config = {.back_button = true,  .back_screen = E_PROFILE_SCREEN, .back_function = NULL}},
+	[E_BIKE_SCREEN]           = {.enter = &bike_screen_enter,            .exit = &bike_screen_exit,           .topbar_present = false, .topbar_config = {0}},
+	[E_SETTINGS_SCREEN]       = {.enter = &settings_screen_enter,        .exit = &settings_screen_exit,       .topbar_present = true,  .topbar_config = {.back_button = true,  .back_screen = E_MAIN_SCREEN,    .back_function = NULL}},
 };
 
 typedef struct {
 	lv_obj_t *bar;
 	lv_obj_t *back_btn;
 	lv_obj_t *back_btn_label;
+	lv_obj_t *back_btn_icon;
 	lv_obj_t *label;
 	lv_timer_t *timer;
 } T_topbar;
@@ -160,38 +168,54 @@ static void _topbar_timer_handler(lv_timer_t * timer)
 
 static void _topbar_back_btn_handler(lv_event_t *event)
 {
-	int *user_data = lv_event_get_user_data(event);
-	E_screen_id next_screen = *user_data;
+	T_topbar_config *config = lv_event_get_user_data(event);
 
-	ui_change_screen(next_screen);
+	/* If the back function is set call it, in other display the wanted back_screen */
+	if(config->back_function)
+	{
+		config->back_function();
+	}
+	else
+	{
+		ui_change_screen(config->back_screen);
+	}
 }
 
-static int _create_topbar(bool back_button_visible, E_screen_id *back_screen)
+static int _create_topbar(bool back_button_visible, T_topbar_config *topbar_config)
 {
 	int ret = 0;
 
 	/* Create the top bar */
-	ui.topbar.bar = lv_obj_create(lv_scr_act());
+	ui.topbar.bar = lv_obj_create(lv_screen_active());
 	lv_obj_set_size(ui.topbar.bar, ui_get_resolution_hor(), TOPBAR_SIZE);
 	lv_obj_align(ui.topbar.bar, LV_ALIGN_TOP_MID, 0, 0);
 	lv_obj_add_style(ui.topbar.bar, topbar_styles_get_general_style(), LV_PART_MAIN | LV_STATE_DEFAULT);
 
 	/* Create the top bar back button if needed */
-	if(back_button_visible)
+	if(topbar_config->back_button)
 	{
 		/* Create back button */
 		ui.topbar.back_btn = lv_btn_create(ui.topbar.bar);
-		lv_obj_add_event_cb(ui.topbar.back_btn, &_topbar_back_btn_handler, LV_EVENT_CLICKED, (void*)back_screen);
-		lv_obj_set_size(ui.topbar.back_btn, lv_pct(35), lv_pct(90));
-		lv_obj_align(ui.topbar.back_btn, LV_ALIGN_LEFT_MID, 0, 0);
+		lv_obj_add_event_cb(ui.topbar.back_btn, &_topbar_back_btn_handler, LV_EVENT_CLICKED, (void*)topbar_config);
+		lv_obj_set_size(ui.topbar.back_btn, lv_pct(TOPBAR_BACK_BUTTON_X_SIZE_PERCENT), lv_pct(TOPBAR_BACK_BUTTON_Y_SIZE_PERCENT));
+		lv_obj_align(ui.topbar.back_btn, LV_ALIGN_LEFT_MID, TOPBAR_BACK_BUTTON_X_OFFSET, TOPBAR_BACK_BUTTON_Y_OFFSET);
+		lv_obj_add_style(ui.topbar.back_btn, topbar_styles_get_back_button_style(), LV_PART_MAIN | LV_STATE_DEFAULT);
 
-		/* Put the text in the back button label */
+		/* Add the back icon in the button */
+		ui.topbar.back_btn_icon = lv_image_create(ui.topbar.back_btn);
+		lv_image_set_src(ui.topbar.back_btn_icon, ICON_BACK);
+		lv_obj_set_size(ui.topbar.back_btn_icon, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+
+		/* ADD the text in the back button label */
 		ui.topbar.back_btn_label = lv_label_create(ui.topbar.back_btn);
 		lv_label_set_text(ui.topbar.back_btn_label, _("Back"));
-		lv_obj_center(ui.topbar.back_btn_label);
+		lv_obj_set_size(ui.topbar.back_btn_label, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
 
-		/* Change style of text */
-		lv_obj_set_style_text_font(ui.topbar.back_btn_label, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
+		lv_obj_update_layout(ui.topbar.back_btn_icon);
+		lv_obj_update_layout(ui.topbar.back_btn_label);
+
+		lv_obj_align(ui.topbar.back_btn_icon, LV_ALIGN_LEFT_MID, 16, 0);
+		lv_obj_align(ui.topbar.back_btn_label, LV_ALIGN_LEFT_MID, 24 + lv_obj_get_width(ui.topbar.back_btn_icon), 0);
 	}
 
 	/* Fill the top bar with widgets */
@@ -282,14 +306,14 @@ static void * screen_thread_handler(void *data)
 		lv_obj_remove_style_all(ui.virt_screen);
 		lv_obj_add_style(ui.virt_screen, styles_get_virtual_screen_style(), LV_PART_MAIN | LV_STATE_DEFAULT);
 
-		if(screen_table[next].top_bar_visible)
+		if(screen_table[next].topbar_present)
 		{
 			/* Bar is visible, resize the virtual screen object to the correct dimensions */
 			lv_obj_set_size(ui.virt_screen, ui_get_resolution_hor(), ui_get_resolution_ver() - TOPBAR_SIZE);
 			lv_obj_align(ui.virt_screen, LV_ALIGN_TOP_MID, 0, TOPBAR_SIZE);
 
 			/* Create the top bar in the same display */
-			ret = _create_topbar(screen_table[next].top_bar_has_back_button, &screen_table[next].top_bar_has_back_button_screen);
+			ret = _create_topbar(screen_table[next].topbar_config.back_button, &screen_table[next].topbar_config);
 			if(ret < 0)
 			{
 				log_error("_create_topbar failed, return: %d\n", ret);

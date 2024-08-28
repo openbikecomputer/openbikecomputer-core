@@ -26,11 +26,12 @@
 static struct {
 	bool is_initialized;
 	lv_style_t general;
+	lv_style_t back_button;
 } topbar_styles = {
 	.is_initialized = false,
 };
 
-int topbar_styles_init(void)
+static int _general_styles_init(void)
 {
 	/* Initialized general topbar style */
 	lv_style_init(&topbar_styles.general);
@@ -63,6 +64,47 @@ int topbar_styles_init(void)
 	/* Remove radius */
 	lv_style_set_radius(&topbar_styles.general, 0);
 
+	return 0;
+}
+
+static int _back_button_styles_init(void)
+{
+	/* Initialized back_button topbar style */
+	lv_style_init(&topbar_styles.back_button);
+
+	/* Padding, outline width */
+	lv_style_set_pad_all(&topbar_styles.back_button, 8);
+	lv_style_set_outline_width(&topbar_styles.back_button, 0);
+
+	/* Border color and transp */
+	lv_style_set_border_width(&topbar_styles.back_button, 0);
+	lv_style_set_border_opa(&topbar_styles.back_button, LV_OPA_TRANSP);
+
+	/* Background color and opacity */
+	lv_style_set_bg_color(&topbar_styles.back_button, lv_color_hex(TOPBAR_BACK_BUTTON_COLOR));
+	lv_style_set_bg_opa(&topbar_styles.back_button, TOPBAR_BACK_BUTTON_OPACITY);
+
+	/* Text color and opacity */
+	lv_style_set_text_color(&topbar_styles.back_button, lv_color_white());
+	lv_style_set_text_opa(&topbar_styles.back_button, LV_OPA_COVER);
+	lv_style_set_text_font(&topbar_styles.back_button, &lv_font_montserrat_20);
+
+	/* Remove radius */
+	lv_style_set_radius(&topbar_styles.back_button, 48);
+
+	return 0;
+}
+
+int topbar_styles_init(void)
+{
+	int ret = 0;
+
+	ret = _general_styles_init();
+	fail_if_negative(ret, -1, "_general_styles_init failed, returned: %d\n");
+
+	ret = _back_button_styles_init();
+	fail_if_negative(ret, -2, "_back_button_styles_init failed, returned: %d\n");
+
 	/* Set is_initialized */
 	topbar_styles.is_initialized = true;
 
@@ -74,4 +116,11 @@ lv_style_t* topbar_styles_get_general_style(void)
 	fail_if_false(topbar_styles.is_initialized, NULL, "topbar_styles is not initialized\n");
 
 	return &topbar_styles.general;
+}
+
+lv_style_t* topbar_styles_get_back_button_style(void)
+{
+	fail_if_false(topbar_styles.is_initialized, NULL, "topbar_styles is not initialized\n");
+
+	return &topbar_styles.back_button;
 }
