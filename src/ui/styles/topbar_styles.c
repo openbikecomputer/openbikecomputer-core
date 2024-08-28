@@ -44,8 +44,8 @@ int topbar_styles_init(void)
 	lv_style_set_border_opa(&topbar_styles.general, LV_OPA_TRANSP);
 
 	/* Background color and opacity */
-	lv_style_set_bg_color(&topbar_styles.general, lv_color_white());
-	lv_style_set_bg_opa(&topbar_styles.general, LV_OPA_COVER);
+	lv_style_set_bg_color(&topbar_styles.general, lv_color_hex(SCREEN_BACKGROUND_COLOR));
+	lv_style_set_bg_opa(&topbar_styles.general, SCREEN_BACKGROUND_OPACITY);
 
 	/* Text color and opacity */
 	lv_style_set_text_color(&topbar_styles.general, lv_color_black());

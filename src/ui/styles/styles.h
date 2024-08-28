@@ -31,6 +31,10 @@
 
 #define lv_obj_disable_scroll(obj) lv_obj_set_scrollbar_mode(obj, LV_SCROLLBAR_MODE_OFF)
 
+/* Global background screen color */
+#define SCREEN_BACKGROUND_COLOR 0xf2ebc4
+#define SCREEN_BACKGROUND_OPACITY LV_OPA_COVER
+
 int styles_init(void);
 lv_style_t* styles_get_virtual_screen_style(void);
 lv_style_t* styles_get_main_button_style(void);

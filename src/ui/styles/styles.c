@@ -46,8 +46,8 @@ static int _virtual_screen_style_init(void)
 	lv_style_set_border_opa(&styles.virtual_screen, LV_OPA_TRANSP);
 
 	/* Background color and opacity */
-	lv_style_set_bg_color(&styles.virtual_screen, lv_color_white());
-	lv_style_set_bg_opa(&styles.virtual_screen, LV_OPA_COVER);
+	lv_style_set_bg_color(&styles.virtual_screen, lv_color_hex(SCREEN_BACKGROUND_COLOR));
+	lv_style_set_bg_opa(&styles.virtual_screen, SCREEN_BACKGROUND_OPACITY);
 
 	/* Text color and opacity */
 	lv_style_set_text_color(&styles.virtual_screen, lv_color_black());
