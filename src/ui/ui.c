@@ -201,7 +201,7 @@ static int _create_topbar(bool back_button_visible, E_screen_id *back_screen)
 	fail_if_negative(ret, -2, "_get_local_time failed, return %d\n", ret);
 	//lv_label_set_text_fmt(ui.topbar.label, LV_SYMBOL_GPS " " LV_SYMBOL_WIFI " " LV_SYMBOL_BATTERY_FULL " %s", str);
 	lv_label_set_text_fmt(ui.topbar.label, LV_SYMBOL_BATTERY_FULL " %s", str);
-    lv_obj_align(ui.topbar.label, LV_ALIGN_RIGHT_MID, 0, 0);
+    lv_obj_align(ui.topbar.label, LV_ALIGN_RIGHT_MID, TOPBAR_LABEL_X_OFFSET, 0);
 
 	/* Create lvgl timer that update the bar each secondes */
 	ui.topbar.timer = lv_timer_create(&_topbar_timer_handler, TOPBAR_TIMER_DELAY, ui.topbar.label);

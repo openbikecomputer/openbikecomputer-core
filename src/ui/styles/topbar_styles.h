@@ -21,6 +21,8 @@
 
 #include <lvgl.h>
 
+#define TOPBAR_LABEL_X_OFFSET (-16)
+
 int topbar_styles_init(void);
 lv_style_t* topbar_styles_get_general_style(void);
 
