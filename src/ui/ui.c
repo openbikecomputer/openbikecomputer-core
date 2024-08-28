@@ -279,7 +279,7 @@ static void * screen_thread_handler(void *data)
 		/* Destroy the top bar before cleaning the display */
 		_destroy_topbar();
 		/* Clean the display */
-		lv_obj_clean(lv_scr_act());
+		lv_obj_clean(lv_screen_active());
 		pthread_mutex_unlock(&ui.lvgl_mutex);
 
 		log_debug("Run actual screen exit handler\n");
@@ -300,7 +300,7 @@ static void * screen_thread_handler(void *data)
 		pthread_mutex_lock(&ui.lvgl_mutex);
 
 		/* Create the virtual screen object */
-		ui.virt_screen = lv_obj_create(lv_scr_act());
+		ui.virt_screen = lv_obj_create(lv_screen_active());
 
 		/* Remove all style from virt screen and reapply virtual screen style */
 		lv_obj_remove_style_all(ui.virt_screen);
