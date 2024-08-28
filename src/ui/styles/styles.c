@@ -85,7 +85,7 @@ static int _main_button_style_init(void)
 	/* Text color and opacity */
 	lv_style_set_text_color(&styles.main_button, lv_color_black());
 	lv_style_set_text_opa(&styles.main_button, LV_OPA_100);
-	lv_style_set_text_font(&styles.main_button, &lv_font_montserrat_14);
+	lv_style_set_text_font(&styles.main_button, &lv_font_montserrat_18);
 
 	/* Clip corner */
 	lv_style_set_clip_corner(&styles.main_button, true);
