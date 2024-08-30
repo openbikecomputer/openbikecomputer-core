@@ -10,6 +10,10 @@ SRC = src/main.c \
       src/log/log.c \
       src/ui/ui.c \
       src/ui/mouse_img.c \
+      src/ui/fonts/inter_regular_18.c \
+      src/ui/fonts/inter_regular_24.c \
+      src/ui/fonts/inter_semibold_18.c \
+      src/ui/fonts/inter_semibold_24.c \
       src/ui/screens/main_screen.c \
       src/ui/screens/data_screen.c \
       src/ui/screens/navigation_screen.c \

@@ -35,6 +35,12 @@
 #define SCREEN_BACKGROUND_COLOR 0xf2ebc4
 #define SCREEN_BACKGROUND_OPACITY LV_OPA_COVER
 
+/* Declare all custom fonts used by the project */
+LV_FONT_DECLARE(inter_semibold_18)
+LV_FONT_DECLARE(inter_semibold_24)
+LV_FONT_DECLARE(inter_regular_18)
+LV_FONT_DECLARE(inter_regular_24)
+
 int styles_init(void);
 lv_style_t* styles_get_virtual_screen_style(void);
 lv_style_t* styles_get_main_button_style(void);

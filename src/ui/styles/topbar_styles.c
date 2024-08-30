@@ -87,7 +87,10 @@ static int _back_button_styles_init(void)
 	/* Text color and opacity */
 	lv_style_set_text_color(&topbar_styles.back_button, lv_color_white());
 	lv_style_set_text_opa(&topbar_styles.back_button, LV_OPA_COVER);
-	lv_style_set_text_font(&topbar_styles.back_button, &lv_font_montserrat_20);
+	lv_style_set_text_font(&topbar_styles.back_button, &inter_semibold_18);
+
+	/* shadow transp */
+	lv_style_set_shadow_opa(&topbar_styles.back_button, LV_OPA_TRANSP);
 
 	/* Remove radius */
 	lv_style_set_radius(&topbar_styles.back_button, 48);
