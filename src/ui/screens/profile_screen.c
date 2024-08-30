@@ -23,7 +23,7 @@
 #include "locales.h"
 #include "styles.h"
 
-#define GAP_BETWEEN_BUTTON_LABEL_PX 10
+#define GAP_BETWEEN_BUTTON_LABEL_PX 5
 
 typedef enum {
 	E_PROFILE_BUTTON_RIDER = 0,

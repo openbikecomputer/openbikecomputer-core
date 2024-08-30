@@ -30,7 +30,7 @@
 #include "locales.h"
 #include "styles.h"
 
-#define GAP_BETWEEN_BUTTON_LABEL_PX 10
+#define GAP_BETWEEN_BUTTON_LABEL_PX 5
 
 static void button_event_handler(lv_event_t *event)
 {
