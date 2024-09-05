@@ -16,7 +16,7 @@ msgstr ""
 
 #: resources/locales/../../src/ui/screens/bike_screen.c:116
 msgid "All terrain bike"
-msgstr "Velo tout chemin"
+msgstr "Vélo tout chemin"
 
 #: resources/locales/../../src/ui/ui.c:190
 msgid "Back"
@@ -24,7 +24,7 @@ msgstr "Retour"
 
 #: resources/locales/../../src/ui/screens/profile_screen.c:42
 msgid "Bike"
-msgstr "Velo"
+msgstr "Vélo"
 
 #: resources/locales/../../src/ui/screens/bike_screen.c:207
 msgid "Bike brand"
@@ -64,7 +64,7 @@ msgstr "Modele:"
 
 #: resources/locales/../../src/ui/screens/bike_screen.c:117
 msgid "Mountain bike"
-msgstr "Velo tout terrain"
+msgstr "Vélo tout terrain"
 
 #. Populate subpage content in display order
 #: resources/locales/../../src/ui/screens/bike_screen.c:204
@@ -109,7 +109,7 @@ msgstr "Spedelec"
 
 #: resources/locales/../../src/ui/screens/bike_screen.c:120
 msgid "Touring bike"
-msgstr "Velo de voyage"
+msgstr "Vélo de voyage"
 
 #: resources/locales/../../src/ui/screens/bike_screen.c:155
 msgid "Type:"
