@@ -28,6 +28,10 @@ static struct {
 	lv_style_t virtual_screen;
 	lv_style_t main_button;
 	lv_style_t no_border;
+	lv_style_t transp_bg;
+	lv_style_t keyboard_keys_color;
+	lv_style_t text_area_bg_color;
+	lv_style_t font_inter_regular_18;
 } styles = {
 	.is_initialized = false,
 };
@@ -105,6 +109,54 @@ static int _no_border_style_init(void)
 	return 0;
 }
 
+static int _transp_bg_style_init(void)
+{
+	/* Initialized main_button topbar style */
+	lv_style_init(&styles.transp_bg);
+
+	/* Background opacity */
+	lv_style_set_bg_opa(&styles.transp_bg, LV_OPA_TRANSP);
+
+	return 0;
+}
+
+static int _keyboard_keys_color_style_init(void)
+{
+	/* Initialized main_button topbar style */
+	lv_style_init(&styles.keyboard_keys_color);
+
+	/* Keyboard keys color and transp */
+	lv_style_set_bg_opa(&styles.keyboard_keys_color, LV_OPA_COVER);
+	lv_style_set_bg_color(&styles.keyboard_keys_color, lv_color_hex(KEYBOARD_KEYS_COLOR));
+
+	return 0;
+}
+
+static int _text_area_bg_color_style_init(void)
+{
+	/* Initialized main_button topbar style */
+	lv_style_init(&styles.text_area_bg_color);
+
+	/* Text area bg color and transp */
+	lv_style_set_bg_opa(&styles.text_area_bg_color, LV_OPA_COVER);
+	lv_style_set_bg_color(&styles.text_area_bg_color, lv_color_hex(TEXT_ENTRY_BACKGROUND_COLOR));
+
+	return 0;
+}
+
+static int _font_inter_regular_18_style_init(void)
+{
+	/* Initialized main_button topbar style */
+	lv_style_init(&styles.font_inter_regular_18);
+
+	/* Text font color and opacity */
+	lv_style_set_text_opa(&styles.font_inter_regular_18, LV_OPA_COVER);
+	lv_style_set_text_color(&styles.font_inter_regular_18, lv_color_black());
+	lv_style_set_text_font(&styles.font_inter_regular_18, &inter_regular_18);
+
+	return 0;
+}
+
 /* This is the entry point for all LVGL styles initialization */
 int styles_init(void)
 {
@@ -121,6 +173,18 @@ int styles_init(void)
 
 	ret = _no_border_style_init();
 	fail_if_negative(ret, -4, " _no_border_style_init failed, returned: %d\n", ret);
+
+	ret = _transp_bg_style_init();
+	fail_if_negative(ret, -5, " _transp_bg_style_init failed, returned: %d\n", ret);
+
+	ret = _keyboard_keys_color_style_init();
+	fail_if_negative(ret, -6, " _keyboard_keys_color_style_init failed, returned: %d\n", ret);
+
+	ret = _text_area_bg_color_style_init();
+	fail_if_negative(ret, -7, " _text_area_bg_color_style_init failed, returned: %d\n", ret);
+
+	ret = _font_inter_regular_18_style_init();
+	fail_if_negative(ret, -8, " _font_inter_regular_18_style_init failed, returned: %d\n", ret);
 
 	styles.is_initialized = true;
 
@@ -146,6 +210,34 @@ lv_style_t* styles_get_no_border_style(void)
 	fail_if_false(styles.is_initialized, NULL, "styles is not initialized\n");
 
 	return &styles.no_border;
+}
+
+lv_style_t* styles_get_transp_bg_style(void)
+{
+	fail_if_false(styles.is_initialized, NULL, "styles is not initialized\n");
+
+	return &styles.transp_bg;
+}
+
+lv_style_t* styles_get_keyboard_keys_color_style(void)
+{
+	fail_if_false(styles.is_initialized, NULL, "styles is not initialized\n");
+
+	return &styles.keyboard_keys_color;
+}
+
+lv_style_t* styles_get_text_area_bg_color_style(void)
+{
+	fail_if_false(styles.is_initialized, NULL, "styles is not initialized\n");
+
+	return &styles.text_area_bg_color;
+}
+
+lv_style_t* styles_get_font_inter_regular_18(void)
+{
+	fail_if_false(styles.is_initialized, NULL, "styles is not initialized\n");
+
+	return &styles.font_inter_regular_18;
 }
 
 

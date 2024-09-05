@@ -78,6 +78,7 @@ static int _create_text_entry(T_bike_menu_element *element, lv_obj_t *subpage, c
 
 	/* Apply style */
 	lv_obj_add_style(element->container, styles_get_no_border_style(), LV_PART_MAIN | LV_STATE_DEFAULT);
+	lv_obj_add_style(element->container, styles_get_font_inter_regular_18(), LV_PART_MAIN | LV_STATE_DEFAULT);
 
 	/* Set container size */
     lv_obj_set_size(element->container, lv_pct(100), lv_pct(PCT_VER_SIZE));
@@ -98,6 +99,9 @@ static int _create_text_entry(T_bike_menu_element *element, lv_obj_t *subpage, c
     lv_textarea_set_placeholder_text(element->data, placeholder);
     lv_obj_set_size(element->data, lv_pct(PCT_HOR_SIZE), lv_pct(100));
 	lv_obj_update_layout(element->data);
+
+	/* Set the text area background color using the style */
+	lv_obj_add_style(element->data, styles_get_text_area_bg_color_style(), LV_PART_MAIN | LV_STATE_DEFAULT);
 
 	/* Align the label and the text area */
     lv_obj_align(element->label, LV_ALIGN_LEFT_MID, 0, 0);
@@ -143,6 +147,8 @@ static int _create_drop_down_entry(T_bike_menu_element *element, lv_obj_t *subpa
 
 	/* Apply style */
 	lv_obj_add_style(element->container, styles_get_no_border_style(), LV_PART_MAIN | LV_STATE_DEFAULT);
+	lv_obj_add_style(element->container, styles_get_transp_bg_style(), LV_PART_MAIN | LV_STATE_DEFAULT);
+	lv_obj_add_style(element->container, styles_get_font_inter_regular_18(), LV_PART_MAIN | LV_STATE_DEFAULT | LV_STATE_CHECKED);
 
 	/* Set container size */
     lv_obj_set_size(element->container, lv_pct(100), lv_pct(PCT_VER_SIZE));
@@ -165,6 +171,13 @@ static int _create_drop_down_entry(T_bike_menu_element *element, lv_obj_t *subpa
     lv_obj_set_size(element->data, lv_pct(PCT_HOR_SIZE), lv_pct(100));
 	lv_obj_update_layout(element->data);
 
+	/* Set the text area background color using the style */
+	lv_obj_add_style(element->data, styles_get_text_area_bg_color_style(), LV_PART_MAIN | LV_STATE_DEFAULT);
+
+	/* Set the text font of the element in the dropdown list */
+	lv_obj_t * list = lv_dropdown_get_list(element->data);
+	lv_obj_add_style(list, styles_get_font_inter_regular_18(), LV_PART_MAIN | LV_STATE_DEFAULT);
+
 	/* Align the label and the drop down list */
     lv_obj_align(element->label, LV_ALIGN_LEFT_MID, 0, 0);
     lv_obj_align_to(element->data, element->label, LV_ALIGN_OUT_RIGHT_MID, LABEL_GAP_PX, OFFSET_Y);
@@ -183,6 +196,11 @@ static lv_obj_t* _create_keyboard(lv_obj_t *subpage)
     lv_obj_set_size(kb, lv_pct(100), lv_pct(KEYBOARD_HEIGHT));
     lv_obj_align(kb, LV_ALIGN_BOTTOM_MID, 0, 0);
 
+	/* Add the style to the object */
+	lv_obj_add_style(kb, styles_get_transp_bg_style(), LV_PART_MAIN | LV_STATE_DEFAULT);
+	lv_obj_add_style(kb, styles_get_keyboard_keys_color_style(), LV_PART_ITEMS | LV_STATE_DEFAULT);
+	lv_obj_add_style(kb, styles_get_font_inter_regular_18(), LV_PART_MAIN | LV_STATE_DEFAULT);
+
 	return kb;
 }
 
@@ -197,6 +215,9 @@ static int _create_subpage(void)
 	/* Create the menu subpage */
     subpage = lv_menu_page_create(bike_screen.menu, NULL);
 	fail_if_null(subpage, -1, "subpage is NULL\n");
+
+	/* Add font style to the whole page */
+	lv_obj_add_style(subpage, styles_get_font_inter_regular_18(), LV_PART_MAIN | LV_STATE_DEFAULT);
 
 	/* Populate subpage content in display order */
 	ret = _create_text_entry(&menu_entry[0], subpage, _("Name:"), _("Bike name"));
@@ -278,6 +299,10 @@ int bike_screen_enter(lv_obj_t *screen)
 	/* Set size and center the menu */
     lv_obj_set_size(bike_screen.menu, lv_pct(100), lv_pct(100));
     lv_obj_align(bike_screen.menu, LV_ALIGN_TOP_MID, 0, 0);
+
+	/* Make the bike screen menu background transparent and set the correct font */
+	lv_obj_add_style(bike_screen.menu, styles_get_transp_bg_style(), LV_PART_MAIN | LV_STATE_DEFAULT);
+	lv_obj_add_style(bike_screen.menu, styles_get_font_inter_regular_18(), LV_PART_MAIN | LV_STATE_DEFAULT);
 
 	log("Create menu main page\n");
     /*Create a main page that will contain the bike list */

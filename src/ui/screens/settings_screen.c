@@ -19,9 +19,16 @@
 #include "log.h"
 #include "settings_screen.h"
 #include "lvgl_helper.h"
+#include "locales.h"
 
 static struct {
 	lv_obj_t *menu;
+	lv_obj_t *sub_page_wifi;
+	lv_obj_t *sub_page_bluetooth;
+	lv_obj_t *sub_page_ant;
+	lv_obj_t *sub_page_sensors;
+	lv_obj_t *sub_page_map;
+	lv_obj_t *sub_page_about;
 } settings_screen;
 
 int settings_screen_enter(lv_obj_t *screen)

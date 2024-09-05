@@ -35,6 +35,9 @@
 #define SCREEN_BACKGROUND_COLOR 0xf2ebc4
 #define SCREEN_BACKGROUND_OPACITY LV_OPA_COVER
 
+#define KEYBOARD_KEYS_COLOR 0xd9c896
+#define TEXT_ENTRY_BACKGROUND_COLOR 0xfaf7e3
+
 /* Declare all custom fonts used by the project */
 LV_FONT_DECLARE(inter_semibold_18)
 LV_FONT_DECLARE(inter_semibold_24)
@@ -46,6 +49,10 @@ int styles_init(void);
 lv_style_t* styles_get_virtual_screen_style(void);
 lv_style_t* styles_get_main_button_style(void);
 lv_style_t* styles_get_no_border_style(void);
+lv_style_t* styles_get_transp_bg_style(void);
+lv_style_t* styles_get_keyboard_keys_color_style(void);
+lv_style_t* styles_get_text_area_bg_color_style(void);
+lv_style_t* styles_get_font_inter_regular_18(void);
 void styles_disable_scrollbar(lv_obj_t *obj);
 
 /* Helper to display obj border */
