@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: V0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-27 18:47+0200\n"
+"POT-Creation-Date: 2024-09-05 21:43+0200\n"
 "PO-Revision-Date: 2024-08-21 14:32+0200\n"
 "Last-Translator: LAMBS Pierre-Antoine <pierreantoine.lambs@gmail.com>\n"
 "Language: fr_FR\n"
@@ -14,11 +14,19 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: resources/locales/../../src/ui/screens/bike_screen.c:116
+#: resources/locales/../../src/ui/screens/settings_screen.c:55
+msgid "ANT"
+msgstr "ANT"
+
+#: resources/locales/../../src/ui/screens/settings_screen.c:64
+msgid "About"
+msgstr "A propos"
+
+#: resources/locales/../../src/ui/screens/bike_screen.c:118
 msgid "All terrain bike"
 msgstr "Vélo tout chemin"
 
-#: resources/locales/../../src/ui/ui.c:190
+#: resources/locales/../../src/ui/ui.c:211
 msgid "Back"
 msgstr "Retour"
 
@@ -26,27 +34,31 @@ msgstr "Retour"
 msgid "Bike"
 msgstr "Vélo"
 
-#: resources/locales/../../src/ui/screens/bike_screen.c:207
+#: resources/locales/../../src/ui/screens/bike_screen.c:226
 msgid "Bike brand"
 msgstr "Marque du velo"
 
-#: resources/locales/../../src/ui/screens/bike_screen.c:210
+#: resources/locales/../../src/ui/screens/bike_screen.c:229
 msgid "Bike model"
 msgstr "Modele du velo"
 
-#: resources/locales/../../src/ui/screens/bike_screen.c:204
+#: resources/locales/../../src/ui/screens/bike_screen.c:223
 msgid "Bike name"
 msgstr "Nom du velo"
 
-#: resources/locales/../../src/ui/screens/bike_screen.c:213
+#: resources/locales/../../src/ui/screens/bike_screen.c:232
 msgid "Bike weight in Kg"
 msgstr "Poids du velo en Kg"
 
-#: resources/locales/../../src/ui/screens/bike_screen.c:219
+#: resources/locales/../../src/ui/screens/bike_screen.c:238
 msgid "Bike wheel size"
 msgstr "Diametre des roue"
 
-#: resources/locales/../../src/ui/screens/bike_screen.c:207
+#: resources/locales/../../src/ui/screens/settings_screen.c:52
+msgid "Bluetooth"
+msgstr "Bluetooth"
+
+#: resources/locales/../../src/ui/screens/bike_screen.c:226
 msgid "Brand:"
 msgstr "Marque:"
 
@@ -54,20 +66,54 @@ msgstr "Marque:"
 msgid "Data"
 msgstr "Donnees"
 
-#: resources/locales/../../src/ui/screens/bike_screen.c:119
+#: resources/locales/../../src/ui/screens/rider_screen.c:119
+msgid "Female"
+msgstr "Femme"
+
+#: resources/locales/../../src/ui/screens/rider_screen.c:219
+msgid "First name"
+msgstr "Prénom"
+
+#. Populate subpage content in display order
+#: resources/locales/../../src/ui/screens/rider_screen.c:219
+msgid "First name:"
+msgstr "Prénom:"
+
+#: resources/locales/../../src/ui/screens/rider_screen.c:155
+msgid "Gender:"
+msgstr "Genre"
+
+#: resources/locales/../../src/ui/screens/bike_screen.c:121
 msgid "Gravel"
 msgstr "Gravel"
 
-#: resources/locales/../../src/ui/screens/bike_screen.c:210
+#: resources/locales/../../src/ui/screens/rider_screen.c:228
+msgid "Height:"
+msgstr "Taille:"
+
+#: resources/locales/../../src/ui/screens/rider_screen.c:118
+msgid "Male"
+msgstr "Homme"
+
+#: resources/locales/../../src/ui/screens/settings_screen.c:61
+msgid "Map"
+msgstr "Carte"
+
+#: resources/locales/../../src/ui/screens/bike_screen.c:229
 msgid "Model:"
 msgstr "Modele:"
 
-#: resources/locales/../../src/ui/screens/bike_screen.c:117
+#: resources/locales/../../src/ui/screens/bike_screen.c:119
 msgid "Mountain bike"
 msgstr "Vélo tout terrain"
 
+#: resources/locales/../../src/ui/screens/rider_screen.c:222
+msgid "Name"
+msgstr "Nom"
+
 #. Populate subpage content in display order
-#: resources/locales/../../src/ui/screens/bike_screen.c:204
+#: resources/locales/../../src/ui/screens/bike_screen.c:223
+#: resources/locales/../../src/ui/screens/rider_screen.c:222
 msgid "Name:"
 msgstr "Nom:"
 
@@ -75,9 +121,21 @@ msgstr "Nom:"
 msgid "Navigation"
 msgstr "Navigation"
 
-#: resources/locales/../../src/ui/screens/bike_screen.c:122
+#: resources/locales/../../src/ui/screens/rider_screen.c:120
+msgid "None-Binary"
+msgstr "Non-binaire"
+
+#: resources/locales/../../src/ui/screens/bike_screen.c:124
 msgid "Other"
 msgstr "Autre"
+
+#: resources/locales/../../src/ui/screens/rider_screen.c:228
+msgid "Pilot height in cm"
+msgstr "Taille du pilote en cm"
+
+#: resources/locales/../../src/ui/screens/rider_screen.c:231
+msgid "Pilot weight in Kg"
+msgstr "Poids du pilote en Kg"
 
 #: resources/locales/../../src/ui/screens/main_screen.c:95
 msgid "Profiles"
@@ -91,7 +149,7 @@ msgstr "Resultats"
 msgid "Rider"
 msgstr "Pilote"
 
-#: resources/locales/../../src/ui/screens/bike_screen.c:118
+#: resources/locales/../../src/ui/screens/bike_screen.c:120
 msgid "Road"
 msgstr "Route"
 
@@ -99,26 +157,35 @@ msgstr "Route"
 msgid "Routes"
 msgstr "Traces"
 
+#: resources/locales/../../src/ui/screens/settings_screen.c:58
+msgid "Sensors"
+msgstr "Capteurs"
+
 #: resources/locales/../../src/ui/screens/main_screen.c:98
 msgid "Settings"
 msgstr "Parametres"
 
-#: resources/locales/../../src/ui/screens/bike_screen.c:121
+#: resources/locales/../../src/ui/screens/bike_screen.c:123
 msgid "Speedbike"
 msgstr "Spedelec"
 
-#: resources/locales/../../src/ui/screens/bike_screen.c:120
+#: resources/locales/../../src/ui/screens/bike_screen.c:122
 msgid "Touring bike"
 msgstr "Vélo de voyage"
 
-#: resources/locales/../../src/ui/screens/bike_screen.c:155
+#: resources/locales/../../src/ui/screens/bike_screen.c:159
 msgid "Type:"
 msgstr "Type:"
 
-#: resources/locales/../../src/ui/screens/bike_screen.c:213
+#: resources/locales/../../src/ui/screens/bike_screen.c:232
+#: resources/locales/../../src/ui/screens/rider_screen.c:231
 msgid "Weight:"
 msgstr "Poids:"
 
-#: resources/locales/../../src/ui/screens/bike_screen.c:219
+#: resources/locales/../../src/ui/screens/bike_screen.c:238
 msgid "Wheel size:"
 msgstr "Diametre des roues:"
+
+#: resources/locales/../../src/ui/screens/settings_screen.c:49
+msgid "WiFi"
+msgstr "WiFi"
