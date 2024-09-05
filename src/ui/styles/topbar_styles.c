@@ -51,7 +51,7 @@ static int _general_styles_init(void)
 	/* Text color and opacity */
 	lv_style_set_text_color(&topbar_styles.general, lv_color_black());
 	lv_style_set_text_opa(&topbar_styles.general, LV_OPA_90);
-	lv_style_set_text_font(&topbar_styles.general, &lv_font_montserrat_48);
+	lv_style_set_text_font(&topbar_styles.general, &inter_regular_48);
 
 	/* Debug options, show border, padding, outline, etc... */
 	#if DEBUG_TOPBAR_STYLE

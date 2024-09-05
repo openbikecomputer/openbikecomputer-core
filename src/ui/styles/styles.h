@@ -40,6 +40,7 @@ LV_FONT_DECLARE(inter_semibold_18)
 LV_FONT_DECLARE(inter_semibold_24)
 LV_FONT_DECLARE(inter_regular_18)
 LV_FONT_DECLARE(inter_regular_24)
+LV_FONT_DECLARE(inter_regular_48)
 
 int styles_init(void);
 lv_style_t* styles_get_virtual_screen_style(void);
